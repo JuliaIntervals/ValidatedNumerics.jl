@@ -1,15 +1,19 @@
 
+
 ## Equalities and neg-equalities
 ==(a::Interval, b::Interval) = a.lo == b.lo && a.hi == b.hi
 !=(a::Interval, b::Interval) = a.lo != b.lo || a.hi != b.hi
 
 ## Inclusion/containment functions
-in(a::Interval, b::Interval) = b.lo <= a.lo && a.hi <= b.hi
+# in(a::Interval, b::Interval) = b.lo <= a.lo && a.hi <= b.hi
 in(x::Real, a::Interval) = a.lo <= x <= a.hi
 
 # strict inclusion:
 isinside(a::Interval, b::Interval) = b.lo < a.lo && a.hi < b.hi
-isinside(x::Real, a::Interval) = isinside(promote(x,a)...)
+isinside(x::Real, a::Interval) = a.lo < x < a.hi
+
+⊊(a::Interval, b::Interval) = b.lo < a.lo && a.hi < b.hi
+⊆(a::Interval, b::Interval) = b.lo ≤ a.lo && a.hi ≤ b.hi
 
 ## zero and one functions
 zero(a::Interval) = Interval(big(0.0))
@@ -66,10 +70,16 @@ abs(a::Interval) = Interval(mig(a), mag(a))
 
 isempty(a::Interval, b::Interval) = a.hi < b.lo || b.hi < a.lo
 
+
+# this definition of empty_interval is not nice:
+const empty_interval = Interval(Inf)  # interval from Inf to Inf
+isempty(x::Interval) = x == empty_interval
+const ∅ = empty_interval
+
 function intersect(a::Interval, b::Interval)
     if isempty(a,b)
         # warn("Intersection is empty")
-        return nothing
+        return empty_interval
     end
 
     @round(max(a.lo, b.lo), min(a.hi, b.hi))

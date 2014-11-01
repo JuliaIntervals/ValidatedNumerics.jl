@@ -2,16 +2,23 @@ module ValidatedNumerics
 
 
 import Base:
-  in, zero, one, abs, real, show,
-  sqrt, exp, log, sin, cos, tan, inv,
-  union, intersect, isempty,
-  convert, promote_rule,
-  BigFloat, string
+    in, zero, one, abs, real, show,
+    sqrt, exp, log, sin, cos, tan, inv,
+    union, intersect, isempty,
+    convert, promote_rule,
+    BigFloat, string
 
 export
-  @interval, Interval,
-  @round_down, @round_up, @round, @thin_interval,
-  diam, mid, mag, mig, hull, isinside
+    @interval, Interval,
+    @round_down, @round_up, @round, @thin_interval,
+    diam, mid, mag, mig, hull, isinside,
+    empty_interval, ∅, isempty, ⊊,
+    differentiate, D  # should these be exported?
+
+
+export
+    newton, krawczyk
+
 
 
 ## Default precision:
@@ -27,10 +34,7 @@ BigFloat(a::MathConst) = big(a)
 
 ## Includes:
 
-include("interval_definition.jl")
-include("interval_macros.jl")
-include("interval_arithmetic.jl")
-include("interval_trig.jl")
-include("interval_functions.jl")
+include("intervals/intervals.jl")
+include("root_finding/root_finding.jl")
 
 end # module ValidatedNumerics
