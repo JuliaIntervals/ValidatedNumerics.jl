@@ -13,11 +13,12 @@ end
 function N(f::Function, x::Interval, deriv::Interval)
     m = guarded_mid(x)
     m = Interval(m)
-    Nx = m - f(m) * inv(deriv)
+    Nx = m - f(m) / deriv
     Nx
 end
 
-function newton_refine(f::Function, f_prime::Function, x::Interval, tolerance=1e-15)
+function newton_refine{T<:Real}(f::Function, f_prime::Function, x::Interval{T}, 
+                                tolerance=eps(one(T)))
     #print("Entering newton_refine:")
     #@show x
 
@@ -37,10 +38,12 @@ end
 #newton(f::Function, x::Nothing) = []
 
 
-newton(f::Function, x::Interval, tolerance=1e-15) = newton(f, D(f), x, 0, tolerance)
+newton{T<:Real}(f::Function, x::Interval{T}, tolerance=eps(one(T))) = 
+                newton(f, D(f), x, 0, tolerance)
  # use automatic differentiation if no derivative function given
 
-function newton(f::Function, f_prime::Function, x::Interval, level::Int=0, tolerance=1e-15)
+function newton{T<:Real}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0, 
+                        tolerance=eps(one(T)))
     
     #print("Entering Newton: ")
     #@show(x, level)
@@ -113,7 +116,6 @@ function newton(f::Function, f_prime::Function, x::Interval, level::Int=0, toler
 
     # return sort!(rootsN)
     return sort!(rrootsN)
-
 end
 
 # function process_newton(f::Function, x::Interval)
