@@ -6,11 +6,16 @@ set_rounding(whatever, rounding_mode) = ()  # for types other than Float64 and B
 
 macro rounding(T, expr, rounding_mode)
     quote
-        set_rounding($T, $rounding_mode)
-        temp = $expr
-        set_rounding($T, RoundNearest)
+#         set_rounding($T, $rounding_mode)
+#         temp = $expr
+#         set_rounding($T, RoundNearest)
 
-        temp
+        with_rounding($T, $rounding_mode) do
+            $expr
+        end
+
+
+#        temp
     end
 
 end
