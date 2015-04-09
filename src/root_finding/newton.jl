@@ -4,157 +4,117 @@ function guarded_mid(x::Interval)
     m = mid(x)
     if m == zero(x.lo)  # midpoint exactly 0
         alpha = 0.45
-        m = alpha*x.lo + (1-alpha)*x.hi   # displace to another point in the interval
+        m = alpha*x.lo + (1.0-alpha)*x.hi   # displace to another point in the interval
     end
 
     m
 end
 
-function N(f::Function, f_prime::Function, x::Interval, deriv=None)
-
-    if deriv==None
-        deriv = f_prime(x)
-    end
-
+function N(f::Function, x::Interval, deriv::Interval)
     m = guarded_mid(x)
     m = Interval(m)
-
-    Nx = m - ( f(m) / deriv )
-
+    Nx = m - f(m) / deriv
+    Nx
 end
 
+function newton_refine{T<:Real}(f::Function, f_prime::Function, x::Interval{T}; 
+    tolerance=eps(one(T)), debug=false)
 
-
-function newton_refine(f::Function, f_prime::Function, x::Interval, tolerance=1e-16)
-    #print("Entering newton_refine:")
-    #@show x
+    debug && (print("Entering newton_refine:"); @show x)
 
     while diam(x) > tolerance  # avoid problem with tiny floating-point numbers if 0 is a root
-        Nx = N(f, f_prime, x)
+        deriv = f_prime(x)
+        Nx = N(f, x, deriv)
+        debug && @show(x, Nx)
         Nx = Nx ∩ x
-
-        if Nx == x
-            return Any[(x, :unique)]
-        end
+        Nx == x && break
         x = Nx
-
     end
 
     Any[(x, :unique)]
 end
 
-#newton(f::Function, x::Nothing) = []
+# use automatic differentiation if no derivative function given
+newton{T<:Real}(f::Function, x::Interval{T}; tolerance=eps(one(T)), debug=false) = 
+    newton(f, D(f), x, 0, tolerance=tolerance, debug=debug)
 
+function newton{T<:Real}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0; 
+    tolerance=eps(one(T)), debug=false)
 
-newton(f::Function, x::Interval, tolerance=1e-16) = newton(f, D(f), x, 0, tolerance)
- # use automatic differentiation if no derivative function given
+    debug && (print("Entering newton:"); @show (x, level))
 
-function newton(f::Function, f_prime::Function, x::Interval, level::Int=0, tolerance=1e-16)
+    level >= 30 && return Any[(x, :unknown)]
 
-    if isempty(x)
-#        if level==0
-#            return [(∅, :none)]
- #       else
-            return Any[]
-  #      end
-    end
+    isempty(x) && return Any[(x, :empty)]
 
-    #print("Entering Newton: ")
-    #@show(x, level)
-
+    # Shall we make sure tolerance>eps(1.0) ?
+    z = zero(x.lo)
+    tolerance = abs(tolerance)
     if diam(x) < tolerance
-        return Any[(x, :unknown)]
+        z in f(x) && newton(f, f_prime, x, level+1, tolerance=tolerance, debug=debug)
+        println("Error: ", z in f(x), " ", x, " ", f(x))
+        return Any[(x, :error)]
     end
-
 
     #deriv = differentiate(f, x)
     deriv = f_prime(x)
 
-    if !(0 in deriv)
-        Nx = N(f, f_prime, x, deriv)
+    if !(z in deriv)
 
-        if isempty(Nx ∩ x)
-         #   if level==0
-         #       return [(∅, :none)]
-         #   else
-                return Any[]
-          #  end
-        end
+        # Nx = N(f, f_prime, x, deriv)
+        Nx = N(f, x, deriv)
 
-        if Nx ⊆ x
-            return newton_refine(f, f_prime, Nx)
-        end
+        isempty(Nx ∩ x) && return Any[(x, :none)]
 
+        Nx ⊆ x &&  (debug && (print("Refining "); @show(x)); 
+            return newton_refine(f, f_prime, Nx, tolerance=tolerance, debug=debug))
 
-        if isthin(x)
-            return Any[(x, :unknown)]
-        end
+        m = guarded_mid(x) # must be careful with rounding of m ?
 
-        # bisect:
+        debug && @show (x, m)
 
-        #println("Bisecting...")
-
-        m = mid(x)
-
-        roots = vcat(newton(f, f_prime, Interval(x.lo, m), level+1),  # must be careful with rounding of m ?
-                    newton(f, f_prime, Interval(m, x.hi), level+1)
+        rootsN = vcat(
+                    newton(f, f_prime, Interval(x.lo, m), level+1, tolerance=tolerance, debug=debug),
+                    newton(f, f_prime, Interval(m, x.hi), level+1, tolerance=tolerance, debug=debug)
                     )
 
-        # if length(roots) == 0 && level==0
-        #    return [(∅, :none)]
-        #else
-            return sort!(roots)
-        #end
-
     else  # 0 in deriv; this does extended interval division by hand
-        y1 = Interval(deriv.lo, -zero(deriv.lo))
-        y2 = Interval(zero(deriv.lo), deriv.hi)
 
-        y1 = N(f, f_prime, x, y1) ∩ x
-        y2 = N(f, f_prime, x, y2) ∩ x
+        y1 = Interval(deriv.lo, -z)
+        y2 = Interval(z, deriv.hi)
 
-        roots = vcat(
-                         newton(f, f_prime, y1, level+1),
-                         newton(f, f_prime, y2, level+1)
-                         )
+        if debug
+            println("0 in deriv")
+            @show deriv
+            @show (y1, y2)
+            @show N(f, x, y1)
+            @show N(f, x, y2)
+        end
 
-        #@show roots
+        # y1 = N(f, f_prime, x, y1) ∩ x
+        # y2 = N(f, f_prime, x, y2) ∩ x
+        y1 = N(f, x, y1) ∩ x
+        y2 = N(f, x, y2) ∩ x
 
-      #  if length(roots) == 0 && level==0
-      #      return [(∅, :none)]
-      #  else
-            return sort!(roots)
-       # end
+        debug && @show(y1, y2)
 
-#         return sort!(vcat(
-#                          newton(f, f_prime, y1),
-#                          newton(f, f_prime, y2)
-#                          )
-#                      )
+        rootsN = vcat(
+                    newton(f, f_prime, y1, level+1, tolerance=tolerance, debug=debug),
+                    newton(f, f_prime, y2, level+1, tolerance=tolerance, debug=debug)
+                    )
+
+        debug && show(rootsN)
+
     end
+
+    # This cleans-up the tuples with `:none` or `:empty` from the rootsN vector
+    rrootsN = Any[]
+    for i in 1:length(rootsN)
+        tup = copy(rootsN[i])
+        (tup[2] == symbol(:none) || tup[2] == symbol(:empty)) && continue
+         push!(rrootsN, tup)
+    end
+
+    return sort!(rrootsN)
 end
 
-# function process_newton(f::Function, x::Interval)
-
-#     roots = newton(f, x)
-
-#     unique_roots = Interval[]
-#     unknown_roots = Interval[]
-
-#     for root in roots
-#         @show root
-#         if root[2] == :unique
-#             push!(unique_roots, root[1])
-#         else
-#             push!(unknown_roots, root[1])
-#         end
-#     end
-
-#     sort!(unique_roots)
-#     sort!(unknown_roots)
-
-#     unique_roots, unknown_roots
-# end
-
-#import Base.show
-#show(io::IO, x::Interval) = print(io, "[$(round(float(x.lo), 5)), $(round(float(x.hi), 5))]")

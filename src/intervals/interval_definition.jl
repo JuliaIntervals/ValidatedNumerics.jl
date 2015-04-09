@@ -40,6 +40,7 @@ promote_rule{T<:Real, S<:Real}(::Type{Interval{T}}, ::Type{Interval{S}}) = Inter
 promote_rule{T<:Real, A<:Real}(::Type{Interval{T}}, ::Type{A}) = Interval{T}
 promote_rule{T<:Real}(::Type{BigFloat}, ::Type{Interval{T}}) = Interval{T}
 
+eltype{T<:Real}(::Interval{T}) = T
 
 ## Output
 
