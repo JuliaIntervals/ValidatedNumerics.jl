@@ -12,7 +12,6 @@ end
 
 
 macro rounding(T, expr, rounding_mode)
-
     quote
         with_rounding($T, $rounding_mode) do
             $expr
@@ -28,6 +27,22 @@ macro round(T, expr1, expr2)
 end
 
 
+@doc doc"""`thin_interval` takes an expression and makes a "thin" interval
+by rounding it downwards and upwards.
+
+*This should never be called directly by user code*.
+
+Rather, it is used from the `transf` function which passes suitable expressions
+to process objects of different types.
+
+Note that this does not necessarily produce true "thin" intervals (of zero width,
+i.e. with identical start- and end- points). Rather, it produces an interval that
+is *as thin as possible*, i.e. if the result is `a`, such that `nextfloat(a.lo) == a.hi`.
+
+Nonetheless, a *true* thin interval of zero width may be created by passing it directly
+a `Float64` or `BigFloat`.
+""" ->
+
 macro thin_interval(expr)
     quote
         @round(BigFloat, $expr, $expr)
@@ -39,11 +54,14 @@ end
 ## Wrap user input for correct rounding:
 # These transf functions are called after the initial @interval macro has been expanded
 
-transf(a::MathConst) =  @thin_interval(big(a))
-transf(a::Rational)  =  transf(a.num) / transf(a.den)
-transf(a::BigFloat)  =  @thin_interval(a)
-transf(a::Number)    =  @thin_interval(BigFloat("$a"))   # dangerous for floats!
 transf(a::String)    =  @thin_interval(BigFloat(a))
+transf(a::MathConst) =  @thin_interval(big(a))
+
+transf(a::Integer)   =  @thin_interval(BigFloat("$a"))
+transf(a::Rational)  =  transf(a.num) / transf(a.den)
+transf(a::Float64)   =  transf(rationalize(a))  # NB: converts a float to a rational
+
+transf(a::BigFloat)  =  @thin_interval(a)  # NB: this will give a true thin interval (zero width)
 
 
 @doc doc"""`transform` transforms a string by applying the function `transf` to each argument, e.g
