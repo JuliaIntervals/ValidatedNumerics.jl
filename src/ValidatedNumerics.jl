@@ -37,6 +37,9 @@ export
 
 ## Default precision:
 set_bigfloat_precision(53)
+set_rounding(BigFloat, RoundUp)
+set_rounding(Float64, RoundUp)
+
 
 
 ## Fix some issues with MathConst:

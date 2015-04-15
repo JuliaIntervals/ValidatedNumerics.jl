@@ -20,11 +20,27 @@ macro rounding(T, expr, rounding_mode)
 end
 
 
+# macro round(T, expr1, expr2)
+#     quote
+#         Interval(@rounding($T, $expr1, RoundDown), @rounding($T, $expr2, RoundUp))
+#     end
+# end
+
+## ASSUMES THAT RoundUp IS SET:
+macro round_up(T, expr)
+    expr
+end
+
+macro round_down(T, expr)
+    :(prevfloat($expr))
+end
+
 macro round(T, expr1, expr2)
     quote
-        Interval(@rounding($T, $expr1, RoundDown), @rounding($T, $expr2, RoundUp))
+        Interval(@round_down($T, $expr1), @round_up($T, $expr2))
     end
 end
+
 
 
 @doc doc"""`thin_interval` takes an expression and makes a "thin" interval
@@ -73,7 +89,8 @@ big_transf(x::Interval)  =  convert(Interval{BigFloat}, x)
 
 
 float_transf(x::String)    =  @thin_float_interval(parsefloat(x))
-float_transf(x::MathConst) =  convert(Interval{Float64}, @thin_interval(big(x)))   # this should be improved
+float_transf(x::MathConst) =  convert(Interval{Float64}, @thin_interval(big(x)))   # this should be improved. What happens if BigFloat precision > 53?
+# should just define an interval FLOAT_PI
 
 float_transf(x::Integer)   =  @thin_float_interval(float(x))
 float_transf(x::Rational)  =  float_transf(x.num) / float_transf(x.den)
