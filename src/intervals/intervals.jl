@@ -1,4 +1,5 @@
 include("interval_definition.jl")
+include("old_rationalize.jl")
 include("interval_macros.jl")
 include("interval_conversion_promotion.jl")
 include("interval_arithmetic.jl")
