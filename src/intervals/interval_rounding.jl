@@ -11,7 +11,44 @@ if VERSION > v"0.4-"
 end
 
 
-macro rounding(T, expr, rounding_mode)
+const global INTERVAL_ROUNDING = [:narrow]  # or :wider or :widest
+# TODO: replace by an enum in 0.4
+
+@doc """`get_interval_rounding()` returns the current interval rounding mode.
+There are three rounding modes:
+
+- :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
+This gives the narrowest possible interval.
+
+- :wider -- fixes the floating-point rounding mode in `RoundUp` (which is a bad idea
+if any non-interval floating-point functions will be used). Downward rounding is achieved
+using `prevfloat`. This gives intervals that is one `eps` wider if the result of the calculation
+is exact.
+
+- :wide -- Leaves the floating-point rounding mode in `RoundNearest` and uses
+`prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
+""" ->
+
+get_interval_rounding() = INTERVAL_ROUNDING[end]
+
+function set_interval_rounding(mode)
+    INTERVAL_ROUNDING[end] = mode  # a symbol
+
+    if mode == :wider  # dangerous
+        set_rounding(Float64, RoundUp)
+        set_rounding(BigFloat, RoundUp)
+
+    else  # :wide and :narrow
+        set_rounding(Float64, RoundNearest)
+        set_rounding(BigFloat, RoundNearest)
+
+    end
+end
+
+set_interval_rounding(:narrow)
+
+
+macro with_rounding(T, expr, rounding_mode)
     quote
         with_rounding($T, $rounding_mode) do
             $expr
@@ -19,10 +56,22 @@ macro rounding(T, expr, rounding_mode)
     end
 end
 
-
+@doc """The `@round` macro creates a rounded interval according to the current interval rounding mode.
+It is the main function used to create intervals in the library (e.g. when adding two intervals, etc.)""" ->
 macro round(T, expr1, expr2)
     quote
-        Interval(@rounding($T, $expr1, RoundDown), @rounding($T, $expr2, RoundUp))
+        mode = get_interval_rounding()
+
+        if mode == :narrow
+            Interval(@with_rounding($T, $expr1, RoundDown), @with_rounding($T, $expr2, RoundUp))
+
+        elseif mode == :wider  # assumes RoundUp is always set
+            Interval(prevfloat($expr1), $expr2)
+
+        else  # mode == :wide;  works with any rounding mode set, but the result will depend on the rounding mode
+            # we assume RoundNearest
+            Interval(prevfloat($expr1), nextfloat($expr2))
+        end
     end
 end
 
