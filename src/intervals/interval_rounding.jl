@@ -11,7 +11,7 @@ if VERSION > v"0.4-"
 end
 
 
-const global INTERVAL_ROUNDING = [:narrow]  # or :wider or :widest
+const INTERVAL_ROUNDING = [:narrow]  # or :wider or :widest
 # TODO: replace by an enum in 0.4
 
 @doc """`get_interval_rounding()` returns the current interval rounding mode.
@@ -62,15 +62,16 @@ macro round(T, expr1, expr2)
     quote
         mode = get_interval_rounding()
 
-        if mode == :narrow
-            Interval(@with_rounding($T, $expr1, RoundDown), @with_rounding($T, $expr2, RoundUp))
-
-        elseif mode == :wider  # assumes RoundUp is always set
-            Interval(prevfloat($expr1), $expr2)
-
-        else  # mode == :wide;  works with any rounding mode set, but the result will depend on the rounding mode
+        if mode == :wide  #works with any rounding mode set, but the result will depend on the rounding mode
             # we assume RoundNearest
             Interval(prevfloat($expr1), nextfloat($expr2))
+
+        elseif mode == :narrow
+            Interval(@with_rounding($T, $expr1, RoundDown), @with_rounding($T, $expr2, RoundUp))
+
+        else#if mode == :wider  # assumes RoundUp is always set
+            Interval(prevfloat($expr1), $expr2)
+
         end
     end
 end
