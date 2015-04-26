@@ -77,9 +77,7 @@ macro round(T, expr1, expr2)
     end
 end
 
-
-<<<<<<< HEAD
-=======
+@doc doc"""`@thin_round` possibly saves one operation compared to `@round`.""" ->
 macro thin_round(T, expr)
     quote
         mode = get_interval_rounding()
@@ -101,65 +99,67 @@ macro thin_round(T, expr)
     end
 end
 
+# @doc doc"""`thin_interval` takes an expression and makes a "thin" interval
+# by rounding it downwards and upwards.
 
->>>>>>> 0969e46... Modified conversion and promotion rules so that they work again
-@doc doc"""`thin_interval` takes an expression and makes a "thin" interval
-by rounding it downwards and upwards.
+# *This should never be called directly by user code*.
 
-*This should never be called directly by user code*.
+# Rather, it is used from the `transf` function which passes suitable expressions
+# to process objects of different types.
 
-Rather, it is used from the `transf` function which passes suitable expressions
-to process objects of different types.
+# Note that this does not necessarily produce true "thin" intervals (of zero width,
+# i.e. with identical start- and end- points). Rather, it produces an interval that
+# is *as thin as possible*, i.e. if the result is `a`, such that `nextfloat(a.lo) == a.hi`.
 
-Note that this does not necessarily produce true "thin" intervals (of zero width,
-i.e. with identical start- and end- points). Rather, it produces an interval that
-is *as thin as possible*, i.e. if the result is `a`, such that `nextfloat(a.lo) == a.hi`.
+# Nonetheless, a *true* thin interval of zero width may be created by passing it directly
+# a `Float64` or `BigFloat`.
+# """ ->
 
-Nonetheless, a *true* thin interval of zero width may be created by passing it directly
-a `Float64` or `BigFloat`.
-""" ->
+# macro thin_interval(expr)
+#     quote
+#         @thin_round(BigFloat, $expr)
+#     end
+# end
 
-macro thin_interval(expr)
-    quote
-        @thin_round(BigFloat, $expr)
-    end
-end
-
-macro thin_float_interval(expr)
-    quote
-        @thin_round(Float64, $expr)
-    end
-end
+# macro thin_float_interval(expr)
+#     quote
+#         @thin_round(Float64, $expr)
+#     end
+# end
 
 
 ## Wrap user input for correct rounding:
 # These transf functions are called after the initial @interval macro has been expanded
 
-big_transf(x::String)    =  @thin_interval(@compat parse(BigFloat,x))
+big_transf(x::String)    =  @thin_round(@compat parse(BigFloat,x))
 # TODO: Check conversion to Float64 from big intervals with > 53 bits. Is the rounding correct?
 
-big_transf(x::MathConst) =  @thin_interval(big(x))
+big_transf(x::String)    =  @thin_round(BigFloat, BigFloat(x))
+big_transf(x::MathConst) =  @thin_round(BigFloat, big(x))
 
-# big_transf(x::Integer)   =  @thin_interval(BigFloat("$x"))
-big_transf(x::Integer)   =  @thin_interval(@compat parse(BigFloat,"$x"))
+big_transf(x::Integer)   =  Interval(BigFloat(x))  # no rounding -- dangerous if very big integer
+# but conversion from BigInt to BigFloat with correct rounding seems to be broken anyway # @thin_interval(BigFloat("$x"))
 big_transf(x::Rational)  =  big_transf(x.num) / big_transf(x.den)
 big_transf(x::Float64)   =  big_transf(rationalize(x))  # NB: converts a float to a rational
 
-big_transf(x::BigFloat)  =  @thin_interval(x)  # NB: this will give a true thin interval (zero width)
-big_transf(x::Interval)  =  @round(BigFloat, convert(BigFloat, x.lo), convert(BigFloat, x.hi))#convert(Interval{BigFloat}, x)
+big_transf(x::BigInt)  =  @thin_round(BigFloat, convert(BigFloat, x))  # NB: this will give a true thin interval (zero width)
+
+big_transf(x::BigFloat)  =  @thin_round(BigFloat, 1.*x)  # convert to possibly different BigFloat precision
+big_transf(x::Interval)  =  @round(BigFloat, convert(BigFloat, x.lo), convert(BigFloat, x.hi)) #convert(Interval{BigFloat}, x)
 
 
-float_transf(x::String)    =  @thin_float_interval(parsefloat(x))
+float_transf(x::String)    =  @thin_round(Float64, parsefloat(x))
 float_transf(x::MathConst) =  float_transf(big_transf(x)) #convert(Interval{Float64}, @thin_interval(big(x)))   # this should be improved. What happens if BigFloat precision > 53?
 # should just define an interval FLOAT_PI
 
-float_transf(x::Integer)   =  @thin_float_interval(float(x))
+float_transf(x::Integer)   =  Interval(float(x))  # @thin_float_interval(float(x))  # assumes the int is representable
 float_transf(x::Rational)  =  float_transf(x.num) / float_transf(x.den)
 float_transf(x::Float64)   =  float_transf(rationalize(x))  # NB: converts a float to a rational
 
-float_transf(x::BigFloat)  =  @thin_float_interval(convert(Float64, x))  # NB: this will give a true thin interval (zero width)
+float_transf(x::BigInt)    =  float_transf(big_transf(x)) #@round(BigFloat, convert(Float64, x), convert(Float64, x))
+float_transf(x::BigFloat)  =  @thin_round(BigFloat, convert(Float64, x)) # @thin_float_interval(convert(Float64, x))  # NB: this will give a true thin interval (zero width)
 float_transf(x::Interval)  =  @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi)) #convert(Interval{Float64}, x)
-
+# BigFloat to Float64 conversion uses *BigFloat* rounding mode
 
 @doc doc"""`transform` transforms a string by applying the function `transf` to each argument, e.g
 `:(x+y)` is transformed to (approximately)
