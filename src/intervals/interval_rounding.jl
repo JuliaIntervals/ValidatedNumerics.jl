@@ -11,19 +11,14 @@ if VERSION > v"0.4-"
 end
 
 
-const INTERVAL_ROUNDING = [:narrow]  # or :wider or :wide
+const INTERVAL_ROUNDING = [:narrow]  # or :wide
 # TODO: replace by an enum in 0.4
 
-@doc """`get_interval_rounding()` returns the current interval rounding mode.
-There are three rounding modes:
+@doc doc"""`get_interval_rounding()` returns the current interval rounding mode.
+There are two possible rounding modes:
 
 - :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
 This gives the narrowest possible interval.
-
-- :wider -- fixes the floating-point rounding mode in `RoundUp` (which is a bad idea
-if any non-interval floating-point functions will be used). Downward rounding is achieved
-using `prevfloat`. This gives intervals that is one `eps` wider if the result of the calculation
-is exact.
 
 - :wide -- Leaves the floating-point rounding mode in `RoundNearest` and uses
 `prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
@@ -31,19 +26,9 @@ is exact.
 
 get_interval_rounding() = INTERVAL_ROUNDING[end]
 
-function set_interval_rounding(mode)
-    INTERVAL_ROUNDING[end] = mode  # a symbol
+set_interval_rounding(mode) = INTERVAL_ROUNDING[end] = mode  # a symbol
 
-    if mode == :wider  # dangerous
-        set_rounding(Float64, RoundUp)
-        set_rounding(BigFloat, RoundUp)
 
-    else  # :wide and :narrow
-        set_rounding(Float64, RoundNearest)
-        set_rounding(BigFloat, RoundNearest)
-
-    end
-end
 
 set_interval_rounding(:narrow)
 
@@ -56,8 +41,10 @@ macro with_rounding(T, expr, rounding_mode)
     end
 end
 
-@doc """The `@round` macro creates a rounded interval according to the current interval rounding mode.
-It is the main function used to create intervals in the library (e.g. when adding two intervals, etc.)""" ->
+
+@doc doc"""The `@round` macro creates a rounded interval according to the current interval rounding mode.
+It is the main function used to create intervals in the library (e.g. when adding two intervals, etc.).
+It uses the interval rounding mode (see get_interval_rounding())""" ->
 macro round(T, expr1, expr2)
     #@show "round", expr1, expr2
     quote
@@ -67,13 +54,10 @@ macro round(T, expr1, expr2)
             # we assume RoundNearest
             Interval(prevfloat($expr1), nextfloat($expr2))
 
-        elseif mode == :narrow
+        else # mode == :narrow
             Interval(@with_rounding($T, $expr1, RoundDown), @with_rounding($T, $expr2, RoundUp))
-
-        else#if mode == :wider  # assumes RoundUp is always set
-            Interval(prevfloat($expr1), $expr2)
-
         end
+
     end
 end
 
@@ -87,49 +71,15 @@ macro thin_round(T, expr)
             temp = $expr  # evaluate the expression
             Interval(prevfloat(temp), nextfloat(temp))
 
-        elseif mode == :narrow
+        else # mode == :narrow
             Interval(@with_rounding($T, $expr, RoundDown), @with_rounding($T, $expr, RoundUp))
 
-        else#if mode == :wider  # assumes RoundUp is always set
-            temp = $expr
-            Interval(prevfloat(temp), temp)
-
         end
-
     end
 end
 
-# @doc doc"""`thin_interval` takes an expression and makes a "thin" interval
-# by rounding it downwards and upwards.
 
-# *This should never be called directly by user code*.
-
-# Rather, it is used from the `transf` function which passes suitable expressions
-# to process objects of different types.
-
-# Note that this does not necessarily produce true "thin" intervals (of zero width,
-# i.e. with identical start- and end- points). Rather, it produces an interval that
-# is *as thin as possible*, i.e. if the result is `a`, such that `nextfloat(a.lo) == a.hi`.
-
-# Nonetheless, a *true* thin interval of zero width may be created by passing it directly
-# a `Float64` or `BigFloat`.
-# """ ->
-
-# macro thin_interval(expr)
-#     quote
-#         @thin_round(BigFloat, $expr)
-#     end
-# end
-
-# macro thin_float_interval(expr)
-#     quote
-#         @thin_round(Float64, $expr)
-#     end
-# end
-
-
-## Wrap user input for correct rounding:
-# These transf functions are called after the initial @interval macro has been expanded
+@doc doc"""`big_transf` is used by `@interval` to create intervals from individual elements of different types"""->
 
 big_transf(x::String)    =  @thin_round(@compat parse(BigFloat,x))
 # TODO: Check conversion to Float64 from big intervals with > 53 bits. Is the rounding correct?
@@ -142,11 +92,13 @@ big_transf(x::Integer)   =  Interval(BigFloat(x))  # no rounding -- dangerous if
 big_transf(x::Rational)  =  big_transf(x.num) / big_transf(x.den)
 big_transf(x::Float64)   =  big_transf(rationalize(x))  # NB: converts a float to a rational
 
-big_transf(x::BigInt)  =  @thin_round(BigFloat, convert(BigFloat, x))  # NB: this will give a true thin interval (zero width)
+big_transf(x::BigInt)    =  @thin_round(BigFloat, convert(BigFloat, x))  # NB: this will give a true thin interval (zero width)
 
 big_transf(x::BigFloat)  =  @thin_round(BigFloat, 1.*x)  # convert to possibly different BigFloat precision
 big_transf(x::Interval)  =  @round(BigFloat, convert(BigFloat, x.lo), convert(BigFloat, x.hi)) #convert(Interval{BigFloat}, x)
 
+
+@doc doc"""`float_transf` is used by `@floatinterval` to create intervals from individual elements of different types"""->
 
 float_transf(x::String)    =  @thin_round(Float64, parsefloat(x))
 float_transf(x::MathConst) =  float_transf(big_transf(x)) #convert(Interval{Float64}, @thin_interval(big(x)))   # this should be improved. What happens if BigFloat precision > 53?
@@ -160,6 +112,7 @@ float_transf(x::BigInt)    =  float_transf(big_transf(x)) #@round(BigFloat, conv
 float_transf(x::BigFloat)  =  @thin_round(BigFloat, convert(Float64, x)) # @thin_float_interval(convert(Float64, x))  # NB: this will give a true thin interval (zero width)
 float_transf(x::Interval)  =  @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi)) #convert(Interval{Float64}, x)
 # BigFloat to Float64 conversion uses *BigFloat* rounding mode
+
 
 @doc doc"""`transform` transforms a string by applying the function `transf` to each argument, e.g
 `:(x+y)` is transformed to (approximately)
@@ -242,7 +195,4 @@ end
 
 
 
-function float(x::Interval)
-    # @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi))
-    convert(Interval{Float64}, x)
-end
+float(x::Interval) = convert(Interval{Float64}, x)
