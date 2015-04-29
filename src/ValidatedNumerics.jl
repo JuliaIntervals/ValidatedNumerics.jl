@@ -33,8 +33,8 @@ export
 export
     newton, krawczyk,
     differentiate, D, # should these be exported?
-    Root
-    findroots,
+    Root,
+    findroots
 
 ## Default precision:
 set_bigfloat_precision(53)

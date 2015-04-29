@@ -81,7 +81,7 @@ end
 
 @doc doc"""`big_transf` is used by `@interval` to create intervals from individual elements of different types"""->
 
-big_transf(x::String)    =  @thin_round(@compat parse(BigFloat,x))
+big_transf(x::String)    =  @thin_round(BigFloat, @compat parse(BigFloat,x))
 # TODO: Check conversion to Float64 from big intervals with > 53 bits. Is the rounding correct?
 
 big_transf(x::String)    =  @thin_round(BigFloat, BigFloat(x))
