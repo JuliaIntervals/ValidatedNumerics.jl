@@ -71,6 +71,7 @@ end
 
 #tan{T<:Real}(a::Interval{T}) = sin(a) / cos(a)
 
+#tan{T:<Real}(a::Interval{T}) = sin(a) / cos(a)
 
 function cos{T<:Real}(a::Interval{T})
 
