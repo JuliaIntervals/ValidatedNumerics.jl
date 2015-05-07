@@ -32,7 +32,7 @@ function sin{T<:Real}(a::Interval{T})
 
     whole_range = Interval(-one(T), one(T))
 
-    diam(a) >= 3*half_pi(T).lo && return whole_range
+    diam(a) >= two_pi(T).lo && return whole_range
 
     lo_quadrant = minimum(find_quadrants(a.lo))
     hi_quadrant = maximum(find_quadrants(a.hi))
