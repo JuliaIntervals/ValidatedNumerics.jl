@@ -18,7 +18,8 @@ export
     get_interval_rounding, set_interval_rounding,
     diam, mid, mag, mig, hull, isinside,
     emptyinterval, ∅, isempty, ⊊,
-    widen
+    widen,
+    set_interval_precision
 
 ## Root finding
 export
