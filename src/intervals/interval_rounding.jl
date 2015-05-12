@@ -113,9 +113,9 @@ make_interval(::Type{Float64}, x::Interval)  =  @round(BigFloat, convert(Float64
 
 
 
-@doc doc"""`transform` transforms a string by applying the function `transf` to each argument, e.g
+@doc doc"""`transform` transforms a string by applying the function `f` to each argument, e.g
 `:(x+y)` is transformed to (approximately)
-`:(transf(x) + transf(y))`
+`:(f(T, x) + f(T, y))`, where `T` is the type.
 """ ->
 transform(x, f, T) = :($f($T, $(esc(x))))   # use if x is not an expression
 
@@ -162,34 +162,6 @@ macro make_interval(T, expr1, expr2...)
     make_interval(T, expr1, expr2)
 end
 
-@doc doc"""The `@interval` macro is the main way to create an interval of `BigFloat`s.
-It converts each expression into a thin interval that is guaranteed to contain the true value passed
-by the user in the one or two expressions passed to it.
-It takes the hull of the resulting intervals (if necessary, i.e. when given two expressions)
-to give a guaranteed containing interval.
-
-Examples:
-```
-    @interval(0.1)
-
-    @interval(0.1, 0.2)
-
-    @interval(1/3, 1/6)
-
-    @interval(1/3^2)
-```
-"""->
-
-macro interval(expr1, expr2...)
-    make_interval(BigFloat, expr1, expr2)
-end
-
-@doc doc"""The `floatinterval` macro constructs an interval with `Float64` entries,
-instead of `BigFloat`. It is just a wrapper of the `@interval` macro.""" ->
-
-macro floatinterval(expr1, expr2...)
-    make_interval(Float64, expr1, expr2)
-end
 
 
-float(x::Interval) = convert(Interval{Float64}, x)
+float(x::Interval) = make_interval(Float64, x)

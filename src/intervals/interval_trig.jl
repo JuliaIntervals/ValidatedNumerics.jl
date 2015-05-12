@@ -11,7 +11,7 @@ get_pi(::Type{Float64})  = float_pi_interval
 half_pi{T}(::Type{T}) = get_pi(T) / 2
 two_pi{T}(::Type{T})  = get_pi(T) * 2
 
-half_pi(x::FloatingPoint) = half_pi(typeof(x))
+half_pi{T<:FloatingPoint}(x::T) = half_pi(T)
 
 
 @doc doc"""Finds the quadrant(s) corresponding to a given floating-point
