@@ -33,6 +33,8 @@ end
 function ^{T}(a::Interval{T}, x::Interval)
     0 > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
 
+    diam(x) <= 2*eps(mid(x)) && return a^(x.lo)  # thin interval
+
     domain = Interval{T}(0, Inf)
     a_restricted = intersect(a, domain)
 
