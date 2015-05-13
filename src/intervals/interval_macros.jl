@@ -19,7 +19,8 @@ Examples:
 macro interval(expr1, expr2...)
     #@show interval_parameters.precision_type
 
-    make_interval(interval_parameters.precision_type, expr1, expr2)
+        make_interval(:(interval_parameters.precision_type), expr1, expr2)
+
 end
 
 @doc doc"""The `floatinterval` macro constructs an interval with `Float64` entries,
@@ -27,4 +28,9 @@ instead of `BigFloat`. It is just a wrapper of the `@interval` macro.""" ->
 
 macro floatinterval(expr1, expr2...)
     make_interval(Float64, expr1, expr2)
+end
+
+
+macro make_interval(T, expr1, expr2...)
+    make_interval(T, expr1, expr2)
 end

@@ -19,14 +19,14 @@ export
     diam, mid, mag, mig, hull, isinside,
     emptyinterval, ∅, isempty, ⊊,
     widen,
-    set_interval_precision
+    set_interval_precision, get_interval_precision
 
 ## Root finding
 export
     newton, krawczyk,
     differentiate, D, # should these be exported?
     Root,
-    findroots
+    find_roots
 
 
 
