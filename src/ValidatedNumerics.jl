@@ -28,8 +28,6 @@ export
     Root,
     find_roots
 
-## Default precision:
-set_bigfloat_precision(53)
 
 
 ## Fix some issues with MathConst:
@@ -39,9 +37,13 @@ BigFloat(a::MathConst) = big(a)
 <(a::MathConst, b::MathConst) = float(a) < float(b)
 
 
-## Includes:
+
+## Includes
+
 
 include("intervals/intervals.jl")
 include("root_finding/root_finding.jl")
+
+
 
 end # module ValidatedNumerics

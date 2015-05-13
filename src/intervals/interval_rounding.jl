@@ -11,31 +11,7 @@ if VERSION > v"0.4-"
 end
 
 
-const INTERVAL_ROUNDING = [:narrow]  # or :wide
-# TODO: replace by an enum in 0.4
 
-@doc doc"""`get_interval_rounding()` returns the current interval rounding mode.
-There are two possible rounding modes:
-
-- :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
-This gives the narrowest possible interval.
-
-- :wide -- Leaves the floating-point rounding mode in `RoundNearest` and uses
-`prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
-""" ->
-
-get_interval_rounding() = INTERVAL_ROUNDING[end]
-
-function set_interval_rounding(mode)
-    if mode ∉ [:wide, :narrow]
-        error("Only possible interval rounding modes are `:wide` and `:narrow`")
-    end
-
-    INTERVAL_ROUNDING[end] = mode  # a symbol
-end
-
-
-set_interval_rounding(:narrow)
 
 
 macro with_rounding(T, expr, rounding_mode)
@@ -165,3 +141,28 @@ end
 
 
 float(x::Interval) = make_interval(Float64, x)
+
+## Change type of interval rounding:
+
+
+@doc doc"""`get_interval_rounding()` returns the current interval rounding mode.
+There are two possible rounding modes:
+
+- :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
+This gives the narrowest possible interval.
+
+- :wide -- Leaves the floating-point rounding mode in `RoundNearest` and uses
+`prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
+""" ->
+
+get_interval_rounding() = interval_parameters.rounding
+
+function set_interval_rounding(mode)
+    if mode ∉ [:wide, :narrow]
+        error("Only possible interval rounding modes are `:wide` and `:narrow`")
+    end
+
+    interval_parameters.rounding = mode  # a symbol
+end
+
+
