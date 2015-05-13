@@ -25,7 +25,13 @@ function ^{T}(a::Interval{T}, x::Real)
     0 > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
 
     x = make_interval(T, x) # convert(Interval{T}, x)  # @interval(x) ?
-    a^x
+    diam(x) >= 2*eps(x) && return a^x
+
+    domain = Interval{T}(0, Inf)
+    a_restricted = a ∩ domain
+
+    @round(T, a_restricted.lo.lo^x, a_restricted.hi^x)
+
 
 end
 
