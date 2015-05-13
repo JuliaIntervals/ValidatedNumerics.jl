@@ -2,11 +2,8 @@
 #----- From here on, NEEDS TESTING ------
 
 
-const float_pi_interval = @floatinterval(pi)
-const big_pi_interval = @interval(pi)
-
-get_pi(::Type{BigFloat}) = big_pi_interval
-get_pi(::Type{Float64})  = float_pi_interval
+get_pi(::Type{BigFloat}) = interval_parameters.pi
+get_pi(::Type{Float64})  = float_pi
 
 half_pi{T}(::Type{T}) = get_pi(T) / 2
 two_pi{T}(::Type{T})  = get_pi(T) * 2

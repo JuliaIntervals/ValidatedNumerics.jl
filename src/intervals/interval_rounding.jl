@@ -93,12 +93,12 @@ make_interval(::Type{Float64}, x::Interval)  =  @round(BigFloat, convert(Float64
 `:(x+y)` is transformed to (approximately)
 `:(f(T, x) + f(T, y))`, where `T` is the type.
 """ ->
-transform(x, f, T) = :($f($T, $(esc(x))))   # use if x is not an expression
+transform(x, f, T) = :($f($(esc(T)), $(esc(x))))   # use if x is not an expression
 
 function transform(expr::Expr, f::Symbol, T)
 
     if expr.head == :(.)   # e.g. a.lo
-        return :($f($T, $(esc(expr))))
+        return :($f($esc(T), $(esc(expr))))
     end
 
     new_expr = copy(expr)
@@ -134,9 +134,7 @@ function make_interval(T, expr1, expr2)
     :(hull($expr1, $expr2))
 end
 
-macro make_interval(T, expr1, expr2...)
-    make_interval(T, expr1, expr2)
-end
+
 
 
 
