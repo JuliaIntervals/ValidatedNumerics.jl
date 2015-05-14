@@ -11,9 +11,6 @@ if VERSION > v"0.4-"
 end
 
 
-
-
-
 macro with_rounding(T, expr, rounding_mode)
     quote
         with_rounding($T, $rounding_mode) do
@@ -75,7 +72,6 @@ make_interval(::Type{BigFloat}, x::BigFloat)  =  @thin_round(BigFloat, 1.*x)  # 
 make_interval(::Type{BigFloat}, x::Interval)  =  @round(BigFloat, big(1.*x.lo), big(1.*x.hi))
 
 
-
 make_interval(::Type{Float64}, x::String)    =  @thin_round(Float64, @compat parse(Float64, x))
 make_interval(::Type{Float64}, x::MathConst) =  make_interval(Float64, make_interval(BigFloat, x))
 
@@ -88,10 +84,8 @@ make_interval(::Type{Float64}, x::BigFloat)  =  @thin_round(BigFloat, convert(Fl
 make_interval(::Type{Float64}, x::Interval)  =  @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi)) # NB: BigFloat to Float64 conversion uses *BigFloat* rounding mode
 
 
-
-@doc doc"""`transform` transforms a string by applying the function `f` to each argument, e.g
-`:(x+y)` is transformed to (approximately)
-`:(f(T, x) + f(T, y))`, where `T` is the type.
+@doc doc"""`transform` transforms a string by applying the function `f` and type `T` to each argument, i.e.
+`:(x+y)` is transformed to `:(f(T, x) + f(T, y))`
 """ ->
 transform(x, f, T) = :($f($(esc(T)), $(esc(x))))   # use if x is not an expression
 
@@ -128,6 +122,10 @@ end
 
 
 # Called by interval and floatinterval macros
+@doc doc"""`make_interval` does the hard work of taking expressions
+and making each literal (0.1, 1, etc.) into a corresponding interval construction,
+by calling `transform`.""" ->
+
 function make_interval(T, expr1, expr2)
     expr1 = transform(expr1, :make_interval, T)
 

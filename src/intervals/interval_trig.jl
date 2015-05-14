@@ -1,10 +1,4 @@
 
-#----- From here on, NEEDS TESTING ------
-
-
-get_pi(::Type{BigFloat}) = interval_parameters.pi
-get_pi(::Type{Float64})  = float_pi
-
 half_pi{T}(::Type{T}) = get_pi(T) / 2
 two_pi{T}(::Type{T})  = get_pi(T) * 2
 
@@ -61,12 +55,6 @@ function sin{T<:Real}(a::Interval{T})
         error(string("SOMETHING WENT WRONG in sin with argument $a; this should have never been reached.") )
     end
 end
-
-
-# Could define cos in terms of sin as follows, but it's slightly less accurate:
-# cos{T<:Real}(a::Interval{T}) = sin(half_pi(T) - a)
-
-#tan{T<:Real}(a::Interval{T}) = sin(a) / cos(a)
 
 
 function cos{T<:Real}(a::Interval{T})
@@ -135,4 +123,11 @@ function tan{T<:Real}(a::Interval{T})
     #            "\n The hull of the disjoint subintervals is considered:\n", rangeTan))
 #     return whole_range
 end
+
+
+# Could define cos in terms of sin as follows, but it's slightly less accurate:
+# cos{T<:Real}(a::Interval{T}) = sin(half_pi(T) - a)
+
+# And tan in terms of sin and cos:
+# tan{T<:Real}(a::Interval{T}) = sin(a) / cos(a)
 
