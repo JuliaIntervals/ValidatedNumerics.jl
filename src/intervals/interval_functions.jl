@@ -22,7 +22,7 @@ function ^{T}(a::Interval{T}, x::Real)
     zero(a.hi) > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
 
     x_interval = make_interval(T, x) # convert(Interval{T}, x)  # @interval(x) ?
-    diam(x_interval) > 2*eps(x) && return a^x_interval
+    diam(x_interval) >= eps(x) && return a^x_interval
 
     domain = Interval{T}(0, Inf)
     a_restricted = a ∩ domain
