@@ -19,10 +19,10 @@ end
 # Real power of an interval:
 function ^{T}(a::Interval{T}, x::Real)
     isinteger(x)  && return a^round(Int,x)
-    x < 0  && return inv( a^(-x) )
+    x < zero(x)  && return inv(a^(-x))
     x == 0.5  && return sqrt(a)
 
-    0 > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
+    zero(a.hi) > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
 
     x = make_interval(T, x) # convert(Interval{T}, x)  # @interval(x) ?
     diam(x) >= 2*eps(x) && return a^x
@@ -30,14 +30,12 @@ function ^{T}(a::Interval{T}, x::Real)
     domain = Interval{T}(0, Inf)
     a_restricted = a ∩ domain
 
-    @round(T, a_restricted.lo.lo^x, a_restricted.hi^x)
-
-
+    @round(T, a_restricted.lo^x, a_restricted.hi^x)
 end
 
 # Interval power of an interval:
 function ^{T}(a::Interval{T}, x::Interval)
-    0 > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
+    zero(a.hi) > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
 
     diam(x) <= 2*eps(mid(x)) && return a^(x.lo)  # thin interval
 
@@ -64,7 +62,7 @@ inf(x::Rational) = 1//0  # to allow sqrt()
 
 function sqrt{T}(a::Interval{T})
 
-    0 > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
+    zero(a.hi) > a.hi && error("Undefined: interval is strictly negative and power is non-integer")
 
     domain = Interval{T}(0, Inf)
     a_restricted = intersect(a, domain)
@@ -80,7 +78,7 @@ exp{T}(a::Interval{T}) = @round(T, exp(a.lo), exp(a.hi))
 function log{T}(a::Interval{T})
 
     domain = Interval{T}(0, Inf)
-    0 > a.hi && error("Undefined log; Interval is strictly negative")
+    zero(a.hi) > a.hi && error("Undefined log; Interval is strictly negative")
 
     a_restricted = intersect(a, domain)
 

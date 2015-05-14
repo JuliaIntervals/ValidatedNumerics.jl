@@ -115,7 +115,6 @@ function transform(expr::Expr, f::Symbol, T)
         end
     end
 
-
     for (i, arg) in enumerate(expr.args)
         i < first && continue
         #@show i,arg
@@ -142,9 +141,6 @@ function make_interval(T, expr1, expr2)
 end
 
 
-
-
-
 float(x::Interval) = make_interval(Float64, x)
 
 ## Change type of interval rounding:
@@ -169,5 +165,3 @@ function set_interval_rounding(mode)
 
     interval_parameters.rounding = mode  # a symbol
 end
-
-
