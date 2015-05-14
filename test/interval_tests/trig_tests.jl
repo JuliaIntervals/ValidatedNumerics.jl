@@ -1,3 +1,9 @@
+using ValidatedNumerics
+using FactCheck
+
+set_rounding(BigFloat, RoundUp)
+set_rounding(Float64, RoundUp)
+
 
 facts("Trig tests") do
     @fact sin(@interval(0.5)) => Interval(0.47942553860420295, 0.47942553860420301)

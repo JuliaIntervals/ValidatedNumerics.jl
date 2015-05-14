@@ -24,16 +24,17 @@ import Base:
 
 export
     Interval, @interval, @floatinterval,
+    get_interval_rounding, set_interval_rounding,
     diam, mid, mag, mig, hull, isinside,
     emptyinterval, ∅, isempty, ⊊,
-    widen,
-    findroots
+    widen
 
 ## Root finding
 export
     newton, krawczyk,
     differentiate, D, # should these be exported?
-    Root
+    Root,
+    findroots
 
 ## Default precision:
 set_bigfloat_precision(53)
