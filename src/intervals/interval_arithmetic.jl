@@ -13,6 +13,7 @@ emptyinterval() = ∅
 
 isempty(x::Interval) = isnan(x.lo) || isnan(x.hi)
 
+eps(x::Interval) = max(eps(x.lo), eps(x.hi))
 
 ## "Thin" interval (one for which there is "no more precision")
 # Note that this is not the standard usage of "thin interval", which is one for

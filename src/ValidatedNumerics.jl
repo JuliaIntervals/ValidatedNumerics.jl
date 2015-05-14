@@ -11,7 +11,7 @@ import Base:
     convert, promote_rule, eltype,
     BigFloat, float,
     set_rounding, widen,
-    ⊆
+    ⊆, eps
 
 export
     Interval, @interval, @floatinterval,
@@ -20,7 +20,7 @@ export
     emptyinterval, ∅, isempty, ⊊,
     widen,
     set_interval_precision, get_interval_precision,
-    interval_parameters
+    interval_parameters, eps
 
 ## Root finding
 export
