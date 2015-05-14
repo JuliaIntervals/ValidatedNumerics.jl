@@ -31,12 +31,12 @@ facts("Testing root_finding methods") do
         f = sin
         f_prime = cos
         context("Testing zeros using $method of $f in $a") do
-            res = BigFloat[-pi, 0.0, pi]
+            res = Float64[-pi, 0.0, pi]
             roots_sin = method(f, f_prime, a)
             for i in 1:length(roots_sin)
                 root = roots_sin[i]
                 @fact res[i] ∈ root[1] => true
-                @fact isa(root, Root{BigFloat}) => true
+                @fact isa(root, Root{Float64}) => true
                 @fact is_unique(root) => true
             end
         end
@@ -57,6 +57,56 @@ facts("Testing root_finding methods") do
         b = @interval(-7.3, 7.3)
         W₃, W₃_prime = generate_wilkinson(3)
         context("Testing zeros of W₃ in $b") do 
+            res = Float64[1.0, 2.0, 3.0]
+            roots_w3 = method(W₃, W₃_prime, b)
+            for i in length(roots_w3)
+                root = roots_w3[i]
+                @fact res[i] ∈ root[1] => true
+                @fact isa(root, Root{Float64}) => true
+                @fact is_unique(root) => true
+            end
+        end
+    end
+end
+
+facts("Testing root_finding methods changing precision") do
+
+    for method in (newton, krawczyk)
+
+        set_interval_precision(256)
+        a = @interval(-5, 5)
+        f = sin
+        f_prime = cos
+        context("Testing zeros using $method of $f in $a") do
+            res = BigFloat[pi, 0.0, pi]
+            res[1] = -res[1]
+            roots_sin = method(f, f_prime, a)
+            for i in 1:length(roots_sin)
+                root = roots_sin[i]
+                @fact res[i] ∈ root[1] => true
+                @fact isa(root, Root{BigFloat}) => true
+                @fact is_unique(root) => true
+            end
+        end
+
+        set_interval_precision(Float64)
+        a = @floatinterval(-7.5, 7.5)
+        f = cos
+        context("Testing zeros using $method of $f in $a") do
+            res = [-3pi/2, -pi/2, pi/2, 3pi/2]
+            roots_cos = method(f, a)
+            for i in 1:length(roots_cos)
+                root = roots_cos[i]
+                @fact res[i] ∈ root[1] => true
+                @fact isa(root, Root{Float64}) => true
+                @fact is_unique(root) => true
+            end
+        end
+
+        set_interval_precision(256)
+        b = @interval(-7.3, 7.3)
+        W₃, W₃_prime = generate_wilkinson(3)
+        context("Testing zeros of W₃ in $b") do 
             res = BigFloat[1.0, 2.0, 3.0]
             roots_w3 = method(W₃, W₃_prime, b)
             for i in length(roots_w3)
@@ -68,5 +118,4 @@ facts("Testing root_finding methods") do
         end
     end
 end
-
 

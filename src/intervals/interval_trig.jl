@@ -1,17 +1,8 @@
 
-#----- From here on, NEEDS TESTING ------
-
-
-const float_pi_interval = @floatinterval(pi)
-const big_pi_interval = @interval(pi)
-
-get_pi(::Type{BigFloat}) = big_pi_interval
-get_pi(::Type{Float64})  = float_pi_interval
-
 half_pi{T}(::Type{T}) = get_pi(T) / 2
 two_pi{T}(::Type{T})  = get_pi(T) * 2
 
-half_pi(x::FloatingPoint) = half_pi(typeof(x))
+half_pi{T<:FloatingPoint}(x::T) = half_pi(T)
 
 
 @doc doc"""Finds the quadrant(s) corresponding to a given floating-point
@@ -64,12 +55,6 @@ function sin{T<:Real}(a::Interval{T})
         error(string("SOMETHING WENT WRONG in sin with argument $a; this should have never been reached.") )
     end
 end
-
-
-# Could define cos in terms of sin as follows, but it's slightly less accurate:
-# cos{T<:Real}(a::Interval{T}) = sin(half_pi(T) - a)
-
-#tan{T<:Real}(a::Interval{T}) = sin(a) / cos(a)
 
 
 function cos{T<:Real}(a::Interval{T})
@@ -138,4 +123,11 @@ function tan{T<:Real}(a::Interval{T})
     #            "\n The hull of the disjoint subintervals is considered:\n", rangeTan))
 #     return whole_range
 end
+
+
+# Could define cos in terms of sin as follows, but it's slightly less accurate:
+# cos{T<:Real}(a::Interval{T}) = sin(half_pi(T) - a)
+
+# And tan in terms of sin and cos:
+# tan{T<:Real}(a::Interval{T}) = sin(a) / cos(a)
 

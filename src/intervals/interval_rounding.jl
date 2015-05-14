@@ -11,33 +11,6 @@ if VERSION > v"0.4-"
 end
 
 
-const INTERVAL_ROUNDING = [:narrow]  # or :wide
-# TODO: replace by an enum in 0.4
-
-@doc doc"""`get_interval_rounding()` returns the current interval rounding mode.
-There are two possible rounding modes:
-
-- :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
-This gives the narrowest possible interval.
-
-- :wide -- Leaves the floating-point rounding mode in `RoundNearest` and uses
-`prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
-""" ->
-
-get_interval_rounding() = INTERVAL_ROUNDING[end]
-
-function set_interval_rounding(mode)
-    if mode ∉ [:wide, :narrow]
-        error("Only possible interval rounding modes are `:wide` and `:narrow`")
-    end
-
-    INTERVAL_ROUNDING[end] = mode  # a symbol
-end
-
-
-set_interval_rounding(:narrow)
-
-
 macro with_rounding(T, expr, rounding_mode)
     quote
         with_rounding($T, $rounding_mode) do
@@ -99,7 +72,6 @@ make_interval(::Type{BigFloat}, x::BigFloat)  =  @thin_round(BigFloat, 1.*x)  # 
 make_interval(::Type{BigFloat}, x::Interval)  =  @round(BigFloat, big(1.*x.lo), big(1.*x.hi))
 
 
-
 make_interval(::Type{Float64}, x::String)    =  @thin_round(Float64, @compat parse(Float64, x))
 make_interval(::Type{Float64}, x::MathConst) =  make_interval(Float64, make_interval(BigFloat, x))
 
@@ -112,25 +84,29 @@ make_interval(::Type{Float64}, x::BigFloat)  =  @thin_round(BigFloat, convert(Fl
 make_interval(::Type{Float64}, x::Interval)  =  @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi)) # NB: BigFloat to Float64 conversion uses *BigFloat* rounding mode
 
 
-
-@doc doc"""`transform` transforms a string by applying the function `transf` to each argument, e.g
-`:(x+y)` is transformed to (approximately)
-`:(transf(x) + transf(y))`
+@doc doc"""`transform` transforms a string by applying the function `f` and type `T` to each argument, i.e.
+`:(x+y)` is transformed to `:(f(T, x) + f(T, y))`
 """ ->
-transform(x, f, T) = :($f($T, $(esc(x))))   # use if x is not an expression
+transform(x, f, T) = :($f($(esc(T)), $(esc(x))))   # use if x is not an expression
 
 function transform(expr::Expr, f::Symbol, T)
 
     if expr.head == :(.)   # e.g. a.lo
-        return :($f($T, $(esc(expr))))
+        return :($f($(esc(T)), $(esc(expr))))
     end
 
     new_expr = copy(expr)
 
 
     first = 1  # where to start processing arguments
+
     if expr.head == :call
-        first = 2  # skip operator
+        if expr.args[1] ∈ (:+, :-, :*, :/, :^)
+            first = 2  # skip operator
+        else   # escape standard function:
+            new_expr.args[1] = :($(esc(expr.args[1])))
+            first = 2
+        end
     end
 
     for (i, arg) in enumerate(expr.args)
@@ -146,6 +122,10 @@ end
 
 
 # Called by interval and floatinterval macros
+@doc doc"""`make_interval` does the hard work of taking expressions
+and making each literal (0.1, 1, etc.) into a corresponding interval construction,
+by calling `transform`.""" ->
+
 function make_interval(T, expr1, expr2)
     expr1 = transform(expr1, :make_interval, T)
 
@@ -158,38 +138,28 @@ function make_interval(T, expr1, expr2)
     :(hull($expr1, $expr2))
 end
 
-macro make_interval(T, expr1, expr2...)
-    make_interval(T, expr1, expr2)
+
+float(x::Interval) = make_interval(Float64, x)
+
+## Change type of interval rounding:
+
+
+@doc doc"""`get_interval_rounding()` returns the current interval rounding mode.
+There are two possible rounding modes:
+
+- :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
+This gives the narrowest possible interval.
+
+- :wide -- Leaves the floating-point rounding mode in `RoundNearest` and uses
+`prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
+""" ->
+
+get_interval_rounding() = interval_parameters.rounding
+
+function set_interval_rounding(mode)
+    if mode ∉ [:wide, :narrow]
+        error("Only possible interval rounding modes are `:wide` and `:narrow`")
+    end
+
+    interval_parameters.rounding = mode  # a symbol
 end
-
-@doc doc"""The `@interval` macro is the main way to create an interval of `BigFloat`s.
-It converts each expression into a thin interval that is guaranteed to contain the true value passed
-by the user in the one or two expressions passed to it.
-It takes the hull of the resulting intervals (if necessary, i.e. when given two expressions)
-to give a guaranteed containing interval.
-
-Examples:
-```
-    @interval(0.1)
-
-    @interval(0.1, 0.2)
-
-    @interval(1/3, 1/6)
-
-    @interval(1/3^2)
-```
-"""->
-
-macro interval(expr1, expr2...)
-    make_interval(BigFloat, expr1, expr2)
-end
-
-@doc doc"""The `floatinterval` macro constructs an interval with `Float64` entries,
-instead of `BigFloat`. It is just a wrapper of the `@interval` macro.""" ->
-
-macro floatinterval(expr1, expr2...)
-    make_interval(Float64, expr1, expr2)
-end
-
-
-float(x::Interval) = convert(Interval{Float64}, x)
