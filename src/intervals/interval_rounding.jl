@@ -98,16 +98,23 @@ transform(x, f, T) = :($f($(esc(T)), $(esc(x))))   # use if x is not an expressi
 function transform(expr::Expr, f::Symbol, T)
 
     if expr.head == :(.)   # e.g. a.lo
-        return :($f($esc(T), $(esc(expr))))
+        return :($f($(esc(T)), $(esc(expr))))
     end
 
     new_expr = copy(expr)
 
 
     first = 1  # where to start processing arguments
+
     if expr.head == :call
-        first = 2  # skip operator
+        if expr.args[1] ∈ (:+, :-, :*, :/, :^)
+            first = 2  # skip operator
+        else   # escape standard function:
+            new_expr.args[1] = :($(esc(expr.args[1])))
+            first = 2
+        end
     end
+
 
     for (i, arg) in enumerate(expr.args)
         i < first && continue
