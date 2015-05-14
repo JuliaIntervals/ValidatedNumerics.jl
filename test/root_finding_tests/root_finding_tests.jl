@@ -24,14 +24,16 @@ is_unique{T}(root::Root{T}) = root[2] == :unique
 
 
 set_interval_precision(256)
+big_pi = @interval(pi)
+
 a = @interval(-5, 5)
 f = sin
 facts("Testing zeros of $f in $a") do
     roots_sin = newton(f, a)
 
-    @fact -pi ∈ roots_sin[1][1] => true
+    @fact -big_pi ⊆ roots_sin[1][1] => true
     @fact zero(eltype(a)) ∈ roots_sin[2][1] => true
-    @fact pi ∈ roots_sin[3][1] => true
+    @fact big_pi ⊆ roots_sin[3][1] => true
 
     for root in roots_sin
         @fact isa(root, Root{BigFloat}) => true
@@ -44,10 +46,10 @@ a = @interval(-7.5, 7.5)
 f = cos
 facts("Testing zeros of $f in $a using @floatinterval") do
     roots_cos = newton(f,a)
-    @fact -3pi/2 ∈ roots_cos[1][1] => true
-    @fact -pi/2 ∈ roots_cos[2][1] => true
-    @fact pi/2 ∈ roots_cos[3][1] => true
-    @fact 3pi/2 ∈ roots_cos[4][1] => true
+    @fact -3*big_pi/2 ⊆ roots_cos[1][1] => true
+    @fact -big_pi/2 ⊆ roots_cos[2][1] => true
+    @fact big_pi/2 ⊆ roots_cos[3][1] => true
+    @fact 3*big_pi/2 ⊆ roots_cos[4][1] => true
 
     for root in roots_cos
         @fact isa(root, Root{Float64}) => true
