@@ -21,9 +21,9 @@ facts("Numeric tests") do
     @fact c/4.0 => Interval(6.25e-02, 1e+00)
 
     # Powers
-    @fact @interval(-3,2)^2 => @interval(0,9)
-    @fact @interval(-3,2)^3 => @interval(-27,8)
-    @fact @interval(-3,4)^0.5 => @interval(0,2)
+    @fact @interval(-3,2)^2 => @interval(0, 9.000000000000002)
+    @fact @interval(-3,2)^3 => @interval(-27, 8)
+    @fact @interval(-3,4)^0.5 => @interval(0, 2)
     @fact @interval(-3,4)^0.5 => @interval(-3,4)^(1//2)
     @fact @interval(1,27)^@interval(1/3) => Interval(1., 3.0000000000000004e+00)  # @interval(1, 3)
     @fact @interval(-3,2)^@interval(2) => Interval(0, 9)

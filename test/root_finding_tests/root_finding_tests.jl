@@ -23,6 +23,7 @@ end
 is_unique{T}(root::Root{T}) = root[2] == :unique
 
 
+set_interval_precision(256)
 a = @interval(-5, 5)
 f = sin
 facts("Testing zeros of $f in $a") do
@@ -38,8 +39,8 @@ facts("Testing zeros of $f in $a") do
     end
 end
 
-
-a = @floatinterval(-7.5, 7.5)
+set_interval_precision(Float64)
+a = @interval(-7.5, 7.5)
 f = cos
 facts("Testing zeros of $f in $a using @floatinterval") do
     roots_cos = newton(f,a)
@@ -55,9 +56,10 @@ facts("Testing zeros of $f in $a using @floatinterval") do
 end
 
 
+set_interval_precision(256)
 b = @interval(-7.3, 7.3)
 W₃, W₃_prime = generate_wilkinson(3)
-facts("Testing zeros of W₃ in $b") do 
+facts("Testing zeros of W₃ in $b") do
     roots_w3 = newton(W₃, b)
     @fact 1.0 ∈ roots_w3[1][1] => true
     @fact 2.0 ∈ roots_w3[2][1] => true
