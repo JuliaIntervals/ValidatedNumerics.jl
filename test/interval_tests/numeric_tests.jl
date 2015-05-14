@@ -23,7 +23,7 @@ facts("Numeric tests") do
     @fact @interval(-3,2) ^ 3 => @interval(-27, 8)
     @fact @interval(-3,4) ^ 0.5 => @interval(0, 2)
     @fact @interval(-3,4) ^ 0.5 => @interval(-3,4)^(1//2)
-    @fact @interval(1,27) ^ @interval(1/3) => Interval(1., 3.)  # @interval(1, 3)
+    @fact @interval(1,27) ^ @interval(1/3) => Interval(1., 3.0000000000000004)  # @interval(1, 3)
     @fact @interval(-3,2) ^ @interval(2) => Interval(0, 9.000000000000002)
     @fact @interval(-3,4) ^ @interval(0.5) => Interval(0, 2)
 
