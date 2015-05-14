@@ -1,8 +1,6 @@
 using ValidatedNumerics
 using FactCheck
 
-set_bigfloat_precision(53)
-
 a = @interval(1.1, 0.1)
 b = @interval(0.9, 2.0)
 c = @interval(0.25, 4.0)
@@ -21,19 +19,19 @@ facts("Numeric tests") do
     @fact c/4.0 => Interval(6.25e-02, 1e+00)
 
     # Powers
-    @fact @interval(-3,2)^2 => @interval(0,9)
-    @fact @interval(-3,2)^3 => @interval(-27,8)
-    @fact @interval(-3,4)^0.5 => @interval(0,2)
-    @fact @interval(-3,4)^0.5 => @interval(-3,4)^(1//2)
-    @fact @interval(1,27)^@interval(1/3) => Interval(1., 3.0000000000000004e+00)  # @interval(1, 3)
-    @fact @interval(-3,2)^@interval(2) => Interval(0, 9)
-    @fact @interval(-3,4)^@interval(0.5) => Interval(0, 2)
+    @fact @interval(-3,2) ^ 2 => Interval(0, 9.000000000000002)
+    @fact @interval(-3,2) ^ 3 => @interval(-27, 8)
+    @fact @interval(-3,4) ^ 0.5 => @interval(0, 2)
+    @fact @interval(-3,4) ^ 0.5 => @interval(-3,4)^(1//2)
+    @fact @interval(1,27) ^ @interval(1/3) => Interval(1., 3.)  # @interval(1, 3)
+    @fact @interval(-3,2) ^ @interval(2) => Interval(0, 9.000000000000002)
+    @fact @interval(-3,4) ^ @interval(0.5) => Interval(0, 2)
 
-    @fact @interval(0.1,0.7)^(1//3) => Interval(4.6415888336127781e-01, 8.8790400174260076e-01)
-    @fact @interval(0.1,0.7)^(1/3)  => Interval(4.6415888336127781e-01, 8.8790400174260076e-01)
+    @fact @interval(0.1,0.7) ^ (1//3) => Interval(0.46415888336127786, 0.8879040017426008)
+    @fact @interval(0.1,0.7) ^ (1/3)  => Interval(0.46415888336127786, 0.8879040017426008)
 
     # exp and log
-    @fact exp(@interval(1//2)) => Interval(1.648721270700128e+00, 1.6487212707001282e+00)
+    @fact exp(@interval(1//2)) => Interval(1.6487212707001282, 1.6487212707001282)
     @fact exp(@interval(0.1)) => Interval(1.1051709180756475e+00, 1.1051709180756477e+00)
     @fact diam(exp(@interval(0.1))) => eps(exp(0.1))
     @fact log(@interval(1//2)) => Interval(-6.931471805599454e-01, -6.9314718055994529e-01)
