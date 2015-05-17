@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Basic usage - ValidatedNumerics.jl: A Julia package for rigorous numerics</title>
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script>
+
+  <style>
+    body {font-size: 90%;}
+    pre, code {font-size: 100%;}
+    h3, h4, h5, h6 {color: #2980b9; font-weight: 300}
+  </style> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> ValidatedNumerics.jl: A Julia package for rigorous numerics</a>
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+      <ul class="current">
+    
+        
+            <li class="toctree-l1 current">
+                <a class="current" href=".">Basic usage</a>
+            </li>
+        
+
+    
+        
+            <li class="toctree-l1 ">
+                <a class="" href="../root_finding">Root finding</a>
+            </li>
+        
+
+    
+        
+            <li class="toctree-l1 ">
+                <a class="" href="../rounding">Rounding</a>
+            </li>
+        
+
+    
+</ul>
+
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="icon icon-reorder"></i>
+        <a href=".."></a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    <li>Basic usage</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              <h1 id="basic-usage">Basic usage</h1>
+<p>The basic elements of the package are <strong>intervals</strong>, i.e. sets of real numbers (possibly including $\pm \infty$) of the form </p>
+<p>$$[a, b] := { a \le x \le b } \subseteq \mathbb{R}.$$</p>
+<h2 id="creating-intervals">Creating intervals</h2>
+<p>Intervals are created using the <code>@interval</code> macro, which takes one or two expressions:</p>
+<pre><code class="julia">julia&gt; using ValidatedNumerics
+
+julia&gt; a = @interval(1)
+[1.0, 1.0]
+
+julia&gt; typeof(ans)
+Interval{Float64} (constructor with 1 method)
+
+julia&gt;
+
+julia&gt; b = @interval(1, 2)
+[1.0, 2.0]
+</code></pre>
+
+<p>These return objects of the parametrised type <code>Interval</code>, the basic object in the package.</p>
+<p>The constructor of the <code>Interval</code> type may be used directly, but this is generally not recommended, for the following reason:</p>
+<pre><code class="julia">julia&gt; a = Interval(0.1, 0.3)
+[0.1, 0.3]
+
+julia&gt; b = @interval(0.1, 0.3)
+[0.09999999999999999, 0.30000000000000004]
+</code></pre>
+
+<p>What is going on here?</p>
+<p>Due to the way floating-point arithmetic works, the interval
+<code>a</code> created directly by the constructor <em>contains neither the true real number 0.1, nor 0.3</em>.
+The <code>@interval</code> macro, however, uses <a href="../rounding"><strong>directed rounding</strong></a> to <em>guarantee</em>
+that the true 0.1 and 0.3 are included in the result.</p>
+<p>Behind the scenes, the <code>@interval</code> macro rewrites the expression(s) passed to it, replacing the literals (0.1, 1, etc.) by calls to create correctly-rounded intervals, handled internally by the <code>make_interval</code> function.</p>
+<p>This allows us to write, for example</p>
+<pre><code class="julia">julia&gt; @interval sin(0.1) + cos(0.2)
+</code></pre>
+
+<p>and get a result that is equivalent to</p>
+<pre><code class="julia">julia&gt; sin(@interval(0.1)) + cos(@interval(0.2))
+</code></pre>
+
+<p>This can also be used with user-defined functions:</p>
+<pre><code class="julia">julia&gt; f(x) = 2x
+f (generic function with 1 method)
+
+julia&gt; f(@interval(0.1))
+[0.19999999999999998, 0.2]
+</code></pre>
+
+<h3 id="pi">$\pi$</h3>
+<p>You can create correctly-rounded intervals containing $\pi$: </p>
+<pre><code class="julia">julia&gt; @interval(pi)
+[3.141592653589793, 3.1415926535897936]
+</code></pre>
+
+<p>and embed it in expressions:</p>
+<pre><code class="julia">julia&gt; @interval(3*pi/2 + 1)
+[5.71238898038469, 5.712388980384691]
+</code></pre>
+
+<h2 id="examples">Examples</h2>
+<p>Intervals may be constructed using rationals:</p>
+<pre><code class="julia">julia&gt; @interval(1//10)
+[0.09999999999999999, 0.1]
+</code></pre>
+
+<p>Reals are converted to rationals:</p>
+<pre><code class="julia">julia&gt; @interval(0.1)
+[0.09999999999999999, 0.1]
+</code></pre>
+
+<p>Strings may be used:</p>
+<pre><code class="julia">julia&gt; @interval(&quot;0.1&quot;*&quot;2&quot;)
+[0.19999999999999998, 0.2]
+</code></pre>
+
+<p>Strings in the form of intervals may also be used:</p>
+<pre><code class="julia">julia&gt; @interval &quot;[1.2, 3.4]&quot;
+[1.2, 3.4000000000000004]
+</code></pre>
+
+<p>Intervals can be created from variables:</p>
+<pre><code class="julia">julia&gt; a = 3.6
+3.6
+
+julia&gt; b = @interval(a)
+[3.5999999999999996, 3.6000000000000005]
+</code></pre>
+
+<p>The upper and lower bounds of the interval may be accessed as the fields
+<code>lo</code> and <code>hi</code>:</p>
+<pre><code class="julia">julia&gt; b.lo
+3.5999999999999996
+
+julia&gt; b.hi
+3.6000000000000005
+</code></pre>
+
+<p>The diameter (length) of an interval is obtained using <code>diam(b)</code>;
+note that for non-exactly representable numbers in base 2
+(i.e., whose <em>binary</em> expansion is infinite or exceeds the current precision)
+ the diameter of newly-created thin intervals corresponds to the local machine epsilon (<code>eps</code>):</p>
+<pre><code class="julia">julia&gt; diam(b)
+8.881784197001252e-16
+
+</code></pre>
+
+<h2 id="arithmetic">Arithmetic</h2>
+<p>Basic arithmetic operations (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>) are defined for pairs of intervals in the standard way (see, e.g., the book by Tucker): the smallest interval containing the result of operating with each element of each interval. That is, for two intervals $X$ and $Y$ and an operation $\circ$, we define the operation on the two intervals by
+$$X \circ Y := { x \circ y: x \in X \text{ and } y \in Y }.$$  Again, directed rounding is used if necessary.</p>
+<p>For example:</p>
+<pre><code class="julia">julia&gt; a = @interval(0.1, 0.3)
+[0.09999999999999999, 0.30000000000000004]
+
+julia&gt; b = @interval(0.3, 0.6)
+[0.29999999999999993, 0.6000000000000001]
+
+julia&gt; a + b
+[0.3999999999999999, 0.9000000000000001]
+</code></pre>
+
+<p>However, subtraction of two intervals gives an initially unexpected result, due to the above definition:</p>
+<pre><code class="julia">julia&gt; a = @interval(0, 1)
+[0.0, 1.0]
+
+julia&gt; a - a
+[-1.0, 1.0]
+</code></pre>
+
+<h2 id="changing-the-precision">Changing the precision</h2>
+<p>By default, the <code>@interval</code> macro creates intervals of <code>Float64</code>s.
+This may be changed using the <code>set_interval_precision</code> function:</p>
+<pre><code class="julia">julia&gt; set_interval_precision(256)
+256
+
+julia&gt; @interval(3*pi/2 + 1)
+[5.712388980384689857693965074919254326295754099062658731462416888461724609429262e+00, 5.712388980384689857693965074919254326295754099062658731462416888461724609429401e+00]₂₅₆
+</code></pre>
+
+<p>The subscript <code>256</code> at the end denotes the precision.</p>
+<p>To change back to <code>Float64</code>s, use</p>
+<pre><code class="julia">julia&gt; set_interval_precision(Float64)
+Float64
+
+julia&gt; @interval(pi)
+[3.141592653589793, 3.1415926535897936]
+</code></pre>
+
+<p>To check which mode is currently set, use</p>
+<pre><code class="julia">julia&gt; get_interval_precision()
+(Float64,-1)
+</code></pre>
+
+<p>The number indicates the precision (relevant only for <code>BigFloat</code>s).</p>
+<p>NB: The standard Julia function <code>set_bigfloat_precision</code> is used internally by <code>set_interval_precision</code>, but it should not be used directly.</p>
+<h2 id="elementary-functions">Elementary functions</h2>
+<p>The main elementary functions are defined, acting on interval arguments.
+Currently, <code>exp</code>, <code>log</code>, <code>sin</code>, <code>cos</code> and <code>tan</code> are implemented, e.g.</p>
+<pre><code>julia&gt; sin(@interval(1))
+[0.8414709848078965, 0.8414709848078965]
+</code></pre>
+
+<p>Again, the result should contain the result of applying the function to each real number contained in the interval.</p>
+<p><strong>However</strong>, as can be seen from the above result, currently <strong>directed rounding is <em>not</em> implemented</strong> for elementary functions of <code>Float64</code>s. [We are aiming to incorporate this functionality in v0.2 via the <a href="http://lipforge.ens-lyon.fr/www/crlibm/"><code>crlibm</code> package</a>.]</p>
+<p>Currently, this may be correctly calculated by using <code>BigFloat</code>s with a precision of 53 bits (the same as that of <code>Float64</code>s):</p>
+<pre><code class="julia">julia&gt; set_interval_precision(53)
+53
+
+julia&gt; sin(@interval(1))
+[8.414709848078965e-01, 8.4147098480789662e-01]₅₃
+
+julia&gt; @interval sin(0.1) + cos(0.2)
+[1.0798999944880696e+00, 1.0798999944880701e+00]₅₃
+</code></pre>
+
+<p>Note, however, that calculations with <code>BigFloat</code>s are carried out in software, and so are slower than operating with  <code>Float64</code>s directly.</p>
+<h2 id="interval-rounding-modes">Interval rounding modes</h2>
+<p>By default, the directed rounding used corresponds to using the <code>RoundDown</code> and <code>RoundUp</code> rounding modes when performing calculations; this gives the narrowest resulting intervals, and is set by</p>
+<pre><code class="julia">set_interval_rounding(:narrow)
+</code></pre>
+
+<p>An alternative rounding method is to perform calculations using the (standard) <code>RoundNearest</code> rounding mode, and then widen the result by one machine epsilon in each direction using <code>prevfloat</code> and <code>nextfloat</code>. This is achived by</p>
+<pre><code class="julia">set_interval_rounding(:wide)
+</code></pre>
+
+<p>It generally results in wider intervals, but seems to be significantly faster.</p>
+<p>The current interval rounding mode may be obtained by</p>
+<pre><code class="julia">get_interval_rounding()
+</code></pre>
+
+
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../root_finding" class="btn btn-neutral float-right" title="Root finding"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Validated Numerics package"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+    <!-- Copyright etc -->
+    </p>
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        
+      <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      <span style="margin-left: 15px"><a href="../root_finding" style="color: #fcfcfc">Next &raquo;</a></span>
+    </span>
+</div>
+</body>
+</html>
