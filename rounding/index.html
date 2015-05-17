@@ -107,30 +107,42 @@ In fact, however, it stores a <em>slightly different</em> number than 0.1, since
 <pre><code>julia&gt; II = Interval(0.1)
 [0.1, 0.1]
 </code></pre>
-<p>It looks like the interval contains the true value 0.1, but from the above discussion we see that, in fact, <em>it does not</em>! In order to contain the true value 0.1, the end-points of the interval must be rounded outwards: the lower bound is rounded down, and the upper bound is rounded up. This is all handled by the <code>@interval</code> and <code>@floatinterval</code> macros, which generate correctly-rounded intervals of <code>BigFloat</code>s and <code>Float64</code>s, respectively:</p>
-<pre><code>julia&gt; a = @interval(0.1)
-[9.9999999999999992e-02, 1.0000000000000001e-01]₅₃
-
-julia&gt; b = @floatinterval(0.1)
+<p>It looks like the interval contains the true value 0.1, but from the above discussion we see that, in fact, <em>it does not</em>. In order to contain the true value 0.1, the end-points of the interval must be rounded outwards ("directed rounding"): the lower bound is rounded down, and the upper bound is rounded up. </p>
+<p>This rounding is handled by the <code>@interval</code>  macro, which generates correctly-rounded intervals:</p>
+<pre><code class="julia">julia&gt; a = @interval(0.1)
 [0.09999999999999999, 0.1]
 </code></pre>
 
-<p>[Note the subscript "53" at the end of the first output, which indicates the precision of the <code>BigFloat</code>s contained in the interval.]</p>
-<p>We see that the true 0.1 is now correctly contained in the intervals, so that any calculations on these intervals will contain the true result of calculating with 0.1. For example, if we define</p>
-<pre><code>julia&gt; f(x) = 2x + 0.2
-</code></pre>
-<p>then we can apply the function <code>f</code> to the interval <code>c</code> to obtain</p>
-<pre><code>julia&gt; f(a)
-[3.9999999999999997e-01, 4.0000000000000002e-01]₅₃
-</code></pre>
-<p>The result correctly contains the true 0.4.</p>
-<h3 id="creating-intervals-from-expressions">Creating intervals from expressions</h3>
-<p>The macros <code>@interval</code> and <code>@floatinterval</code> can also create intervals from expressions, e.g.</p>
-<pre><code>julia&gt; @interval(2.3*3.4)
-[7.8199999999999958e+00, 7.8200000000000021e+00]₅₃
+<p>The true 0.1 is now correctly contained in the intervals, so that any calculations on these intervals will contain the true result of calculating with 0.1. For example, if we define</p>
+<pre><code class="julia">julia&gt; f(x) = 2x + 0.2
 </code></pre>
 
-<p>Internally, each term in the expression is wrapped in the (non-exported) <code>make_interval</code> function; furthermore, floating-point numbers are converted into rationals.</p>
+<p>then we can apply the function <code>f</code> to the interval <code>a</code> to obtain</p>
+<pre><code class="julia">julia&gt; f(a)
+[0.39999999999999997, 0.4]
+</code></pre>
+
+<p>The result correctly contains the true 0.4.</p>
+<h2 id="more-detail">More detail</h2>
+<p>Let's look at the internal representation of the <code>Float64</code> number 0.1:</p>
+<pre><code class="julia">julia&gt; bits(0.1)
+&quot;0011111110111001100110011001100110011001100110011001100110011010&quot;
+</code></pre>
+
+<p>The last 53 bits of these 64 bits correspond to the binary expansion of 0.1, which is</p>
+<pre><code>0.000110011001100110011001100110011001100...
+</code></pre>
+
+<p>We see that the expansion is periodic; in fact, the binary expansion of 0.1 has an infinite repetition of the sequence of digits <code>1100</code>. It is thus <em>impossible</em> to represent the decimal 0.1 in binary, with <em>any</em> precision.</p>
+<p>Julia allows us to get closer to the true value using <code>BigFloat</code>s:</p>
+<pre><code class="julia">julia&gt; using Compat
+
+julia&gt; @compat parse(BigFloat, &quot;0.1&quot;)
+1.000000000000000000000000000000000000000000000000000000000000000000000000000002e-01 with 256 bits of precision
+</code></pre>
+
+<p>But the 2 and the end of the decimal expansion is the giveaway that this number is still not exactly 0.1</p>
+<p>The true value must be approximated by a floating-point number with fixed precision -- this procedure is called <strong>rounding</strong>. Rounding down may be accomplished simply by truncating the expansion; rounding up is accomplished by incrementing the final binary digit and propagating any resulting changes.</p>
 
             </div>
           </div>
