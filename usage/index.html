@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic usage - ValidatedNumerics.jl: A Julia package for rigorous numerics</title>
+  <title>Basic usage - ValidatedNumerics.jl</title>
   
 
   
@@ -34,7 +34,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> ValidatedNumerics.jl: A Julia package for rigorous numerics</a>
+        <a href=".." class="icon icon-home"> ValidatedNumerics.jl</a>
         
       </div>
 
@@ -85,14 +85,36 @@
     <li>Basic usage</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+            <a href="https://github.com/dpsanders/ValidatedNumerics.jl" class="icon icon-github"> Edit on GitHub</a>
+          
+        
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="basic-usage">Basic usage</h1>
-<p>The basic elements of the package are <strong>intervals</strong>, i.e. sets of real numbers (possibly including $\pm \infty$) of the form </p>
+              <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+  MathJax.Hub.Config({
+    TeX: { extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "autoload-all.js"] }
+  });
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+</script>
+
+<h1 id="basic-usage">Basic usage</h1>
+<p>The basic elements of the package are <strong>intervals</strong>, i.e. sets of real numbers (possibly including $\pm \infty$) of the form</p>
 <p>$$[a, b] := { a \le x \le b } \subseteq \mathbb{R}.$$</p>
 <h2 id="creating-intervals">Creating intervals</h2>
 <p>Intervals are created using the <code>@interval</code> macro, which takes one or two expressions:</p>
@@ -142,7 +164,7 @@ julia&gt; f(@interval(0.1))
 </code></pre>
 
 <h3 id="pi">$\pi$</h3>
-<p>You can create correctly-rounded intervals containing $\pi$: </p>
+<p>You can create correctly-rounded intervals containing $\pi$:</p>
 <pre><code class="julia">julia&gt; @interval(pi)
 [3.141592653589793, 3.1415926535897936]
 </code></pre>
@@ -317,6 +339,8 @@ julia&gt; @interval sin(0.1) + cos(0.2)
 
 <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
+        
+            <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
         
       <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
       <span style="margin-left: 15px"><a href="../root_finding" style="color: #fcfcfc">Next &raquo;</a></span>

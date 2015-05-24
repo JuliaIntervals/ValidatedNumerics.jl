@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Root finding - ValidatedNumerics.jl: A Julia package for rigorous numerics</title>
+  <title>Root finding - ValidatedNumerics.jl</title>
   
 
   
@@ -34,7 +34,7 @@
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> ValidatedNumerics.jl: A Julia package for rigorous numerics</a>
+        <a href=".." class="icon icon-home"> ValidatedNumerics.jl</a>
         
       </div>
 
@@ -85,20 +85,48 @@
     <li>Root finding</li>
       <li class="wy-breadcrumbs-aside">
         
+          
+            <a href="https://github.com/dpsanders/ValidatedNumerics.jl" class="icon icon-github"> Edit on GitHub</a>
+          
+        
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main">
             <div class="section">
-              <h1 id="root-finding">Root finding</h1>
-<p>Interval arithmetic not only provides guaranteed numerical calculations; it also makes possible fundamentally new algorithms.</p>
-<p>One such algorithm is the <strong>interval Newton method</strong>. This is a version of the standard Newton (or Newton--Raphson) algorithm for finding roots of equations. The interval version, however, is fundamentally different from its standard counterpart, in that it can (under the best circumstances) provide rigorous <em>guarantees</em> about the presence or absence and uniqueness of roots of a given function in a given interval.</p>
-<p>The idea of the Newton method is to calculate a root $x^<em>$ of a function $f$ [i.e., a value such that $f(x^</em>) = 0$] from an initial guess $x$ using</p>
+              <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+  MathJax.Hub.Config({
+    TeX: { extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "autoload-all.js"] }
+  });
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+</script>
+
+<h1 id="root-finding">Root finding</h1>
+<p>Interval arithmetic not only provides guaranteed numerical calculations; it also
+makes possible fundamentally new algorithms.</p>
+<p>One such algorithm is the <strong>interval Newton method</strong>. This is a version of the
+standard Newton (or Newton-Raphson) algorithm for finding roots of equations.
+The interval version, however, is fundamentally different from its standard
+counterpart, in that it can (under the best circumstances) provide rigorous
+<em>guarantees</em> about the presence or absence and uniqueness of roots of a given
+function in a given interval.</p>
+<p>The idea of the Newton method is to calculate a root $x^\ast$ of a function $f$ [i.e., a value such that $f(x^*) = 0$] from an initial guess $x$ using</p>
 <p>$$x^* = x - \frac{f(x)}{f'(\xi)},$$</p>
 <p>for some $\xi$ between $x$ and $xˆ*$. Since $\xi$ is unknown, we can bound it as</p>
 <p>$$f'(\xi) \in F'(X),$$</p>
-<p>where $X$ is a containing interval and $F'(X)$ denotes the <strong>interval extension</strong> of the function $f$, consisting of applying the same operations as the function $f$ to the interval $X$. </p>
+<p>where $X$ is a containing interval and $F'(X)$ denotes the <strong>interval extension</strong> of the function $f$, consisting of applying the same operations as the function $f$ to the interval $X$.</p>
 <p>This allows us to create an interval Newton operator that acts on an interval and tells us <em>rigorously</em>  if there is a unique root or no root in the interval. There is also an extension to intervals in which the derivative $F'(X)$ contains $0$.</p>
 <p>The upshot is a rigorous algorithm that is <em>guaranteed to find all roots</em> of a real function in a given interval (or to inform us if it is unable to do so, for example at a multiple root); see the book of Tucker for more details.</p>
 <h2 id="interval-newton-method">Interval Newton method</h2>
@@ -133,7 +161,7 @@ julia&gt; newton(g, @interval(-5, 5))
 <pre><code class="julia">julia&gt; find_roots(g, -5, 5)
 8-element Array{Tuple{ValidatedNumerics.Interval{Float64},Symbol},1}:
  ([-1.4142135623730951, -1.414213562373095],:unique)
- ([1.4142135623730947, 1.4142135623730954],:unique) 
+ ([1.4142135623730947, 1.4142135623730954],:unique)
  ([1.9999999953782792, 1.9999999967603888],:unknown)
  ([1.9999999967603888, 1.9999999981424985],:unknown)
  ([1.9999999981806982, 1.9999999987913273],:unknown)
@@ -177,6 +205,8 @@ julia&gt; newton(g, @interval(-5, 5))
 
 <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
+        
+            <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
         
       <span><a href="../usage" style="color: #fcfcfc;">&laquo; Previous</a></span>
       <span style="margin-left: 15px"><a href="../rounding" style="color: #fcfcfc">Next &raquo;</a></span>
