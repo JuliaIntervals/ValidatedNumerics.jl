@@ -124,7 +124,7 @@ counterpart, in that it can (under the best circumstances) provide rigorous
 function in a given interval.</p>
 <p>The idea of the Newton method is to calculate a root $x^\ast$ of a function $f$ [i.e., a value such that $f(x^*) = 0$] from an initial guess $x$ using</p>
 <p>$$x^* = x - \frac{f(x)}{f'(\xi)},$$</p>
-<p>for some $\xi$ between $x$ and $xˆ*$. Since $\xi$ is unknown, we can bound it as</p>
+<p>for some $\xi$ between $x$ and $x^*$. Since $\xi$ is unknown, we can bound it as</p>
 <p>$$f'(\xi) \in F'(X),$$</p>
 <p>where $X$ is a containing interval and $F'(X)$ denotes the <strong>interval extension</strong> of the function $f$, consisting of applying the same operations as the function $f$ to the interval $X$.</p>
 <p>This allows us to create an interval Newton operator that acts on an interval and tells us <em>rigorously</em>  if there is a unique root or no root in the interval. There is also an extension to intervals in which the derivative $F'(X)$ contains $0$.</p>
