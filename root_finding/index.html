@@ -1,120 +1,138 @@
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Root finding - ValidatedNumerics.jl</title>
-  
-
-  <link rel="shortcut icon" href="../img/favicon.ico">
-
-  
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
-
-  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="../css/highlight.css">
-
-  <script src="../js/jquery-2.1.1.min.js"></script>
-  <script src="../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../js/highlight.pack.js"></script>
-  <script src="../js/theme.js"></script> 
-
-  
-</head>
-
-<body class="wy-body-for-nav" role="document">
-
-  <div class="wy-grid-for-nav">
-
-    
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-      <div class="wy-side-nav-search">
-        <a href=".." class="icon icon-home"> ValidatedNumerics.jl</a>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-      </div>
-
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-      <ul class="current">
-    
         
-            <li class="toctree-l1 ">
-                <a class="" href="..">Validated Numerics package</a>
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+
+	<title>Root finding - ValidatedNumerics.jl</title>
+
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="..">ValidatedNumerics.jl</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
                 
-            </li>
-        
-
-    
-        
-            <li class="toctree-l1 ">
-                <a class="" href="../usage/">Basic usage</a>
                 
-            </li>
-        
-
-    
-        
-            <li class="toctree-l1 current">
-                <a class="current" href="./">Root finding</a>
+                    <li >
+                        <a href="..">Validated Numerics package</a>
+                    </li>
                 
-                    <ul>
-                    
-                        <li class="toctree-l3"><a href="#root-finding">Root finding</a></li>
-                        
-                            <li><a class="toctree-l4" href="#interval-newton-method">Interval Newton method</a></li>
-                        
-                    
-                    </ul>
                 
-            </li>
-        
-
-    
-        
-            <li class="toctree-l1 ">
-                <a class="" href="../rounding/">Rounding</a>
                 
-            </li>
-        
+                    <li >
+                        <a href="../usage/">Basic usage</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">Root finding</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../rounding/">Rounding</a>
+                    </li>
+                
+                
+                </ul>
+            
 
-    
-</ul>
-
-      </div>
-      &nbsp;
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
-        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="..">ValidatedNumerics.jl</a>
-      </nav>
-
-      
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="..">Docs</a> &raquo;</li>
-    
-    <li>Root finding</li>
-      <li class="wy-breadcrumbs-aside">
-        
-          
-            <a href="https://github.com/dpsanders/ValidatedNumerics.jl" class="icon icon-github"> Edit on GitHub</a>
-          
-        
-      </li>
-  </ul>
-  <hr/>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../usage/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../rounding/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/dpsanders/ValidatedNumerics.jl">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
 </div>
-          <div role="main">
-            <div class="section">
-              <script type="text/x-mathjax-config">
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#root-finding">Root finding</a></li>
+        
+            <li><a href="#interval-newton-method">Interval Newton method</a></li>
+        
+            <li><a href="#implementation-of-the-interval-newton-method">Implementation of the interval Newton method</a></li>
+        
+            <li><a href="#krawczyk-method">Krawczyk method</a></li>
+        
+            <li><a href="#find_roots-interface">find_roots interface</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     TeX: { equationNumbers: { autoNumber: "AMS" } }
   });
@@ -135,104 +153,178 @@
 <h1 id="root-finding">Root finding</h1>
 <p>Interval arithmetic not only provides guaranteed numerical calculations; it also
 makes possible fundamentally new algorithms.</p>
+<h2 id="interval-newton-method">Interval Newton method</h2>
 <p>One such algorithm is the <strong>interval Newton method</strong>. This is a version of the
-standard Newton (or Newton-Raphson) algorithm for finding roots of equations.
+standard Newton (or Newton-Raphson) algorithm, an iterative method for finding
+roots (zeros) of functions.
 The interval version, however, is fundamentally different from its standard
 counterpart, in that it can (under the best circumstances) provide rigorous
 <em>guarantees</em> about the presence or absence and uniqueness of roots of a given
-function in a given interval.</p>
-<p>The idea of the Newton method is to calculate a root $x^\ast$ of a function $f$ [i.e., a value such that $f(x^*) = 0$] from an initial guess $x$ using</p>
+function in a given interval, and tells us explicitly when it is unable to
+provide such a guarantee.</p>
+<p>The idea of the Newton method is to calculate a root $x^\ast$ of a function
+$f$ [i.e., a value such that $f(x^*) = 0$] from an initial guess $x$ using</p>
 <p>$$x^* = x - \frac{f(x)}{f'(\xi)},$$</p>
 <p>for some $\xi$ between $x$ and $x^*$. Since $\xi$ is unknown, we can bound it as</p>
 <p>$$f'(\xi) \in F'(X),$$</p>
-<p>where $X$ is a containing interval and $F'(X)$ denotes the <strong>interval extension</strong> of the function $f$, consisting of applying the same operations as the function $f$ to the interval $X$.</p>
-<p>This allows us to create an interval Newton operator that acts on an interval and tells us <em>rigorously</em>  if there is a unique root or no root in the interval. There is also an extension to intervals in which the derivative $F'(X)$ contains $0$.</p>
-<p>The upshot is a rigorous algorithm that is <em>guaranteed to find all roots</em> of a real function in a given interval (or to inform us if it is unable to do so, for example at a multiple root); see the book of Tucker for more details.</p>
-<h2 id="interval-newton-method">Interval Newton method</h2>
-<p>The interval Newton method is implemented for real functions of a single variable as the function <code>newton</code>. For example, we can calculate rigorously the square roots of 2:</p>
-<pre><code class="julia">julia&gt; f(x) = x^2 - 2
+<p>where $X$ is a containing interval and $F'(X)$ denotes the <strong>interval extension</strong>
+of the function $f$, consisting of applying the same operations as the function
+$f$ to the interval $X$.</p>
+<p>We define an <em>interval Newton operator</em> $\mathcal{N}$ as follows:</p>
+<p>$$\mathcal{N}(X) := m(X) - \frac{F(m(X))}{F'(X)},$$</p>
+<p>where $m(X)$  is the midpoint of $X$ converted into an interval.</p>
+<p>It turns out that $\mathcal{N}$ tells us precisely whether there is a root of $f$ in
+the interval $X$: there is no root if $\mathcal{N}(X) \cap X = \emptyset$, and there is
+a unique root if $\mathcal{N}(X) \subseteq X$.
+There is also an extension to intervals in which the derivative $F'(X)$ contains $0$,
+in which case the Newton operator returns a union of two intervals.</p>
+<p>Iterating the Newton operator on the resulting sets gives a rigorous algorithm
+that is <em>guaranteed to find all roots</em> of a
+real function in a given interval (or to inform us if it is unable to do so,
+for example at a multiple root); see Tucker's book for more details.</p>
+<h2 id="implementation-of-the-interval-newton-method">Implementation of the interval Newton method</h2>
+<p>The interval Newton method is implemented for real functions of a single
+variable as the function <code>newton</code>. For example, we can calculate rigorously the square roots of 2:</p>
+<pre><code class="julia">julia&gt; using ValidatedNumerics
+
+julia&gt; f(x) = x^2 - 2
 f (generic function with 1 method)
 
 julia&gt; newton(f, @interval(-5, 5))
-2-element Array{Tuple{ValidatedNumerics.Interval{Float64},Symbol},1}:
- ([-1.4142135623730951, -1.414213562373095],:unique)
- ([1.414213562373095, 1.4142135623730951],:unique)  
+2-element Array{ValidatedNumerics.Root{Float64},1}:
+ Root([-1.4142135623730951, -1.414213562373095], :unique)
+ Root([1.414213562373095, 1.4142135623730951], :unique)
 </code></pre>
 
-<p>The function <code>newton</code>  is passed the function and the interval in which to search for roots; it returns an array of tuples, giving the interval and a symbol that tells us if the root is unique.  Automatic differentiation is used if no explicit derivative function is given.</p>
-<p>For example, the basic Newton method fails to guarantee the presence or absence of a double root, although the single roots are found without difficulty:</p>
-<pre><code class="julia">julia&gt; g(x) = (x^2-2)*(x-2)^2
-g (generic function with 1 method)
-
-julia&gt; newton(g, @interval(-5, 5))
-8-element Array{Tuple{ValidatedNumerics.Interval{Float64},Symbol},1}:
- ([-1.4142135623730951, -1.414213562373095],:unique)
- ([1.414213562373095, 1.4142135623730951],:unique)  
- ([1.9999999953782792, 1.9999999967603888],:unknown)
- ([1.9999999967603888, 1.9999999981424985],:unknown)
- ([1.9999999981806982, 1.9999999987913273],:unknown)
- ([1.9999999987913273, 1.9999999994019564],:unknown)
- ([1.999999999589721, 2.000000000202166],:unknown)  
- ([2.000000000299439, 2.000000000876634],:unknown)  
+<p>The function <code>newton</code>  is passed the function and the interval in which to search for roots;
+it returns an array of <code>Root</code> objects, that contain the interval where a root is found,
+together with a symbol <code>:unique</code> if there is guaranteed to be a unique root in that
+interval, or <code>:unknown</code> if the Newton method is unable to make a guarantee, for example,
+when there is a double root:</p>
+<pre><code class="julia">julia&gt; newton(f, @interval(-5,5))
+6-element Array{ValidatedNumerics.Root{Float64},1}:
+ Root([0.9999999968789343, 0.999999997726216], :unknown)
+ Root([0.9999999977262161, 0.9999999985734976], :unknown)
+ Root([0.9999999987089422, 0.9999999993384274], :unknown)
+ Root([0.9999999993384275, 0.9999999999679127], :unknown)
+ Root([0.9999999999687099, 1.0000000004524654], :unknown)
+ Root([2.0, 2.0], :unique)
 </code></pre>
 
+<p>The Newton method may be applied directly to a vector of known roots,
+for example to refine them with higher precision:</p>
+<pre><code class="julia">julia&gt; f(x) = x^2 - 2
+f (generic function with 1 method)
+
+julia&gt; roots = newton(f, @interval(-5, 5))
+2-element Array{ValidatedNumerics.Root{Float64},1}:
+ Root([-1.4142135623730951, -1.414213562373095], :unique)
+ Root([1.414213562373095, 1.4142135623730951], :unique)
+
+julia&gt; set_interval_precision(256)
+256
+
+julia&gt; newton(f, roots)
+2-element Array{ValidatedNumerics.Root{Base.MPFR.BigFloat},1}:
+ Root([-1.414213562373095048801688724209698078569671875376948073176679737990732478462119, -1.414213562373095048801688724209698078569671875376948073176679737990732478462102]₂₅₆, :unique)
+ Root([1.414213562373095048801688724209698078569671875376948073176679737990732478462102, 1.414213562373095048801688724209698078569671875376948073176679737990732478462119]₂₅₆, :unique)
+
+julia&gt; abs(roots2[2].interval.lo - sqrt(big(2)))
+0.000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+</code></pre>
+
+<h2 id="krawczyk-method">Krawczyk method</h2>
+<p>An alternative method is the <em>Krawczyk method</em>, implemented in the function
+<code>krawczyk</code>, with the same interface as the Newton method:</p>
+<pre><code class="julia">julia&gt; f(x) = x^2 - 2
+f (generic function with 1 method)
+
+julia&gt; krawczyk(f, @interval(-5, 5))
+2-element Array{Root{Float64},1}:
+ Root([-1.4142135623730954, -1.4142135623730947], :unique)
+ Root([1.4142135623730947, 1.4142135623730954], :unique)
+
+julia&gt; newton(f, @interval(-5, 5))
+2-element Array{Root{Float64},1}:
+ Root([-1.4142135623730951, -1.414213562373095], :unique)
+ Root([1.414213562373095, 1.4142135623730951], :unique)
+</code></pre>
+
+<p>The Krawczyk method really comes into its own for higher-dimensional functions;
+this is planned to be implemented in the future.</p>
+<h2 id="find_roots-interface"><code>find_roots</code> interface</h2>
+<p>Automatic differentiation is used to calculate the derivative used in the Newton method
+if the derivative function is not given explicitly as the second argument to <code>newton</code>.</p>
 <p>An interface <code>find_roots</code> is provided, which does not require an interval to be passed:</p>
-<pre><code class="julia">julia&gt; find_roots(g, -5, 5)
-8-element Array{Tuple{ValidatedNumerics.Interval{Float64},Symbol},1}:
- ([-1.4142135623730951, -1.414213562373095],:unique)
- ([1.4142135623730947, 1.4142135623730954],:unique)
- ([1.9999999953782792, 1.9999999967603888],:unknown)
- ([1.9999999967603888, 1.9999999981424985],:unknown)
- ([1.9999999981806982, 1.9999999987913273],:unknown)
- ([1.9999999987913273, 1.9999999994019564],:unknown)
- ([1.999999999589721, 2.000000000202166],:unknown)  
- ([2.000000000299439, 2.000000000876634],:unknown)  
+<pre><code>julia&gt; find_roots(f, -5, 5)
+6-element Array{ValidatedNumerics.Root{Float64},1}:
+ Root([0.9999999968789343, 0.999999997726216], :unknown)
+ Root([0.9999999977262161, 0.9999999985734976], :unknown)
+ Root([0.9999999987089422, 0.9999999993384274], :unknown)
+ Root([0.9999999993384275, 0.9999999999679127], :unknown)
+ Root([0.9999999999687099, 1.0000000004524654], :unknown)
+ Root([1.9999999999999998, 2.0000000000000004], :unique)
 </code></pre>
-            </div>
-          </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../rounding/" class="btn btn-neutral float-right" title="Rounding"/>Next <span class="icon icon-circle-arrow-right"></span></a>
-      
-      
-        <a href="../usage/" class="btn btn-neutral" title="Basic usage"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-      
-    </div>
-  
 
-  <hr/>
+<p>There is also a version <code>find_roots_midpoint</code> that returns three vectors:
+the midpoint of each interval; the radius of the interval; and the symbol.
+This may be useful for someone who just wishes to find roots of a function,
+without wanting to understand how to manipulate interval objects:</p>
+<pre><code class="julia">julia&gt; find_roots_midpoint(f, -5, 5)
+([-1.4142135623730951,1.414213562373095],[2.220446049250313e-16,4.440892098500626e-16],[:unique,:unique])
+</code></pre>
 
-  <div role="contentinfo">
-    <p>
-    <!-- Copyright etc -->
-    </p>
-  </div>
+<p>This uses the function <code>midpoint_radius</code>, that returns the midpoint and radius
+of a given interval:</p>
+<pre><code class="julia">julia&gt; a = @interval(0.1, 0.2)
+[0.09999999999999999, 0.2]
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
-	  
+julia&gt; midpoint_radius(a)
+(0.15,0.05000000000000002)
+</code></pre></div>
+            
         </div>
-      </div>
 
-    </section>
+        <footer class="col-md-12">
+            <hr>
+            
+                <p>Copyright &copy; 2014, 2015, Luis Benet & David P. Sanders</p>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
 
-  </div>
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
 
-<div class="rst-versions" role="note" style="cursor: pointer">
-    <span class="rst-current-version" data-toggle="rst-current-version">
-        
-            <a href="https://github.com/dpsanders/ValidatedNumerics.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
-        
-      <span><a href="../usage/" style="color: #fcfcfc;">&laquo; Previous</a></span>
-      <span style="margin-left: 15px"><a href="../rounding/" style="color: #fcfcfc">Next &raquo;</a></span>
-    </span>
-</div>
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!--
-MkDocs version  : 0.12.2
-Docs Build Date : 2015-05-24 17:39:44.618105
--->
-</body>
+    </body>
 </html>

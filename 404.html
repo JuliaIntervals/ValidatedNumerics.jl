@@ -25,7 +25,7 @@
         
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -53,7 +53,7 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="active">
+                    <li >
                         <a href=".">Validated Numerics package</a>
                     </li>
                 
@@ -91,8 +91,8 @@
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li >
-                        <a rel="prev" href="usage/">
+                    <li class="disabled">
+                        <a rel="prev" >
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -114,73 +114,15 @@
 
         <div class="container">
             
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-    
-        <li class="main active"><a href="#validatednumericsjl">ValidatedNumerics.jl</a></li>
-        
-            <li><a href="#installation">Installation</a></li>
-        
-            <li><a href="#interval-arithmetic">Interval arithmetic</a></li>
-        
-            <li><a href="#contents">Contents:</a></li>
-        
-            <li><a href="#bibliography">Bibliography</a></li>
-        
-            <li><a href="#related-packages">Related packages</a></li>
-        
-            <li><a href="#authors">Authors</a></li>
-        
-            <li><a href="#contributors">Contributors</a></li>
-        
-            <li><a href="#acknowledgements">Acknowledgements</a></li>
-        
-    
-    </ul>
-</div></div>
-                <div class="col-md-9" role="main">
 
-<h1 id="validatednumericsjl">ValidatedNumerics.jl</h1>
-<p><code>ValidatedNumerics.jl</code> is a Julia package for performing <em>Validated Numerics</em> in Julia, i.e. <em>rigorous</em> computations with finite-precision floating-point arithmetic.</p>
-<h2 id="installation">Installation</h2>
-<p>To install the package, from within Julia do</p>
-<pre><code>julia&gt; Pkg.add("ValidatedNumerics")
-</code></pre>
-<h2 id="interval-arithmetic">Interval arithmetic</h2>
-<p>All calculations are carried out using <strong>interval arithmetic</strong>: all quantities are treated as intervals, which are propagated throughout a calculation. The final result is an interval that is <em>guaranteed</em> to contain the correct result, starting from the given initial data.</p>
-<p>The aim of the package is correctness over speed, although performance considerations are also taken into account</p>
-<h2 id="contents">Contents:</h2>
-<ul>
-<li><a href="usage/">Basic usage</a></li>
-<li><a href="root_finding/">Root finding</a></li>
-<li><a href="rounding/">Rounding</a></li>
-</ul>
-<h2 id="bibliography">Bibliography</h2>
-<ul>
-<li><em>Validated Numerics: A Short Introduction to Rigorous Computations</em>, W. Tucker, Princeton University Press (2010)</li>
-<li><em>Introduction to Interval Analysis</em>, R.E. Moore, R.B. Kearfott &amp; M.J. Cloud, SIAM (2009)</li>
-</ul>
-<h2 id="related-packages">Related packages</h2>
-<ul>
-<li><a href="https://github.com/andrioni/MPFI.jl">MPFI.jl</a>, a Julia wrapper around the <a href="http://perso.ens-lyon.fr/nathalie.revol/software.html">MPFI C library</a>, a multiple-precision interval arithmetic library based on MPFR</li>
-<li><a href="https://github.com/andrioni/Intervals.jl">Intervals.jl</a>, an alternative implementation of basic interval functions.</li>
-</ul>
-<h2 id="authors">Authors</h2>
-<ul>
-<li><a href="http://www.cicc.unam.mx/~benet/">Luis Benet</a>, Instituto de Ciencias Físicas,
-Universidad Nacional Autónoma de México (UNAM)</li>
-<li><a href="http://sistemas.fciencias.unam.mx/~dsanders">David P. Sanders</a>,
-Departamento de Física, Facultad de Ciencias, Universidad Nacional Autónoma de México (UNAM)</li>
-</ul>
-<h2 id="contributors">Contributors</h2>
-<ul>
-<li>Nikolay Kryukov</li>
-<li>John Verzani</li>
-</ul>
-<h2 id="acknowledgements">Acknowledgements</h2>
-<p>This project was developed in a masters' course in the postgraduate programs in Physics and in Mathematics at UNAM during the second semester of 2013 and the first semester of 2015. We thank the participants of the courses for putting up with the half-baked material and contributing energy and ideas.</p>
-<p>Financial support is acknowledged from DGAPA-UNAM PAPIME grants PE-105911 and PE-107114, and DGAPA-UNAM PAPIIT grant IN-117214. LB acknowledges support through a <em>Cátedra Moshinsky</em> (2013).</p></div>
-            
+    <div class="row-fluid">
+      <div id="main-content" class="span12">
+        <h1 id="404-page-not-found" style="text-align: center">404</h1>
+        <p style="text-align: center"><strong>Page not found</strong></p>
+      </div>
+    </div>
+
+
         </div>
 
         <footer class="col-md-12">
@@ -225,8 +167,3 @@ Departamento de Física, Facultad de Ciencias, Universidad Nacional Autónoma de
 
     </body>
 </html>
-
-<!--
-MkDocs version : 0.14.0
-Build Date UTC : 2015-06-23 11:10:36.585668
--->
