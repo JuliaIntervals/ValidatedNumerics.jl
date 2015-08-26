@@ -202,6 +202,9 @@ f (generic function with 1 method)
 
 julia&gt; f(@interval(0.1))
 [0.19999999999999998, 0.2]
+
+julia&gt; @interval f(0.1)
+[0.19999999999999998, 0.2]
 </code></pre>
 
 <h3 id="pi">$\pi$</h3>
@@ -212,6 +215,9 @@ julia&gt; f(@interval(0.1))
 
 <p>and embed it in expressions:</p>
 <pre><code class="julia">julia&gt; @interval(3*pi/2 + 1)
+[5.71238898038469, 5.712388980384691]
+
+julia&gt; @interval 3π/2 + 1
 [5.71238898038469, 5.712388980384691]
 </code></pre>
 
@@ -244,7 +250,7 @@ julia&gt; b = @interval(a)
 [3.5999999999999996, 3.6000000000000005]
 </code></pre>
 
-<p>The upper and lower bounds of the interval may be accessed as the fields
+<p>The upper and lower bounds of the interval may be accessed using the fields
 <code>lo</code> and <code>hi</code>:</p>
 <pre><code class="julia">julia&gt; b.lo
 3.5999999999999996
@@ -254,16 +260,16 @@ julia&gt; b.hi
 </code></pre>
 
 <p>The diameter (length) of an interval is obtained using <code>diam(b)</code>;
-note that for non-exactly representable numbers in base 2
-(i.e., whose <em>binary</em> expansion is infinite or exceeds the current precision)
- the diameter of newly-created thin intervals corresponds to the local machine epsilon (<code>eps</code>):</p>
+for numbers that cannot be represented in base 2
+(i.e., whose <em>binary</em> expansion is infinite or exceeds the current precision),
+ the diameter of newly-created thin intervals corresponds to the local machine epsilon (<code>eps</code>) in the <code>:narrow</code> interval rounding mode:</p>
 <pre><code class="julia">julia&gt; diam(b)
 8.881784197001252e-16
 
 </code></pre>
 
 <h2 id="arithmetic">Arithmetic</h2>
-<p>Basic arithmetic operations (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>) are defined for pairs of intervals in the standard way (see, e.g., the book by Tucker): the smallest interval containing the result of operating with each element of each interval. That is, for two intervals $X$ and $Y$ and an operation $\circ$, we define the operation on the two intervals by
+<p>Basic arithmetic operations (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code>) are defined for pairs of intervals in a standard way (see, e.g., the book by Tucker): the result is the smallest interval containing the result of operating with each element of each interval. That is, for two intervals $X$ and $Y$ and an operation $\circ$, we define the operation on the two intervals by
 $$X \circ Y := { x \circ y: x \in X \text{ and } y \in Y }.$$  Again, directed rounding is used if necessary.</p>
 <p>For example:</p>
 <pre><code class="julia">julia&gt; a = @interval(0.1, 0.3)
@@ -290,7 +296,7 @@ This may be changed using the <code>set_interval_precision</code> function:</p>
 <pre><code class="julia">julia&gt; set_interval_precision(256)
 256
 
-julia&gt; @interval(3*pi/2 + 1)
+julia&gt; @interval 3π/2 + 1
 [5.712388980384689857693965074919254326295754099062658731462416888461724609429262e+00, 5.712388980384689857693965074919254326295754099062658731462416888461724609429401e+00]₂₅₆
 </code></pre>
 
@@ -308,8 +314,8 @@ julia&gt; @interval(pi)
 (Float64,-1)
 </code></pre>
 
-<p>The number indicates the precision (relevant only for <code>BigFloat</code>s).</p>
-<p>NB: The standard Julia function <code>set_bigfloat_precision</code> is used internally by <code>set_interval_precision</code>, but it should not be used directly.</p>
+<p>The result is a tuple of the type (currently <code>Float64</code> or <code>BigFloat</code>) and the precision (relevant only for <code>BigFloat</code>s).</p>
+<p>NB: The standard Julia function <code>set_bigfloat_precision</code> is used internally by <code>set_interval_precision</code>, but it should not be used directly, since <code>set_interval_precision</code> carries out additional steps to ensure internal consistency of certain interval operations.</p>
 <h2 id="elementary-functions">Elementary functions</h2>
 <p>The main elementary functions are defined, acting on interval arguments.
 Currently, <code>exp</code>, <code>log</code>, <code>sin</code>, <code>cos</code> and <code>tan</code> are implemented, e.g.</p>

@@ -142,7 +142,7 @@ In fact, however, it stores a <em>slightly different</em> number than 0.1, since
 <pre><code>julia&gt; II = Interval(0.1)
 [0.1, 0.1]
 </code></pre>
-<p>It looks like the interval contains the true value 0.1, but from the above discussion we see that, in fact, <em>it does not</em>. In order to contain the true value 0.1, the end-points of the interval must be rounded outwards ("directed rounding"): the lower bound is rounded down, and the upper bound is rounded up. </p>
+<p>It looks like the interval contains the true value 0.1, but from the above discussion we see that, in fact, <em>it does not</em>. In order to contain the true value 0.1, the end-points of the interval must be rounded outwards ("directed rounding"): the lower bound is rounded down, and the upper bound is rounded up.</p>
 <p>This rounding is handled by the <code>@interval</code>  macro, which generates correctly-rounded intervals:</p>
 <pre><code class="julia">julia&gt; a = @interval(0.1)
 [0.09999999999999999, 0.1]
@@ -177,7 +177,7 @@ julia&gt; @compat parse(BigFloat, &quot;0.1&quot;)
 </code></pre>
 
 <p>But the 2 and the end of the decimal expansion is the giveaway that this number is still not exactly 0.1</p>
-<p>The true value must be approximated by a floating-point number with fixed precision -- this procedure is called <strong>rounding</strong>. Rounding down may be accomplished simply by truncating the expansion; rounding up is accomplished by incrementing the final binary digit and propagating any resulting changes.</p></div>
+<p>The true value must be approximated by a floating-point number with fixed precision -- this procedure is called <strong>rounding</strong>. For positive numbers, rounding down may be accomplished simply by truncating the expansion; rounding up is accomplished by incrementing the final binary digit and propagating any resulting changes.</p></div>
             
         </div>
 

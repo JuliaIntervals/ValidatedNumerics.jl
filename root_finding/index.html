@@ -121,7 +121,7 @@
         
             <li><a href="#interval-newton-method">Interval Newton method</a></li>
         
-            <li><a href="#implementation-of-the-interval-newton-method">Implementation of the interval Newton method</a></li>
+            <li><a href="#usage-of-the-interval-newton-method">Usage of the interval Newton method</a></li>
         
             <li><a href="#krawczyk-method">Krawczyk method</a></li>
         
@@ -182,7 +182,7 @@ in which case the Newton operator returns a union of two intervals.</p>
 that is <em>guaranteed to find all roots</em> of a
 real function in a given interval (or to inform us if it is unable to do so,
 for example at a multiple root); see Tucker's book for more details.</p>
-<h2 id="implementation-of-the-interval-newton-method">Implementation of the interval Newton method</h2>
+<h2 id="usage-of-the-interval-newton-method">Usage of the interval Newton method</h2>
 <p>The interval Newton method is implemented for real functions of a single
 variable as the function <code>newton</code>. For example, we can calculate rigorously the square roots of 2:</p>
 <pre><code class="julia">julia&gt; using ValidatedNumerics
