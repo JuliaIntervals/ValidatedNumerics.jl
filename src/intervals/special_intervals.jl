@@ -5,8 +5,7 @@
 ## Empty interval:
 doc"""`emptyinterval`s are represented as the interval [∞, -∞]; note
 that this interval is an exception to the fact that the lower bound is
-larger than the upper one.""" ->
-
+larger than the upper one.""" 
 emptyinterval{T<:Real}(::Type{T}) = Interval{T}(Inf, -Inf)
 emptyinterval{T<:Real}(x::Interval{T}) = emptyinterval(T)
 emptyinterval() = emptyinterval(get_interval_precision()[1])
@@ -16,7 +15,7 @@ isempty(x::Interval) = x.lo == Inf && x.hi == -Inf
 
 
 ## Entire interval:
-doc"""`entireinterval`s represent the whole Real line: [-∞, ∞].""" ->
+doc"""`entireinterval`s represent the whole Real line: [-∞, ∞]."""
 entireinterval{T<:Real}(::Type{T}) = Interval{T}(-Inf, Inf)
 entireinterval{T<:Real}(x::Interval{T}) = entireinterval(T)
 entireinterval() = entireinterval(get_interval_precision()[1])
@@ -26,7 +25,7 @@ isunbounded(x::Interval) = x.lo == -Inf || x.hi == Inf
 
 
 # NaI: not-an-interval
-doc"""`NaI` not-an-interval: [NaN, NaN].""" ->
+doc"""`NaI` not-an-interval: [NaN, NaN]."""
 nai{T<:Real}(::Type{T}) = Interval{T}(NaN,NaN)
 nai{T<:Real}(x::Interval{T}) = nai(T)
 nai() = nai(get_interval_precision()[1])

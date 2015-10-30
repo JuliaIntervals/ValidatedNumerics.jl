@@ -16,14 +16,14 @@ Examples:
 
     @interval(1/3^2)
 ```
-""" ->
+"""
 
 macro interval(expr1, expr2...)
     make_interval(:(parameters.precision_type), expr1, expr2)
 end
 
  doc"""The `floatinterval` macro constructs an interval with `Float64` entries,
-instead of `BigFloat`.""" ->
+instead of `BigFloat`."""
 
 macro floatinterval(expr1, expr2...)
     make_interval(Float64, expr1, expr2)

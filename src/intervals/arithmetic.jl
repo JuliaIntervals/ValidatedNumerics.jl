@@ -314,7 +314,7 @@ capabilities for controlling the rounding mode.
 For compliance with the standard IEEE-1788, "roundTiesToEven" corresponds
 to `round(a)` or `round(a, RoundTiesToEven)`, and "roundTiesToAway"
 to `round(a, RoundTiesToAway)`.
-""" ->
+"""
 round(a::Interval) = round(a, RoundNearest)
 round(a::Interval, ::RoundingMode{:ToZero}) = trunc(a)
 round(a::Interval, ::RoundingMode{:Up}) = ceil(a)
@@ -348,7 +348,7 @@ end
 
 # cancelplus and cancelminus
  doc"""
-`cancelminus(a, b)` returns the unique interval `c` such that `b+c=a`.""" ->
+`cancelminus(a, b)` returns the unique interval `c` such that `b+c=a`."""
 function cancelminus(a::Interval, b::Interval)
     T = promote_type(eltype(a), eltype(b))
 
@@ -373,7 +373,7 @@ end
 
  doc"""
 `cancelplus(a, b)` returns the unique interval `c` such that `b-c=a`;
-it is equivalent to `cancelminus(a, −b)`.""" ->
+it is equivalent to `cancelminus(a, −b)`."""
 cancelplus(a::Interval, b::Interval) = cancelminus(a, -b)
 
 
