@@ -305,7 +305,7 @@ const RoundTiesToEven = RoundNearest
 # RoundTiesToAway is an alias of `RoundNearestTiesAway`
 const RoundTiesToAway = RoundNearestTiesAway
 
-@doc """
+ """
 .. round(a::Interval, ::RoundingMode)
 
 Returns the interval with rounded limits. It is implemented using Julia's
@@ -347,7 +347,7 @@ function radius(a::Interval)
 end
 
 # cancelplus and cancelminus
-@doc doc"""
+ doc"""
 `cancelminus(a, b)` returns the unique interval `c` such that `b+c=a`.""" ->
 function cancelminus(a::Interval, b::Interval)
     T = promote_type(eltype(a), eltype(b))
@@ -371,7 +371,7 @@ function cancelminus(a::Interval, b::Interval)
     @round(T, a.lo - b.lo, a.hi - b.hi)
 end
 
-@doc doc"""
+ doc"""
 `cancelplus(a, b)` returns the unique interval `c` such that `b-c=a`;
 it is equivalent to `cancelminus(a, −b)`.""" ->
 cancelplus(a::Interval, b::Interval) = cancelminus(a, -b)

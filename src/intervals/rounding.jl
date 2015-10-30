@@ -33,7 +33,7 @@ macro with_rounding(T, expr, rounding_mode)
 end
 
 
-@doc doc"""The `@round` macro creates a rounded interval according to the current
+ doc"""The `@round` macro creates a rounded interval according to the current
 interval rounding mode. It is the main function used to create intervals in the
 library (e.g. when adding two intervals, etc.). It uses the interval rounding mode
 (see get_interval_rounding())""" ->
@@ -88,14 +88,14 @@ macro controlled_round(T, expr1, expr2)
     end
 end
 
-@doc doc"""`@thin_round` possibly saves one operation compared to `@round`.""" ->
+ doc"""`@thin_round` possibly saves one operation compared to `@round`.""" ->
 macro thin_round(T, expr)
     quote
         @round($T, $expr, $expr)
     end
 end
 
-@doc doc"""`split_interval_string` deals with strings of the form
+ doc"""`split_interval_string` deals with strings of the form
 \"[3.5, 7.2]\"""" ->
 
 function split_interval_string(T, x::AbstractString)
@@ -113,7 +113,7 @@ function split_interval_string(T, x::AbstractString)
 end
 
 
-@doc doc"""`make_interval` is used by `@interval` to create intervals from
+ doc"""`make_interval` is used by `@interval` to create intervals from
 individual elements of different types""" ->
 
 # make_interval for BigFloat intervals
@@ -187,7 +187,7 @@ function make_interval{T<:Integer}(::Type{Rational{T}}, x::Interval)
 end
 
 
-@doc doc"""`transform` transforms a string by applying the function `f` and type
+ doc"""`transform` transforms a string by applying the function `f` and type
 `T` to each argument, i.e. `:(x+y)` is transformed to `:(f(T, x) + f(T, y))`
 """ ->
 transform(x, f, T) = :($f($(esc(T)), $(esc(x))))   # use if x is not an expression
@@ -224,7 +224,7 @@ end
 
 
 # Called by interval and floatinterval macros
-@doc doc"""`make_interval` does the hard work of taking expressions
+ doc"""`make_interval` does the hard work of taking expressions
 and making each literal (0.1, 1, etc.) into a corresponding interval construction,
 by calling `transform`.""" ->
 
@@ -248,7 +248,7 @@ float(x::Interval) =
 ## Change type of interval rounding:
 
 
-@doc doc"""`get_interval_rounding()` returns the current interval rounding mode.
+ doc"""`get_interval_rounding()` returns the current interval rounding mode.
 There are two possible rounding modes:
 
 - :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
