@@ -16,7 +16,7 @@ immutable Interval{T<:Real} <: Real
         if a > b
             throw(ArgumentError("Must have a ≤ b to construct Interval(a, b)."))
         end
-        
+
         new(a, b)
     end
 end
