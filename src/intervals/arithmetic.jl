@@ -1,22 +1,23 @@
 # This file is part of the ValidatedNumerics.jl package; MIT licensed
 
-## in, \in, corresponds to isMember
+doc"""`in(x, a::Interval)` (also written ∈, obtained with `\in<TAB>`). [corresponds to `isMember`] checks if the number `x` is a member of the interval `a`, treated as a set."""
 function in{T<:Real}(x::T, a::Interval)
     isinf(x) && return false
-    # isentire(a) && return true
     a.lo <= x <= a.hi
 end
 
 
-## Comparison of parameters
-## Equalities and neg-equalities
+## Comparisons
+
+doc"`a == b` checks if the intervals `a` and `b` are equal."
 function ==(a::Interval, b::Interval)
     isempty(a) && isempty(b) && return true
     a.lo == b.lo && a.hi == b.hi
 end
 !=(a::Interval, b::Interval) = !(a==b)
 
-# issubset, \subseteq
+doc"`a ⊆ b` (written `\subseteq<TAB>`) checks if the interval `a` is a subset
+of the interval `b`."
 function ⊆(a::Interval, b::Interval)
     isempty(a) && return true
     b.lo ≤ a.lo && a.hi ≤ b.hi
