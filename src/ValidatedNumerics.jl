@@ -1,11 +1,8 @@
 # This file is part of the ValidatedNumerics.jl package; MIT licensed
 
-VERSION >= v"0.4.0-dev+6521" && __precompile__(true)
+#__precompile__(true)
 
 module ValidatedNumerics
-
-
-(VERSION < v"0.4-") && using Docile
 
 using Compat
 #using FactCheck
@@ -41,7 +38,7 @@ export
     widen, infimum, supremum,
     set_interval_precision, get_interval_precision,
     with_interval_precision,
-    interval_parameters, eps, dist, roughly,
+    parameters, eps, dist, roughly,
     pi_interval,
     midpoint_radius, interval_from_midpoint_radius,
     RoundTiesToEven, RoundTiesToAway,
