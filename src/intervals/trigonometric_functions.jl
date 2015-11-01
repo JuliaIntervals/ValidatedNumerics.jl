@@ -120,7 +120,7 @@ function tan{T}(a::Interval{T})
     return Interval(tan(a.lo, RoundDown), tan(a.hi, RoundUp))
 end
 
-function asin{T}(a::Interval{t})
+function asin{T}(a::Interval{T})
 
     domain = Interval(-one(T), one(T))
     a = a ∩ domain
@@ -130,7 +130,7 @@ function asin{T}(a::Interval{t})
     Interval(asin(a.lo, RoundDown), asin(a.hi, RoundUp))
 end
 
-function acos(a::Interval{T})
+function acos{T}(a::Interval{T})
 
     domain = Interval(-one(T), one(T))
     a = a ∩ domain
@@ -207,9 +207,9 @@ function atan2(y::Interval{BigFloat}, x::Interval{BigFloat})
         elseif x.hi == zero(T)
             y == zero(y) && return pi_interval(T)
             y.lo ≥ zero(T) &&
-                return @round(T, big(pi)/2, atan2(y.lo, x.lo))
+                return @round(T, half_pi(T).lo, atan2(y.lo, x.lo))
             y.hi < zero(T) &&
-                return @round(T, atan2(y.hi, x.lo), big(-pi)/2)
+                return @round(T, atan2(y.hi, x.lo), -(half_pi(T).lo))
             return range_atan2(T)
         else
             y.lo ≥ zero(T) &&
