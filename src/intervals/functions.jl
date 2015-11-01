@@ -179,49 +179,32 @@ function sqrt{T}(a::Interval{T})
 end
 
 
-function exp(a::Interval{Float64})
-    isempty(a) && return a
-    Interval(exp(a.lo, RoundDown), exp(a.hi, RoundUp))
-end
+for T in (Float64, BigFloat),
+    f in (:exp, :exp2, :exp10)
 
-for fn in (:exp2, :exp10)
     @eval begin
-        function ($fn)(a::Interval{Float64})
+        function ($f){T}(a::Interval{T})
             isempty(a) && return a
-            res = with_bigfloat_precision(53) do
-                res = ($fn)(Interval(big(a.lo), big(a.hi)))
-            end
-            float(res)
+            lower = ($f)(a.lo, RoundDown)
+            upper = nextfloat(lower)
+            Interval(lower, upper)
         end
     end
 end
 
-for fn in (:exp, :exp2, :exp10)
-    @eval begin
-        function ($fn)(a::Interval{BigFloat})
-            isempty(a) && return a
-            @round(BigFloat, ($fn)(a.lo), ($fn)(a.hi))
-        end
-    end
-end
+for T in (Float64, BigFloat),
+    f in (:log, :log2, :log10)
 
-for fn in (:log, :log2, :log10)
     @eval begin
-        function ($fn)(a::Interval{Float64})
-            domain = Interval(0.0, Inf)
+        function ($f){T}(a::Interval{T})
+            domain = Interval(zero(T), convert(T, Inf)
             a = a ∩ domain
 
-            (isempty(a) || a.hi ≤ 0.0) && return emptyinterval(a)
+            (isempty(a) || a.hi ≤ zero(T)) && return emptyinterval(a)
 
-            Interval(($fn)(a.lo, RoundDown), ($fn)(a.hi, RoundUp))
-        end
-        function ($fn)(a::Interval{BigFloat})
-            domain = Interval(big(0.0), Inf)
-            a = a ∩ domain
-
-            (isempty(a) || a.hi ≤ big(0.0)) && return emptyinterval(a)
-
-            @round(BigFloat, ($fn)(a.lo), ($fn)(a.hi))
+            lower = ($f)(a.lo, RoundDown)
+            upper = nextfloat(lower)
+            Interval(lower, upper)
         end
     end
 end
