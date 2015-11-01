@@ -179,32 +179,47 @@ function sqrt{T}(a::Interval{T})
 end
 
 
+# add BigFloat functions with rounding:
+for f in (:exp2, :exp10)
+    @eval function ($f)(x::BigFloat, r::RoundingMode)
+        with_rounding(BigFloat, r) do
+            ($f)(x)
+        end
+    end
+end
+
 for T in (Float64, BigFloat),
-    f in (:exp, :exp2, :exp10)
+    f in (:exp, :expm1, :exp2, :exp10)
+
+    if T==Float64 && (f==:exp2 || f==:exp10)
+        continue  # not defined in CRlibm
+    end
 
     @eval begin
         function ($f){T}(a::Interval{T})
             isempty(a) && return a
-            lower = ($f)(a.lo, RoundDown)
-            upper = nextfloat(lower)
-            Interval(lower, upper)
+            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
         end
     end
 end
 
 for T in (Float64, BigFloat),
-    f in (:log, :log2, :log10)
+    f in (:log, :log2, :log10, :log1p)
 
     @eval begin
         function ($f){T}(a::Interval{T})
-            domain = Interval(zero(T), convert(T, Inf)
+            domain = Interval(zero(T), convert(T, Inf))
             a = a ∩ domain
 
             (isempty(a) || a.hi ≤ zero(T)) && return emptyinterval(a)
 
-            lower = ($f)(a.lo, RoundDown)
-            upper = nextfloat(lower)
-            Interval(lower, upper)
+            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
         end
     end
 end
+
+
+
+# float versions:
+exp2(a::Interval{Float64}) = to_float(exp2(big53(a)))
+exp10(a::Interval{Float64}) = to_float(exp10(big53(a)))
