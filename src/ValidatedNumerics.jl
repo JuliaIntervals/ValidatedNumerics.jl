@@ -52,6 +52,10 @@ export
     find_roots,
     find_roots_midpoint
 
+## IEEE 1788 standard aliases
+export
+    @alias
+
 function __init__()
     set_interval_precision(256)  # set up pi
     set_interval_precision(Float64)
@@ -63,6 +67,7 @@ end
 include("misc.jl")
 include("intervals/intervals.jl")
 include("root_finding/root_finding.jl")
+include("IEEE_1788_aliases.jl")
 
 
 
