@@ -2,12 +2,6 @@
 
 ## Macros for directed rounding:
 
-# Use the following empty definitions for rounding types other than Float64:
-Base.set_rounding(whatever, rounding_mode) = ()
-Base.get_rounding(whatever) = ()
-
-Base.Rounding.get_rounding_raw(whatever) = Base.Rounding.set_rounding_raw(whatever, rounding_mode) = ()
-
 
 macro show_rounding(T, expr)
    quote

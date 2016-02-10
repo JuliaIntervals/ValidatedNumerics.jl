@@ -10,6 +10,8 @@
 
 - Documentation has been enhanced.
 
+- `Interval`s can now only contain floating-point numbers. Non-floats will be automatically converted.
+
 - v0.2 **supports only Julia v0.4 and later**.
 
 - Changes are detailed in [issue #31](https://github.com/dpsanders/ValidatedNumerics.jl/issues/31)
