@@ -191,20 +191,20 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         return entireinterval(T)
     end
 
-    lo = setrounding(T, RoundDown) do
-        lo1 = fma(a.lo, b.lo, c.lo)
-        lo2 = fma(a.lo, b.hi, c.lo)
-        lo3 = fma(a.hi, b.lo, c.lo)
-        lo4 = fma(a.hi, b.hi, c.lo)
-        min(lo1, lo2, lo3, lo4)
-    end :: T
-    hi = setrounding(T, RoundUp) do
-        hi1 = fma(a.lo, b.lo, c.hi)
-        hi2 = fma(a.lo, b.hi, c.hi)
-        hi3 = fma(a.hi, b.lo, c.hi)
-        hi4 = fma(a.hi, b.hi, c.hi)
-        max(hi1, hi2, hi3, hi4)
-    end :: T
+    setrounding(T, RoundDown)
+    lo1 = fma(a.lo, b.lo, c.lo)
+    lo2 = fma(a.lo, b.hi, c.lo)
+    lo3 = fma(a.hi, b.lo, c.lo)
+    lo4 = fma(a.hi, b.hi, c.lo)
+    lo = min(lo1, lo2, lo3, lo4)
+    setrounding(T, RoundUp)
+    hi1 = fma(a.lo, b.lo, c.hi)
+    hi2 = fma(a.lo, b.hi, c.hi)
+    hi3 = fma(a.hi, b.lo, c.hi)
+    hi4 = fma(a.hi, b.hi, c.hi)
+    hi = max(hi1, hi2, hi3, hi4)
+    setrounding(T, RoundNearest)
+    
     Interval(lo, hi)
 end
 
@@ -219,8 +219,11 @@ end
 function mig{T<:Real}(a::Interval{T})
     isempty(a) && return convert(T, NaN)
     zero(a.lo) ∈ a && return zero(a.lo)
-    r1 = @setrounding(T, abs(a.lo), RoundDown)
-    r2 = @setrounding(T, abs(a.hi), RoundDown)
+    setrounding(T, RoundDown)
+    r1 = abs(a.lo)
+    setrounding(T, RoundUp)
+    r2 = abs(a.hi)
+    setrounding(T, RoundNearest)
     min( r1, r2 )
 end
 
@@ -335,7 +338,10 @@ end
 
 function diam{T<:Real}(a::Interval{T})
     isempty(a) && return convert(T, NaN)
-    @setrounding(T, a.hi - a.lo, RoundUp) #cf page 64 of IEEE1788
+    setrounding(T, RoundUp) #cf page 64 of IEEE1788
+    r = a.hi - a.lo
+    setrounding(T, RoundNearest)
+    return r
 end
 
 # Should `radius` this yield diam(a)/2? This affects other functions!
