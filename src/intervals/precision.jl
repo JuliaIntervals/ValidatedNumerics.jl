@@ -6,7 +6,8 @@ doc"`big53` creates an equivalent `BigFloat` interval to a given `Float64` inter
 function big53(a::Interval{Float64})
     x = with_interval_precision(53) do  # precision of Float64
         Interval{BigFloat}(a)
-    end
+    end :: Interval{BigFloat}
+    x
 end
 
 

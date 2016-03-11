@@ -144,7 +144,7 @@ end
 function atan{T}(a::Interval{T})
     isempty(a) && return a
 
-    Interval(atan(a.lo, RoundDown), atan(a.hi, RoundUp))
+    Interval(atan(a.lo, RoundDown), atan(a.hi, RoundUp)) :: Interval{T}
 end
 
 

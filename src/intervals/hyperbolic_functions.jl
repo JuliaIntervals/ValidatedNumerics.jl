@@ -3,12 +3,12 @@
 
 function sinh{T}(a::Interval{T})
     isempty(a) && return a
-    return Interval(sinh(a.lo, RoundDown), sinh(a.hi, RoundUp))
+    return Interval(sinh(a.lo, RoundDown), sinh(a.hi, RoundUp)) :: Interval{T}
 end
 
 function cosh{T}(a::Interval{T})
     isempty(a) && return a
-    return Interval(cosh(mig(a), RoundDown), cosh(mag(a), RoundUp))
+    return Interval(cosh(mig(a), RoundDown), cosh(mag(a), RoundUp)) :: Interval{T}
 end
 
 # function tanh(a::Interval{Float64})

@@ -28,7 +28,7 @@ macro setrounding(T, expr, rounding_mode)
     quote
         setrounding($T, $rounding_mode) do
             $expr
-        end
+        end :: eltype($expr)
     end
 end
 
@@ -119,18 +119,14 @@ end
 function make_interval(::Type{Float64}, x::Integer)
     a = setprecision(53) do
         make_interval(BigFloat, x)
-    end
+    end :: Interval{BigFloat}
     float(a)
 end
 
 make_interval(::Type{Float64}, x::BigFloat) = @thin_round(Float64, convert(Float64, x))
 
 function make_interval(::Type{Float64}, x::Interval)
-    # a = make_interval(Float64, x.lo)
-    # b = make_interval(Float64, x.hi)
-
     Interval( Float64(x.lo, RoundDown), Float64(x.hi, RoundUp) )
-
 end
 
 
@@ -213,8 +209,10 @@ end
 
 
 # float(x::Interval) = Interval(convert(Float64,x.lo),convert(Float64,x.hi))
-float(x::Interval) =
-    @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi))
+function float(x::Interval)
+    xx = @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi))
+    xx :: Interval{Float64}
+end
 
 ## Change type of interval rounding:
 

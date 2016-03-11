@@ -197,14 +197,14 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         lo3 = fma(a.hi, b.lo, c.lo)
         lo4 = fma(a.hi, b.hi, c.lo)
         min(lo1, lo2, lo3, lo4)
-    end
+    end :: T
     hi = setrounding(T, RoundUp) do
         hi1 = fma(a.lo, b.lo, c.hi)
         hi2 = fma(a.lo, b.hi, c.hi)
         hi3 = fma(a.hi, b.lo, c.hi)
         hi4 = fma(a.hi, b.hi, c.hi)
         max(hi1, hi2, hi3, hi4)
-    end
+    end :: T
     Interval(lo, hi)
 end
 
@@ -213,18 +213,14 @@ end
 
 function mag{T<:Real}(a::Interval{T})
     isempty(a) && return convert(eltype(a), NaN)
-    # r1, r2 = setrounding(T, RoundUp) do
-    #     abs(a.lo), abs(a.hi)
-    # end
     max( abs(a.lo), abs(a.hi) )
 end
 
 function mig{T<:Real}(a::Interval{T})
-    isempty(a) && return convert(eltype(a), NaN)
+    isempty(a) && return convert(T, NaN)
     zero(a.lo) ∈ a && return zero(a.lo)
-    r1, r2 = setrounding(T, RoundDown) do
-        abs(a.lo), abs(a.hi)
-    end
+    r1 = @setrounding(T, abs(a.lo), RoundDown)
+    r2 = @setrounding(T, abs(a.hi), RoundDown)
     min( r1, r2 )
 end
 
