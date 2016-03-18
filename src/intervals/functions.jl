@@ -6,7 +6,7 @@
 # Use the BigFloat version from MPFR instead, which is correctly-rounded:
 
 for T in (:Integer, :Rational, :Float64, :BigFloat, :Interval)
-    @eval ^(a::Interval{Float64}, x::$T) = float(big53(a)^x)
+    @eval ^(a::Interval{Float64}, x::$T) = float(big53(a)^x) :: Interval{Float64}
 end
 
 # Integer power:
@@ -170,7 +170,7 @@ for f in (:exp, :expm1)
     @eval begin
         function ($f){T}(a::Interval{T})
             isempty(a) && return a
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) ) :: Interval{T}
         end
     end
 end
@@ -183,11 +183,11 @@ for f in (:exp2, :exp10)
             end
         end
 
-    @eval ($f)(a::Interval{Float64}) = float($f(big53(a)))  # no CRlibm version
+    @eval ($f)(a::Interval{Float64}) = float($f(big53(a))) :: Interval{Float64}  # no CRlibm version
 
     @eval function ($f)(a::Interval{BigFloat})
             isempty(a) && return a
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) ) :: Interval{BigFloat}
         end
 end
 
@@ -200,6 +200,6 @@ for f in (:log, :log2, :log10, :log1p)
 
             (isempty(a) || a.hi ≤ zero(T)) && return emptyinterval(a)
 
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) ) :: Interval{T}
         end
 end
