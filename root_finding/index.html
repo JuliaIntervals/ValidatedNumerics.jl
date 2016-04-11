@@ -12,7 +12,7 @@
 	<title>Root finding - ValidatedNumerics.jl</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/highlight.css">
 
@@ -54,13 +54,19 @@
                 
                 
                     <li >
-                        <a href="..">Validated Numerics package</a>
+                        <a href="..">Package</a>
                     </li>
                 
                 
                 
                     <li >
                         <a href="../usage/">Basic usage</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../multidim/">Multi-dimensional</a>
                     </li>
                 
                 
@@ -87,7 +93,7 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../usage/">
+                        <a rel="next" href="../multidim/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
@@ -221,7 +227,7 @@ julia&gt; roots = newton(f, @interval(-5, 5))
  Root([-1.4142135623730951, -1.414213562373095], :unique)
  Root([1.414213562373095, 1.4142135623730951], :unique)
 
-julia&gt; set_interval_precision(256)
+julia&gt; setprecision(Interval, 256)
 256
 
 julia&gt; newton(f, roots)

@@ -12,7 +12,7 @@
 	<title>Basic usage - ValidatedNumerics.jl</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/highlight.css">
 
@@ -54,13 +54,19 @@
                 
                 
                     <li >
-                        <a href="..">Validated Numerics package</a>
+                        <a href="..">Package</a>
                     </li>
                 
                 
                 
                     <li class="active">
                         <a href="./">Basic usage</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../multidim/">Multi-dimensional</a>
                     </li>
                 
                 
@@ -92,7 +98,7 @@
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="../root_finding/">
+                        <a rel="prev" href="../multidim/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -187,7 +193,8 @@ julia&gt; b = @interval(0.1, 0.3)
 <code>a</code> created directly by the constructor <em>contains neither the true real number 0.1, nor 0.3</em>.
 The <code>@interval</code> macro, however, uses <a href="../rounding/"><strong>directed rounding</strong></a> to <em>guarantee</em>
 that the true 0.1 and 0.3 are included in the result.</p>
-<p>Behind the scenes, the <code>@interval</code> macro rewrites the expression(s) passed to it, replacing the literals (0.1, 1, etc.) by calls to create correctly-rounded intervals, handled internally by the <code>make_interval</code> function.</p>
+<p>Behind the scenes, the <code>@interval</code> macro rewrites the expression(s) passed to it, replacing the literals (0.1, 1, etc.) by calls to create correctly-rounded intervals, handled by the <code>convert</code>
+function.</p>
 <p>This allows us to write, for example</p>
 <pre><code class="julia">julia&gt; @interval sin(0.1) + cos(0.2)
 </code></pre>
@@ -227,9 +234,19 @@ julia&gt; @interval 3π/2 + 1
 [0.09999999999999999, 0.1]
 </code></pre>
 
-<p>Reals are converted to rationals:</p>
+<p>Real literals are handled by internally converting them
+to rationals using <code>rationalize</code>. This is produces
+a result that contains the computer's "best guess" for
+the real number the user "had in mind":</p>
 <pre><code class="julia">julia&gt; @interval(0.1)
 [0.09999999999999999, 0.1]
+</code></pre>
+
+<p>If you know exactly which floating-point number you need and really
+want to make a thin interval (i.e., an interval of the form $[a,a]$), you can just
+use the <code>Interval</code> constructor:</p>
+<pre><code>julia&gt; Interval(0.1)
+[0.1, 0.1]
 </code></pre>
 
 <p>Strings may be used:</p>
@@ -247,7 +264,7 @@ julia&gt; @interval 3π/2 + 1
 3.6
 
 julia&gt; b = @interval(a)
-[3.5999999999999996, 3.6000000000000005]
+[3.5999999999999996, 3.6]
 </code></pre>
 
 <p>The upper and lower bounds of the interval may be accessed using the fields
@@ -256,16 +273,32 @@ julia&gt; b = @interval(a)
 3.5999999999999996
 
 julia&gt; b.hi
-3.6000000000000005
+3.6
 </code></pre>
 
 <p>The diameter (length) of an interval is obtained using <code>diam(b)</code>;
 for numbers that cannot be represented in base 2
 (i.e., whose <em>binary</em> expansion is infinite or exceeds the current precision),
- the diameter of newly-created thin intervals corresponds to the local machine epsilon (<code>eps</code>) in the <code>:narrow</code> interval rounding mode:</p>
+ the diameter of newly-created thin intervals corresponds to the local machine epsilon (<code>eps</code>) in the <code>:narrow</code> interval-rounding mode:</p>
 <pre><code class="julia">julia&gt; diam(b)
-8.881784197001252e-16
+4.440892098500626e-16
 
+julia&gt; eps(b.lo)
+4.440892098500626e-16
+</code></pre>
+
+<p>Starting with v0.3, you can use additional syntax for creating intervals more easily:
+the <code>..</code> operator,</p>
+<pre><code class="julia">julia&gt; 0.1..0.3
+[0.09999999999999999, 0.30000000000000004]
+</code></pre>
+
+<p>and the <code>@I_str</code> string macro:</p>
+<pre><code class="julia">julia&gt; I&quot;3.1&quot;
+[3.0999999999999996, 3.1]
+
+julia&gt; I&quot;[3.1, 3.2]&quot;
+[3.0999999999999996, 3.2]
 </code></pre>
 
 <h2 id="arithmetic">Arithmetic</h2>
@@ -276,10 +309,10 @@ $$X \circ Y := { x \circ y: x \in X \text{ and } y \in Y }.$$  Again, directed r
 [0.09999999999999999, 0.30000000000000004]
 
 julia&gt; b = @interval(0.3, 0.6)
-[0.29999999999999993, 0.6000000000000001]
+[0.3, 0.6000000000000001]
 
 julia&gt; a + b
-[0.3999999999999999, 0.9000000000000001]
+[0.39999999999999997, 0.9000000000000001]
 </code></pre>
 
 <p>However, subtraction of two intervals gives an initially unexpected result, due to the above definition:</p>
@@ -292,8 +325,8 @@ julia&gt; a - a
 
 <h2 id="changing-the-precision">Changing the precision</h2>
 <p>By default, the <code>@interval</code> macro creates intervals of <code>Float64</code>s.
-This may be changed using the <code>set_interval_precision</code> function:</p>
-<pre><code class="julia">julia&gt; set_interval_precision(256)
+This may be changed using the <code>setprecision</code> function:</p>
+<pre><code class="julia">julia&gt; setprecision(Interval, 256)
 256
 
 julia&gt; @interval 3π/2 + 1
@@ -302,7 +335,7 @@ julia&gt; @interval 3π/2 + 1
 
 <p>The subscript <code>256</code> at the end denotes the precision.</p>
 <p>To change back to <code>Float64</code>s, use</p>
-<pre><code class="julia">julia&gt; set_interval_precision(Float64)
+<pre><code class="julia">julia&gt; setprecision(Interval, Float64)
 Float64
 
 julia&gt; @interval(pi)
@@ -310,23 +343,50 @@ julia&gt; @interval(pi)
 </code></pre>
 
 <p>To check which mode is currently set, use</p>
-<pre><code class="julia">julia&gt; get_interval_precision()
-(Float64,-1)
+<pre><code class="julia">julia&gt; precision(Interval)
+(Float64,256)
 </code></pre>
 
-<p>The result is a tuple of the type (currently <code>Float64</code> or <code>BigFloat</code>) and the precision (relevant only for <code>BigFloat</code>s).</p>
-<p>NB: The standard Julia function <code>set_bigfloat_precision</code> is used internally by <code>set_interval_precision</code>, but it should not be used directly, since <code>set_interval_precision</code> carries out additional steps to ensure internal consistency of certain interval operations.</p>
+<p>The result is a tuple of the type (currently <code>Float64</code> or <code>BigFloat</code>) and the current <code>BigFloat</code> precision.</p>
+<p>Note that the <code>BigFloat</code> precision is set internally by <code>setprecision(Interval)</code>.
+You should not use <code>setprecision(BigFloat)</code> directly,<br />
+since the package carries out additional steps to ensure internal
+consistency of operations involving π, in particular
+trigonometric functions.</p>
 <h2 id="elementary-functions">Elementary functions</h2>
-<p>The main elementary functions are defined, acting on interval arguments.
-Currently, <code>exp</code>, <code>log</code>, <code>sin</code>, <code>cos</code> and <code>tan</code> are implemented, e.g.</p>
-<pre><code>julia&gt; sin(@interval(1))
-[0.8414709848078965, 0.8414709848078965]
+<p>The main elementary functions are implemented, acting on both
+<code>Interval{Float64}</code> and <code>Interval{BigFloat}</code>.</p>
+<p>The functions that act on <code>Interval{Float64}</code> internally use routines the <a href="https://github.com/dpsanders/CRlibm.jl"><code>CRlibm</code> library</a> where possible, i.e. for the following
+functions defined in that library:</p>
+<ul>
+<li>exp, expm1</li>
+<li>log, log1p, log2, log10</li>
+<li>sin, cos, tan</li>
+<li>asin, acos, atan</li>
+<li>sinh, cosh</li>
+</ul>
+<p>Other functions that are implemented for <code>Interval{Float64}</code> internally convert
+to a <code>Interval{BigFloat}</code>, which then use routines from the <code>MPFR</code> library
+(<code>BigFloat</code> in Julia):</p>
+<ul>
+<li>^</li>
+<li>exp2, exp10</li>
+<li>atan2, atanh</li>
+</ul>
+<p>Note, in particular, that in order to obtain correct rounding for the power function (<code>^</code>),
+intervals are converted to and from <code>BigFloat</code>; this implies a significant slow-down in this case.</p>
+<p>Examples:</p>
+<pre><code class="julia">julia&gt; a = @interval(1)
+[1.0, 1.0]
+
+julia&gt; sin(a)
+[0.8414709848078965, 0.8414709848078966]
+
+julia&gt; cos(cosh(a))
+[0.027712143770207736, 0.02771214377020796]
 </code></pre>
 
-<p>Again, the result should contain the result of applying the function to each real number contained in the interval.</p>
-<p><strong>However</strong>, as can be seen from the above result, currently <strong>directed rounding is <em>not</em> implemented</strong> for elementary functions of <code>Float64</code>s. [We are aiming to incorporate this functionality in v0.2 via the <a href="http://lipforge.ens-lyon.fr/www/crlibm/"><code>crlibm</code> package</a>.]</p>
-<p>Currently, this may be correctly calculated by using <code>BigFloat</code>s with a precision of 53 bits (the same as that of <code>Float64</code>s):</p>
-<pre><code class="julia">julia&gt; set_interval_precision(53)
+<pre><code class="julia">julia&gt; setprecision(Interval, 53)
 53
 
 julia&gt; sin(@interval(1))
@@ -336,19 +396,25 @@ julia&gt; @interval sin(0.1) + cos(0.2)
 [1.0798999944880696e+00, 1.0798999944880701e+00]₅₃
 </code></pre>
 
-<p>Note, however, that calculations with <code>BigFloat</code>s are carried out in software, and so are slower than operating with  <code>Float64</code>s directly.</p>
+<pre><code class="julia">julia&gt; setprecision(Interval, 128)
+128
+
+julia&gt; @interval sin(1)
+[8.41470984807896506652502321630298999621e-01, 8.414709848078965066525023216302989996239e-01]₁₂₈
+</code></pre>
+
 <h2 id="interval-rounding-modes">Interval rounding modes</h2>
 <p>By default, the directed rounding used corresponds to using the <code>RoundDown</code> and <code>RoundUp</code> rounding modes when performing calculations; this gives the narrowest resulting intervals, and is set by</p>
-<pre><code class="julia">set_interval_rounding(:narrow)
+<pre><code class="julia">setrounding(Interval, :narrow)
 </code></pre>
 
 <p>An alternative rounding method is to perform calculations using the (standard) <code>RoundNearest</code> rounding mode, and then widen the result by one machine epsilon in each direction using <code>prevfloat</code> and <code>nextfloat</code>. This is achived by</p>
-<pre><code class="julia">set_interval_rounding(:wide)
+<pre><code class="julia">setrounding(Interval, :wide)
 </code></pre>
 
 <p>It generally results in wider intervals, but seems to be significantly faster.</p>
 <p>The current interval rounding mode may be obtained by</p>
-<pre><code class="julia">get_interval_rounding()
+<pre><code class="julia">rounding(Interval)
 </code></pre></div>
             
         </div>
