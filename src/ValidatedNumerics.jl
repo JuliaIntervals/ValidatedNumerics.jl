@@ -84,6 +84,8 @@ include("intervals/intervals.jl")
 include("multidim/multidim.jl")
 include("decorations/decorations.jl")
 
+include("display.jl")
+
 include("root_finding/root_finding.jl")
 
 
