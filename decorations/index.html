@@ -9,7 +9,7 @@
         
         <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>Multi-dimensional - ValidatedNumerics.jl</title>
+	<title>Decorations - ValidatedNumerics.jl</title>
 
         <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../css/font-awesome-4.5.0.css" rel="stylesheet">
@@ -65,8 +65,8 @@
                 
                 
                 
-                    <li class="active">
-                        <a href="./">Multi-dimensional</a>
+                    <li >
+                        <a href="../multidim/">Multi-dimensional</a>
                     </li>
                 
                 
@@ -83,8 +83,8 @@
                 
                 
                 
-                    <li >
-                        <a href="../decorations/">Decorations</a>
+                    <li class="active">
+                        <a href="./">Decorations</a>
                     </li>
                 
                 
@@ -99,12 +99,12 @@
                 </li>
                 
                     <li >
-                        <a rel="next" href="../usage/">
+                        <a rel="next" href="../rounding/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li >
-                        <a rel="prev" href="../root_finding/">
+                    <li class="disabled">
+                        <a rel="prev" >
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -129,54 +129,59 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#multi-dimensional-boxes">Multi-dimensional boxes</a></li>
+        <li class="main active"><a href="#decorations">Decorations:</a></li>
+        
+            <li><a href="#initialisation">Initialisation</a></li>
+        
+            <li><a href="#action-of-functions">Action of functions</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="multi-dimensional-boxes">Multi-dimensional boxes</h1>
-<p>Starting with v0.3, multi-dimensional (hyper-)boxes are implemented in the
-<code>IntervalBox</code> type.
-These represent Cartesian products of intervals, i.e. rectangles (in 2D),
-cuboids (in 3D), etc.</p>
-<p><code>IntervalBox</code>es are constructed from an array of <code>Interval</code>s; it is
-often convenient to use the <code>..</code> notation:</p>
-<pre><code class="julia">julia&gt; X = IntervalBox(1..3, 2..4)
-[1.0, 3.0] × [2.0, 4.0]
-
-julia&gt; Y = IntervalBox(2..4, 3..5)
-[2.0, 4.0] × [3.0, 5.0]
-</code></pre>
-
-<p>Several operations are defined on <code>IntervalBox</code>es, for example:</p>
-<pre><code>julia&gt; X ∩ Y
-[2.0, 3.0] × [3.0, 4.0]
-
-julia&gt; X ⊆ Y
-false
-</code></pre>
-
-<p>To facilitate working with <code>IntervalBox</code>es, a macro <code>@intervalbox</code> is defined.
-Given a multi-dimensional function taking several inputs, this creates both the original form and a
-version that works with a single <code>IntervalBox</code> argument, e.g.</p>
-<pre><code class="julia">julia&gt; @intervalbox f(x, y) = (x + y, x - y)
-f (generic function with 2 methods)
-
-julia&gt; f(1..1, 2..2)  
-([3.0, 3.0],[-1.0, -1.0])
-
-julia&gt; X = IntervalBox(1..1, 2..2)
-[1.0, 1.0] × [2.0, 2.0]
-
-julia&gt; f(X)
-[3.0, 3.0] × [-1.0, -1.0]
-</code></pre>
-
-<p>The first version takes a tuple of <code>Interval</code>s and returns another tuple of <code>Interval</code>s;
-the second version takes a single <code>IntervalBox</code> and automatically does the
-necessary unpacking and packing to return an <code>IntervalBox.</code></p></div>
+<h1 id="decorations">Decorations:</h1>
+<p>Decorations are flags or labels attached to intervals to indicate the status of a given interval as the product of a function evaluation on a given initial interval.</p>
+<p>The possible decorations and their ordering are as follows (pg. 46):
+<code>com</code> &gt; <code>dac</code> &gt; <code>def</code> &gt; <code>trv</code> &gt; <code>ill</code>.</p>
+<ul>
+<li>
+<p><code>com</code> ("common"): The meanings are (pg. 44): x is a bounded, nonempty subset of Dom(f); f is
+continuous at each point of x; and the computed interval f(x) is bounded.
+x is a nonempty subset of Dom(f), and the restriction of f to x is continuous;</p>
+</li>
+<li>
+<p><code>dac</code> ("defined &amp; continuous"): x is a nonempty subset of Dom(f), and the
+restriction of f to x is continuous;</p>
+</li>
+<li>
+<p><code>def</code> ("defined"): x is a nonempty subset of Dom(f), i.e. f is defined at each point of x</p>
+</li>
+<li>
+<p><code>trv</code> ("trivial"): always true; gives no information</p>
+</li>
+<li>
+<p><code>ill</code> ("ill-formed"): Not an Interval (an error occurred), e.g. Dom(f) = empty</p>
+</li>
+</ul>
+<h2 id="initialisation">Initialisation</h2>
+<p>Each decorated interval is initialised with a decoration according to the status of its interval <code>x</code> (pg. 46 of the standard):</p>
+<ul>
+<li><code>com</code>: if <code>x</code> is nonempty and bounded;</li>
+<li><code>dac</code> if <code>x</code> is unbounded;</li>
+<li><code>trv</code> if <code>x</code> is empty.</li>
+</ul>
+<h2 id="action-of-functions">Action of functions</h2>
+<p>A decoration is the combination of an interval together with the sequence of functions that it has passed through.</p>
+<p>As an example, consider the <code>sqrt</code> function acting on an interval <code>x</code>.</p>
+<p>If <code>x</code> is empty, then <code>sqrt</code> will return the, empty interval, together with the trivial decoration.</p>
+<p>If <code>x</code> is [a, Inf] with a &gt; 0 (<code>dac</code>), then <code>sqrt(x)</code> will return <code>[sqrt(a), Inf]</code>, so is also unbounded, and so will return (<code>[sqrt(a), Inf], dac</code>).</p>
+<p>The domain of <code>sqrt</code> is <code>D := Dom(sqrt) = [0, Inf]</code>. We must first check if
+<code>x ⊆ D</code>. If so, then the <code>sqrt</code> function is continuous and bounded on that interval, so we return <code>min(</code>com<code>, decoration(x))</code>,  where <code>decoration(x)</code> is the decoration of <code>x</code>.</p>
+<p>E.g. consider the <code>sign</code> function:
+sign(x) = 1, if x &gt; 0; sign(x) = 0 if x = 0; sign(x) = -1 if x &lt; 0</p>
+<p>This function is defined for all x in R, but is not continuous at 0. Thus if the interval contains 0, the decoration that results cannot be better than <code>def</code>.
+Thus <code>sqrt(sign([0,10]))</code> will return <code>([0,1], def)</code>, where the decoration is only <code>def</code>, indicating that we cannot guarantee that the function <code>sqrt ∘ sign</code> is continuous on the interval. (In fact, we know that it is not continuous, but this is not guaranteed by the decoration.)</p></div>
             
         </div>
 
