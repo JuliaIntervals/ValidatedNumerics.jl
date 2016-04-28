@@ -94,6 +94,17 @@ function representation(a::Interval{BigFloat})
     end
 end
 
+function representation(a::DecoratedInterval)
+    interval_part = representation(interval_part(a))
+
+    if display_params.decorations
+        string(interval_part, decoration(a))
+    else
+        interval_part
+    end
+
+end
+
 show(io::IO, a::Interval) = print(io, representation(a))
 
 function subscriptify(n::Int)
