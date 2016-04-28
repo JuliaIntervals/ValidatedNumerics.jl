@@ -1,12 +1,14 @@
 type DisplayParameters
     interval_display::Symbol
     decorations::Bool
+    precision::Int
 end
 
-const display_params = DisplayParameters(:standard, false)
+const display_params = DisplayParameters(:standard, false, 6)
 
 
-function display_mode(;decorations=nothing, interval_display=nothing)
+
+function display_mode(;decorations=nothing, interval_display=nothing, precision::Int=-1)
     if interval_display != nothing
         display_params.interval_display = interval_display
     end
@@ -14,11 +16,21 @@ function display_mode(;decorations=nothing, interval_display=nothing)
     if decorations != nothing
         display_params.decorations = decorations
     end
+
+    if precision >= 0
+        display_params.precision = precision
+    end
 end
 
 
+function format(x::Float64, prec::Int)
+    fmt = "%.$(prec)g"
+    @eval @sprintf($fmt, $x)
+    # hack from https://github.com/JuliaLang/julia/issues/4248
+    # Replace with Formatting.jl if supports %g
+end
 
-## Output
+format(x::Float64) = format(x, display_params.precision)
 
 function representation(a::Interval)
     if isempty(a)
@@ -30,7 +42,10 @@ function representation(a::Interval)
     local output
 
     if interval_display == :standard
-        output = "[$(a.lo), $(a.hi)]"
+        aa = format(a.lo)
+        bb = format(a.hi)
+
+        output = "[$aa, $bb]"
         output = replace(output, "inf", "∞")
         output = replace(output, "Inf", "∞")
 
