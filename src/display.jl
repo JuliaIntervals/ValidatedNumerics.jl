@@ -113,3 +113,44 @@ function subscriptify(n::Int)
     dig = reverse(digits(n))
     join([subscript_digits[i+1] for i in dig])
 end
+
+function round(x::Real, digits::Int, rounding_mode::RoundingMode)
+    y = float(x)
+    og = oftype(y, 10)^digits
+
+    r = round(y * og, rounding_mode) / og
+
+    if !isfinite(r)
+        if digits > 0
+            return y
+
+        elseif y > 0
+            return zero(y)
+
+        elseif y < 0
+            -zero(y)
+
+        else
+            return y
+        end
+
+    end
+
+    r
+end
+
+# round to given number of signficant digits
+# basic structure taken from base/mpfr.jl
+function round_string(x::BigFloat, digits::Int, r::RoundingMode)
+
+    lng = digits + Int32(8)
+    buf = Array(UInt8, lng + 1)
+
+    lng = ccall((:mpfr_snprintf,:libmpfr), Int32,
+    (Ptr{UInt8}, Culong,  Ptr{UInt8}, Int32, Ptr{BigFloat}...),
+    buf, lng + 1, "%.$(digits)R*g", Base.MPFR.to_mpfr(r), &x)
+
+    return bytestring(pointer(buf))
+end
+
+round_string(x::Real, digits::Int, r::RoundingMode) = round(big(x), digits, r)
