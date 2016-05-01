@@ -1,100 +1,108 @@
 type DisplayParameters
-    interval_display::Symbol
+    format::Symbol
     decorations::Bool
-    precision::Int
+    sigfigs::Int
 end
 
 const display_params = DisplayParameters(:standard, false, 6)
 
 
+doc"""
+    displaymode(;kw)
 
-function display_mode(;decorations=nothing, interval_display=nothing, precision=-1)
-    if interval_display != nothing
-        display_params.interval_display = interval_display
+`displaymode` changes how intervals are displayed using keyword arguments. Options:
+
+- `format`: interval output format
+
+    - `:standard`: `[1, 2]`
+    - `:full`: `Interval(1, 2)`
+    - `:midpoint`: 1.5 ± 0.5
+
+- `sigfigs`: number of significant figures to show in `standard` mode
+
+- `decorations` (boolean):  show decorations or not
+"""
+function displaymode(;decorations=nothing, format=nothing, sigfigs=-1)
+    if format != nothing
+        display_params.format = format
     end
 
     if decorations != nothing
         display_params.decorations = decorations
     end
 
-    if precision >= 0
-        display_params.precision = precision
-        change_precision(precision)
+    if sigfigs >= 0
+        display_params.sigfigs = sigfigs
     end
 end
 
 
-
 ## Output
 
-function change_precision(prec::Int)
-    prec = Float64(prec)
-    prec = Int(prec)
-    #display_params.float_format = "%.$(prec)g"
-    fmt = "%.$(prec)g"
-    @eval format(x::Float64) = (@sprintf($fmt, x))
-    # creates global "format" function; add to __init__
+# round to given number of signficant digits
+# basic structure taken from base/mpfr.jl
+function round_string(x::BigFloat, digits::Int, r::RoundingMode)
+
+    lng = digits + Int32(8)
+    buf = Array(UInt8, lng + 1)
+
+    lng = ccall((:mpfr_snprintf,:libmpfr), Int32,
+    (Ptr{UInt8}, Culong,  Ptr{UInt8}, Int32, Ptr{BigFloat}...),
+    buf, lng + 1, "%.$(digits)R*g", Base.MPFR.to_mpfr(r), &x)
+
+    return bytestring(pointer(buf))
 end
-change_precision(6)  # move to __init__
 
+round_string(x::Real, digits::Int, r::RoundingMode) = round_string(big(x), digits, r)
 
-# function format(x::Float64, prec::Int)
-#     fmt = "%.$(prec)g"
-#     @eval @sprintf($fmt, $x)
-# end
-#
-# format(x::Float64) = format(x, display_params.precision)
 
 function representation(a::Interval)
     if isempty(a)
         return "∅"
     end
 
-    interval_display = display_params.interval_display
+    format = display_params.format
+    sigfigs = display_params.sigfigs
 
     local output
 
-    if interval_display == :standard
-        #aa = format(a.lo)
-        #bb = format(a.hi)
+    if format == :standard
 
-        # the following is a hack to make sure that format is not inlined:
-        # make it type unstable
-        aa = rand() < 2 ? a.lo : nothing
-        bb = rand() < 2 ? a.hi : nothing
+        aa = round_string(a.lo, sigfigs, RoundDown)
+        bb = round_string(a.hi, sigfigs, RoundUp)
 
-        aaa = format(aa)
-        bbb = format(bb)
-        #output = "[$(@noinline format(a.lo)), $(@noinline format(a.hi))]"
-        output = "[$aaa, $bbb]"
-        # prec = display_params.precision
-        # fmt = "[%.$(prec)g, %.$(prec)g]"
-        # output = @eval @sprintf($fmt, $(a.lo), $(a.hi))
-
+        output = "[$aa, $bb]"
         output = replace(output, "inf", "∞")
         output = replace(output, "Inf", "∞")
 
-    elseif interval_display == :reproducible
+    elseif format == :full
         output = "Interval($(a.lo), $(a.hi))"
 
-    elseif interval_display == :midpoint_radius
-        output = "$(mid(a)) ± $(diam(a)/2)"
+    elseif format == :midpoint
+        m = round_string(mid(a), sigfigs, RoundNearest)
+        r = round_string(radius(a), sigfigs, RoundUp)
+        output = "$m ± $r"
     end
 
     output
 end
 
 function representation(a::Interval{BigFloat})
-    if interval_display == :standard
+    if display_params.format == :standard
         string( invoke(representation, (Interval,), a),
                     subscriptify(precision(a.lo)) )
 
-    elseif interval_display == :reproducible
+    elseif display_params.format == :full
         invoke(representation, (Interval,), a)
     end
 end
 
 function representation(a::DecoratedInterval)
+
+    if display_params.format==:full
+        return "DecoratedInterval($(interval_part(a)), $(decoration(a)))"
+    end
+
     interval = representation(interval_part(a))
 
     if display_params.decorations
@@ -113,44 +121,3 @@ function subscriptify(n::Int)
     dig = reverse(digits(n))
     join([subscript_digits[i+1] for i in dig])
 end
-
-function round(x::Real, digits::Int, rounding_mode::RoundingMode)
-    y = float(x)
-    og = oftype(y, 10)^digits
-
-    r = round(y * og, rounding_mode) / og
-
-    if !isfinite(r)
-        if digits > 0
-            return y
-
-        elseif y > 0
-            return zero(y)
-
-        elseif y < 0
-            -zero(y)
-
-        else
-            return y
-        end
-
-    end
-
-    r
-end
-
-# round to given number of signficant digits
-# basic structure taken from base/mpfr.jl
-function round_string(x::BigFloat, digits::Int, r::RoundingMode)
-
-    lng = digits + Int32(8)
-    buf = Array(UInt8, lng + 1)
-
-    lng = ccall((:mpfr_snprintf,:libmpfr), Int32,
-    (Ptr{UInt8}, Culong,  Ptr{UInt8}, Int32, Ptr{BigFloat}...),
-    buf, lng + 1, "%.$(digits)R*g", Base.MPFR.to_mpfr(r), &x)
-
-    return bytestring(pointer(buf))
-end
-
-round_string(x::Real, digits::Int, r::RoundingMode) = round(big(x), digits, r)

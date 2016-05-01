@@ -41,7 +41,7 @@ export
     .., @I_str, ±
 
 export
-    display_mode
+    displaymode
 
 if VERSION >= v"0.5.0-dev+1182"
     import Base: rounding, setrounding, setprecision
