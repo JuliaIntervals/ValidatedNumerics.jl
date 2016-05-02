@@ -11,7 +11,7 @@ using FixedSizeArrays
 import Base:
     +, -, *, /, //, fma,
     <, >, ==, !=, ⊆, ^, <=,
-    in, zero, one, abs, real, show, min, max,
+    in, zero, one, abs, real, min, max,
     sqrt, exp, log, sin, cos, tan, inv,
     exp2, exp10, log2, log10,
     asin, acos, atan, atan2,
@@ -23,7 +23,8 @@ import Base:
     floor, ceil, trunc, sign, round,
     expm1, log1p,
     precision,
-    isfinite, isnan
+    isfinite, isnan,
+    show, showall
 
 export
     Interval, AbstractInterval,

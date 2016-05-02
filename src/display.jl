@@ -56,12 +56,15 @@ end
 round_string(x::Real, digits::Int, r::RoundingMode) = round_string(big(x), digits, r)
 
 
-function representation(a::Interval)
+function representation(a::Interval, format=nothing)
     if isempty(a)
         return "∅"
     end
 
-    format = display_params.format
+    if format == nothing
+        format = display_params.format  # default
+    end
+
     sigfigs = display_params.sigfigs
 
     local output
@@ -115,6 +118,8 @@ end
 
 show(io::IO, a::Interval) = print(io, representation(a))
 show(io::IO, a::DecoratedInterval) = print(io, representation(a))
+
+showall(io::IO, a::Interval) = print(io, representation(a, :full))
 
 function subscriptify(n::Int)
     subscript_digits = [c for c in "₀₁₂₃₄₅₆₇₈₉"]
