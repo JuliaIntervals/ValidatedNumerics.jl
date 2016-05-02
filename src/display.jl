@@ -6,11 +6,13 @@ end
 
 const display_params = DisplayParameters(:standard, false, 6)
 
+const display_options = [:standard, :full, :midpoint]
 
 doc"""
     displaymode(;kw)
 
-`displaymode` changes how intervals are displayed using keyword arguments. Options:
+`displaymode` changes how intervals are displayed using keyword arguments.
+The following options are available:
 
 - `format`: interval output format
 
@@ -24,7 +26,13 @@ doc"""
 """
 function displaymode(;decorations=nothing, format=nothing, sigfigs=-1)
     if format != nothing
-        display_params.format = format
+
+        if format in display_options
+            display_params.format = format
+        else
+            throw(ArgumentError("Allowed format option is one of  $display_options."))
+        end
+
     end
 
     if decorations != nothing
