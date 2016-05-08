@@ -1,4 +1,21 @@
-# Decorations:
+[I 160508 10:04:49 handlers:132] Browser Connected: http://127.0.0.1:8000/multid<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+  MathJax.Hub.Config({
+    TeX: { extensions: ["AMSmath.js", "AMSsymbols.js", "autobold.js", "autoload-all.js"] }
+  });
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+</script>
+
+# Decorations
 
 Decorations are flags, or labels, attached to intervals to indicate the status of a given interval as the product of a function evaluation on a given initial interval. The combination of an interval $X$ and a decoration $d$ is called a decorated interval.
 
@@ -18,12 +35,37 @@ Suppose that a decorated interval $(X, d)$ is the result of evaluating a functio
 - `ill` ("ill-formed"): Not an Interval (an error occurred), e.g. $\mathrm{Dom}(f) = \emptyset$.
 
 ## Initialisation
-If no decoration is explicitly specified when a `DecoratedInterval` is created, then it is initialised with a decoration according to the status of its interval `X`:
+
+
+An interval may be created directly with the `DecoratedInterval` constructor:
+```julia
+julia> X = DecoratedInterval(3, 4)
+[3, 4]
+```
+By default, decorations are not displayed. The following turns on display of decorations:
+```julia
+julia> displaymode(decorations=true)
+
+julia> X
+[3, 4]_com
+```
+
+If no decoration is explicitly specified when a `DecoratedInterval` is created, then it is initialised with a decoration according to its interval `X`:
 
 - `com`: if `X` is nonempty and bounded;
 - `dac` if `X` is unbounded;
 - `trv` if `X` is empty.
 
+
+An explicit decoration may be provided for advanced use:
+```
+julia> DecoratedInterval(3, 4, dac)
+[3, 4]_dac
+
+julia> DecoratedInterval(X, def)
+[3, 4]_def
+```
+Here, a new `DecoratedInterval` was created by extracting the interval from another one and appending a different decoration.
 
 ## Action of functions
 
