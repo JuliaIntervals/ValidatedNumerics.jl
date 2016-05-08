@@ -7,7 +7,7 @@
   });
   MathJax.Hub.Config({
     tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
+      inlineMath: [['$','$']],
       processEscapes: true
     }
   });
@@ -17,12 +17,12 @@
 
 # Decorations
 
-Decorations are flags, or labels, attached to intervals to indicate the status of a given interval as the product of a function evaluation on a given initial interval. The combination of an interval $X$ and a decoration $d$ is called a decorated interval.
+Decorations are flags, or labels, attached to intervals to indicate the status of a given interval as the result of evaluating a function on an initial interval. The combination of an interval $X$ and a decoration $d$ is called a decorated interval.
 
 The allowed decorations and their ordering are as follows:
 `com` > `dac` > `def` > `trv` > `ill`.
 
-Suppose that a decorated interval $(X, d)$ is the result of evaluating a function $f$ on an initial decorated interval $(X_0, d_0)$. The meaning of the resulting decoration $d$ is as follows:
+Suppose that a decorated interval $(X, d)$ is the result of evaluating a function $f$, or the composition of a sequence of functions, on an initial decorated interval $(X_0, d_0)$. The meaning of the resulting decoration $d$ is as follows:
 
 - `com` ("common"): $X$ is a closed, bounded, nonempty subset of the domain of $f$; $f$ is continuous on the interval $X$; and the resulting interval $f(X)$ is bounded.
 
@@ -34,16 +34,24 @@ Suppose that a decorated interval $(X, d)$ is the result of evaluating a functio
 
 - `ill` ("ill-formed"): Not an Interval (an error occurred), e.g. $\mathrm{Dom}(f) = \emptyset$.
 
+An example will be given at the end of this section.
+
 ## Initialisation
 
-
-An interval may be created directly with the `DecoratedInterval` constructor:
-```julia
+The simplest way to create a `DecoratedInterval` is with the `@decorated` macro,
+which does correct rounding:
+```
+julia> @decorated(0.1, 0.3)
+[0.0999999, 0.300001]
+```
+The `DecoratedInterval` constructor may also be used if necessary:
+```
 julia> X = DecoratedInterval(3, 4)
 [3, 4]
 ```
+
 By default, decorations are not displayed. The following turns on display of decorations:
-```julia
+```
 julia> displaymode(decorations=true)
 
 julia> X
@@ -71,11 +79,7 @@ Here, a new `DecoratedInterval` was created by extracting the interval from anot
 
 A decoration is the combination of an interval together with the sequence of functions that it has passed through. Here are some examples:
 
-```julia
-julia> using ValidatedNumerics
-
-julia> displaymode(decorations=true)
-
+```
 julia> X1 = @decorated(0.5, 3)
 [0.5, 3]_com
 
@@ -84,7 +88,7 @@ julia> sqrt(X1)
 ```
 In this case, both input and output are "common" intervals, meaning that they are closed and bounded, and that the resulting function is continuous over the input interval, so that fixed-point theorems may be applied. Since `sqrt(X1) ⊆ X1`, we know that there must be a fixed point of the function inside the interval `X1` (in this case, `sqrt(1) == 1`).
 
-```julia
+```
 julia> X2 = DecoratedInterval(3, ∞)
 [3, ∞]_dac
 
@@ -93,7 +97,7 @@ julia> sqrt(X2)
 ```
 Since the intervals are unbounded here, the maximum decoration possible is `dac`.
 
-```julia
+```
 julia> X3 = @decorated(-3, 4)
 [-3, 4]_com
 
@@ -102,7 +106,7 @@ julia> sign(X3)
 ```
 The `sign` function is discontinuous at 0, but is defined everywhere on the input interval, so the decoration is `def`.
 
-```julia
+```
 julia> X4 = @decorated(-3.5, 4.1)
 [-3.5, 4.10001]_com
 
@@ -114,7 +118,7 @@ The negative part of `X` is discarded by the `sqrt` function, since its domain i
 
 In this case, we know why the decoration was reduced to `trv`. But if this were just a single step in a longer calculation, a resulting `trv` decoration shows only that something like this happened *at some step*. For example:
 
-```julia
+```
 julia> X5 = @decorated(-3, 3)
 [-3, 3]_com
 
@@ -129,7 +133,7 @@ julia> asin(sqrt(X6))
 ```
 In both cases, `asin(sqrt(X))` gives a result with a `trv` decoration, but
 we do not know at which step this happened, unless we break down the function into its constituent parts:
-```julia
+```
 julia> sqrt(X5)
 [0, 1.73206]_trv
 
