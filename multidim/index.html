@@ -144,15 +144,15 @@ cuboids (in 3D), etc.</p>
 <p><code>IntervalBox</code>es are constructed from an array of <code>Interval</code>s; it is
 often convenient to use the <code>..</code> notation:</p>
 <pre><code class="julia">julia&gt; X = IntervalBox(1..3, 2..4)
-[1.0, 3.0] × [2.0, 4.0]
+[1, 3] × [2, 4]
 
-julia&gt; Y = IntervalBox(2..4, 3..5)
-[2.0, 4.0] × [3.0, 5.0]
+julia&gt; Y = IntervalBox(2.1..2.9, 3.1..4.9)
+[2.09999, 2.90001] × [3.09999, 4.90001]
 </code></pre>
 
 <p>Several operations are defined on <code>IntervalBox</code>es, for example:</p>
 <pre><code>julia&gt; X ∩ Y
-[2.0, 3.0] × [3.0, 4.0]
+[2.09999, 2.90001] × [3.09999, 4]
 
 julia&gt; X ⊆ Y
 false

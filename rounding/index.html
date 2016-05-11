@@ -131,7 +131,7 @@
     
         <li class="main active"><a href="#why-is-rounding-necessary">Why is rounding necessary?</a></li>
         
-            <li><a href="#more-detail">More detail</a></li>
+            <li><a href="#more-detail-the-internal-representation">More detail: the internal representation</a></li>
         
     
     </ul>
@@ -139,25 +139,37 @@
                 <div class="col-md-9" role="main">
 
 <h1 id="why-is-rounding-necessary">Why is rounding necessary?</h1>
-<p>Consider the Julia code</p>
-<pre><code>x = 0.1
+<p>What happens when we write the following Julia code?</p>
+<pre><code>julia&gt; x = 0.1
+0.1
 </code></pre>
-<p>This apparently stores the value 0.1 in a variable <code>x</code> of type <code>Float64</code>.
-In fact, however, it stores a <em>slightly different</em> number than 0.1, since 0.1 itself <em>cannot be represented in binary floating point arithmetic, at any precision</em>.</p>
-<p>The value that is actually stored in the variable can be conveniently determined in Julia using arbitrary precision arithmetic (<code>BigFloat</code>s):</p>
-<pre><code>julia&gt; big(0.1)
 
-1.000000000000000055511151231257827021181583404541015625e-01 with 256 bits of precision
+<p>This appears to store the value <code>0.1</code> in a variable <code>x</code> of type <code>Float64</code>.
+In fact, however, it stores a <em>slightly different</em> number, since <code>0.1</code> <em>cannot be represented exactly in binary floating point arithmetic, at any precision</em>.</p>
+<p>The true value that is actually stored in the variable can be conveniently determined in Julia using arbitrary-precision arithmetic with <code>BigFloat</code>s:</p>
+<pre><code>julia&gt; big(0.1)
+1.000000000000000055511151231257827021181583404541015625000000000000000000000000e-01
 </code></pre>
-<p>So, in fact, the value is slightly greater than 0.1. By default, such calculations are done in round-to-nearest mode (<code>RoundNearest</code>); i.e., the nearest representable floating-point number to 0.1 is used.</p>
-<p>Suppose now that we created an interval as</p>
+
+<p>So, in fact, the Julia float <code>0.1</code> refers to a real number that is slightly greater than 0.1. By default, such calculations are done in round-to-nearest mode (<code>RoundNearest</code>); i.e., the nearest representable floating-point number to 0.1 is used.</p>
+<p>[Recall that to get a <code>BigFloat</code> that is as close as possible to the true 0.1, you can use a special string macro:</p>
+<pre><code>julia&gt; big&quot;0.1&quot;
+1.000000000000000000000000000000000000000000000000000000000000000000000000000002e-01
+</code></pre>
+
+<p>]</p>
+<p>Suppose that we create a thin interval, containing just the floating-point number <code>0.1</code>:</p>
 <pre><code>julia&gt; II = Interval(0.1)
-[0.1, 0.1]
+[0.1, 0.100001]
+
+julia&gt; showall(II)
+Interval(0.1, 0.1)
 </code></pre>
-<p>It looks like the interval contains the true value 0.1, but from the above discussion we see that, in fact, <em>it does not</em>. In order to contain the true value 0.1, the end-points of the interval must be rounded outwards ("directed rounding"): the lower bound is rounded down, and the upper bound is rounded up.</p>
+
+<p>It looks like <code>II</code> contains (the true) 0.1, but from the above discussion we see that <em>it does not</em>. In order to contain 0.1, the end-points of the interval must be rounded outwards ("directed rounding"): the lower bound is rounded down, and the upper bound is rounded up.</p>
 <p>This rounding is handled by the <code>@interval</code>  macro, which generates correctly-rounded intervals:</p>
 <pre><code class="julia">julia&gt; a = @interval(0.1)
-[0.09999999999999999, 0.1]
+[0.0999999, 0.100001]
 </code></pre>
 
 <p>The true 0.1 is now correctly contained in the intervals, so that any calculations on these intervals will contain the true result of calculating with 0.1. For example, if we define</p>
@@ -166,11 +178,14 @@ In fact, however, it stores a <em>slightly different</em> number than 0.1, since
 
 <p>then we can apply the function <code>f</code> to the interval <code>a</code> to obtain</p>
 <pre><code class="julia">julia&gt; f(a)
-[0.39999999999999997, 0.4]
+[0.399999, 0.400001]
+
+julia&gt; showall(f(a))
+Interval(0.39999999999999997, 0.4)
 </code></pre>
 
 <p>The result correctly contains the true 0.4.</p>
-<h2 id="more-detail">More detail</h2>
+<h2 id="more-detail-the-internal-representation">More detail: the internal representation</h2>
 <p>Let's look at the internal representation of the <code>Float64</code> number 0.1:</p>
 <pre><code class="julia">julia&gt; bits(0.1)
 &quot;0011111110111001100110011001100110011001100110011001100110011010&quot;
@@ -181,14 +196,6 @@ In fact, however, it stores a <em>slightly different</em> number than 0.1, since
 </code></pre>
 
 <p>We see that the expansion is periodic; in fact, the binary expansion of 0.1 has an infinite repetition of the sequence of digits <code>1100</code>. It is thus <em>impossible</em> to represent the decimal 0.1 in binary, with <em>any</em> precision.</p>
-<p>Julia allows us to get closer to the true value using <code>BigFloat</code>s:</p>
-<pre><code class="julia">julia&gt; using Compat
-
-julia&gt; @compat parse(BigFloat, &quot;0.1&quot;)
-1.000000000000000000000000000000000000000000000000000000000000000000000000000002e-01 with 256 bits of precision
-</code></pre>
-
-<p>But the 2 and the end of the decimal expansion is the giveaway that this number is still not exactly 0.1</p>
 <p>The true value must be approximated by a floating-point number with fixed precision -- this procedure is called <strong>rounding</strong>. For positive numbers, rounding down may be accomplished simply by truncating the expansion; rounding up is accomplished by incrementing the final binary digit and propagating any resulting changes.</p></div>
             
         </div>
