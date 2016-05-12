@@ -19,17 +19,17 @@ The nomenclature of the follows the IEEE-1788 (2015) standard
 # Note that `isless`, and hence ``<` and `min`, are automatically defined for enums
 
 """
-    DecoratedInterval
+    Decorated
 
-A `DecoratedInterval` is an interval, together with a *decoration*, i.e.
+A `Decorated` is an interval, together with a *decoration*, i.e.
 a flag that records the status of the interval when thought of as the result
 of a previously executed sequence of functions acting on an initial interval.
 """
-type DecoratedInterval{T<:Real} <: AbstractInterval
+type Decorated{T<:Real} <: AbstractInterval
     interval::Interval{T}
     decoration::DECORATION
 
-    function DecoratedInterval(I::Interval, d::DECORATION)
+    function Decorated(I::Interval, d::DECORATION)
         dd = decoration(I)
         dd <= trv && return new(I, dd)
         d == ill && return new(nai(I), d)
@@ -37,26 +37,26 @@ type DecoratedInterval{T<:Real} <: AbstractInterval
     end
 end
 
-DecoratedInterval{T<:AbstractFloat}(I::Interval{T}, d::DECORATION) =
-    DecoratedInterval{T}(I, d)
-DecoratedInterval{T<:Real}(a::T, b::T, d::DECORATION) =
-    DecoratedInterval(Interval(a,b), d)
-DecoratedInterval{T<:Real}(a::T, d::DECORATION) = DecoratedInterval(Interval(a,a), d)
-DecoratedInterval(a::Tuple, d::DECORATION) = DecoratedInterval(Interval(a...), d)
-DecoratedInterval{T<:Real, S<:Real}(a::T, b::S, d::DECORATION) =
-    DecoratedInterval(Interval(promote(a,b)...), d)
+Decorated{T<:AbstractFloat}(I::Interval{T}, d::DECORATION) =
+    Decorated{T}(I, d)
+Decorated{T<:Real}(a::T, b::T, d::DECORATION) =
+    Decorated(Interval(a,b), d)
+Decorated{T<:Real}(a::T, d::DECORATION) = Decorated(Interval(a,a), d)
+Decorated(a::Tuple, d::DECORATION) = Decorated(Interval(a...), d)
+Decorated{T<:Real, S<:Real}(a::T, b::S, d::DECORATION) =
+    Decorated(Interval(promote(a,b)...), d)
 
 # Automatic decorations for an interval
-DecoratedInterval(I::Interval) = DecoratedInterval(I, decoration(I))
-DecoratedInterval{T<:Real}(a::T, b::T) = DecoratedInterval(Interval(a,b))
-DecoratedInterval{T<:Real}(a::T) = DecoratedInterval(Interval(a,a))
-DecoratedInterval(a::Tuple) = DecoratedInterval(Interval(a...))
-DecoratedInterval{T<:Real, S<:Real}(a::T, b::S) = DecoratedInterval(Interval(a,b))
+Decorated(I::Interval) = Decorated(I, decoration(I))
+Decorated{T<:Real}(a::T, b::T) = Decorated(Interval(a,b))
+Decorated{T<:Real}(a::T) = Decorated(Interval(a,a))
+Decorated(a::Tuple) = Decorated(Interval(a...))
+Decorated{T<:Real, S<:Real}(a::T, b::S) = Decorated(Interval(a,b))
 
-DecoratedInterval(I::DecoratedInterval, dec::DECORATION) = DecoratedInterval(I.interval, dec)
+Decorated(I::Decorated, dec::DECORATION) = Decorated(I.interval, dec)
 
-interval_part(x::DecoratedInterval) = x.interval
-decoration(x::DecoratedInterval) = x.decoration
+interval_part(x::Decorated) = x.interval
+decoration(x::Decorated) = x.decoration
 
 # Automatic decorations for an Interval
 function decoration(I::Interval)
@@ -67,26 +67,26 @@ function decoration(I::Interval)
 end
 
 # Promotion and conversion, and other constructors
-promote_rule{T<:Real, S<:Real}(::Type{DecoratedInterval{T}}, ::Type{S}) =
-    DecoratedInterval{promote_type(T, S)}
-promote_rule{T<:Real, S<:Real}(::Type{DecoratedInterval{T}}, ::Type{DecoratedInterval{S}}) =
-    DecoratedInterval{promote_type(T, S)}
+promote_rule{T<:Real, S<:Real}(::Type{Decorated{T}}, ::Type{S}) =
+    Decorated{promote_type(T, S)}
+promote_rule{T<:Real, S<:Real}(::Type{Decorated{T}}, ::Type{Decorated{S}}) =
+    Decorated{promote_type(T, S)}
 
-convert{T<:Real, S<:Real}(::Type{DecoratedInterval{T}}, x::S) =
-    DecoratedInterval( Interval(T(x, RoundDown), T(x, RoundUp)) )
-convert{T<:Real, S<:Integer}(::Type{DecoratedInterval{T}}, x::S) =
-    DecoratedInterval( Interval(T(x), T(x)) )
-# function convert{T<:AbstractFloat}(::Type{DecoratedInterval{T}}, x::Float64)
-#     convert(DecoratedInterval{T}, rationalize(x))
+convert{T<:Real, S<:Real}(::Type{Decorated{T}}, x::S) =
+    Decorated( Interval(T(x, RoundDown), T(x, RoundUp)) )
+convert{T<:Real, S<:Integer}(::Type{Decorated{T}}, x::S) =
+    Decorated( Interval(T(x), T(x)) )
+# function convert{T<:AbstractFloat}(::Type{Decorated{T}}, x::Float64)
+#     convert(Decorated{T}, rationalize(x))
 # end
-function convert{T<:Real}(::Type{DecoratedInterval{T}}, xx::DecoratedInterval)
+function convert{T<:Real}(::Type{Decorated{T}}, xx::Decorated)
     x = interval_part(xx)
     x = convert(Interval{T},x)
-    DecoratedInterval( x, decoration(xx) )
+    Decorated( x, decoration(xx) )
 end
 
 
-# show(io::IO, x::DecoratedInterval) = print(io, x.interval, "_", x.decoration)
+# show(io::IO, x::Decorated) = print(io, x.interval, "_", x.decoration)
 
 macro decorated(ex...)
     local x
@@ -97,5 +97,5 @@ macro decorated(ex...)
         x = :(@interval($(esc(ex[1])), $(esc(ex[2]))))
     end
 
-    :(DecoratedInterval($x))
+    :(Decorated($x))
 end

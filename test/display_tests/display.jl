@@ -61,7 +61,7 @@ facts("displaymode tests") do
 
     end
 
-    context("DecoratedInterval") do
+    context("Decorated") do
         a = @decorated(1, 2)
 
         displaymode(format=:standard, decorations=false)

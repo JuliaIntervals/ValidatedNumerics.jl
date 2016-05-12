@@ -38,15 +38,15 @@ An example will be given at the end of this section.
 
 ## Initialisation
 
-The simplest way to create a `DecoratedInterval` is with the `@decorated` macro,
+The simplest way to create a `Decorated` is with the `@decorated` macro,
 which does correct rounding:
 ```
 julia> @decorated(0.1, 0.3)
 [0.0999999, 0.300001]
 ```
-The `DecoratedInterval` constructor may also be used if necessary:
+The `Decorated` constructor may also be used if necessary:
 ```
-julia> X = DecoratedInterval(3, 4)
+julia> X = Decorated(3, 4)
 [3, 4]
 ```
 
@@ -58,7 +58,7 @@ julia> X
 [3, 4]_com
 ```
 
-If no decoration is explicitly specified when a `DecoratedInterval` is created, then it is initialised with a decoration according to its interval `X`:
+If no decoration is explicitly specified when a `Decorated` is created, then it is initialised with a decoration according to its interval `X`:
 
 - `com`: if `X` is nonempty and bounded;
 - `dac` if `X` is unbounded;
@@ -67,13 +67,13 @@ If no decoration is explicitly specified when a `DecoratedInterval` is created, 
 
 An explicit decoration may be provided for advanced use:
 ```
-julia> DecoratedInterval(3, 4, dac)
+julia> Decorated(3, 4, dac)
 [3, 4]_dac
 
-julia> DecoratedInterval(X, def)
+julia> Decorated(X, def)
 [3, 4]_def
 ```
-Here, a new `DecoratedInterval` was created by extracting the interval from another one and appending a different decoration.
+Here, a new `Decorated` was created by extracting the interval from another one and appending a different decoration.
 
 ## Action of functions
 
@@ -89,7 +89,7 @@ julia> sqrt(X1)
 In this case, both input and output are "common" intervals, meaning that they are closed and bounded, and that the resulting function is continuous over the input interval, so that fixed-point theorems may be applied. Since `sqrt(X1) ⊆ X1`, we know that there must be a fixed point of the function inside the interval `X1` (in this case, `sqrt(1) == 1`).
 
 ```
-julia> X2 = DecoratedInterval(3, ∞)
+julia> X2 = Decorated(3, ∞)
 [3, ∞]_dac
 
 julia> sqrt(X2)

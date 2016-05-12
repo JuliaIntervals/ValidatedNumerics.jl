@@ -61,7 +61,7 @@ export
 ## Decorations
 export
     @decorated,
-    interval_part, decoration, DecoratedInterval,
+    interval_part, decoration, Decorated,
     com, dac, def, trv, ill
 
 ## Root finding
