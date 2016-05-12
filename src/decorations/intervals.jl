@@ -44,9 +44,9 @@ function DecoratedInterval{T<:Real}(a::T, b::T, d::DECORATION)
     DecoratedInterval(Interval(a,b), d)
 end
 DecoratedInterval{T<:Real}(a::T, d::DECORATION) = DecoratedInterval(Interval(a,a), d)
-DecoratedInterval(a::Tuple, d::DECORATION) = DecoratedInterval(Interval(a...), d)
+DecoratedInterval(a::Tuple, d::DECORATION) = DecoratedInterval(a..., d)
 DecoratedInterval{T<:Real, S<:Real}(a::T, b::S, d::DECORATION) =
-    DecoratedInterval(Interval(promote(a,b)...), d)
+    DecoratedInterval(promote(a,b)..., d)
 
 # Automatic decorations for an interval
 DecoratedInterval(I::Interval) = DecoratedInterval(I, decoration(I))

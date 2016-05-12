@@ -18,6 +18,10 @@ facts("DecoratedInterval tests") do
     d = DecoratedInterval(a, dac)
     @fact decoration(d) --> dac
 
+    @fact decoration(DecoratedInterval(1.1)) --> com
+    @fact decoration(DecoratedInterval(1.1, dac)) --> dac
+
+    @fact decoration(DecoratedInterval(2, 0.1, com)) --> ill
     @fact decoration(DecoratedInterval(2, 0.1)) --> ill
     @fact isnai(interval_part(DecoratedInterval(2, 0.1))) --> true
     @fact decoration(@decorated(2, 0.1)) --> ill
