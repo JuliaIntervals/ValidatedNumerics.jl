@@ -108,10 +108,10 @@ function representation(a::BareInterval{BigFloat})
     end
 end
 
-function representation(a::Decorated)
+function representation(a::Interval)
 
     if display_params.format==:full
-        return "Decorated($(interval_part(a)), $(decoration(a)))"
+        return "Interval($(interval_part(a)), $(decoration(a)))"
     end
 
     interval = representation(interval_part(a))
@@ -125,7 +125,7 @@ function representation(a::Decorated)
 end
 
 show(io::IO, a::BareInterval) = print(io, representation(a))
-show(io::IO, a::Decorated) = print(io, representation(a))
+show(io::IO, a::Interval) = print(io, representation(a))
 
 showall(io::IO, a::BareInterval) = print(io, representation(a, :full))
 

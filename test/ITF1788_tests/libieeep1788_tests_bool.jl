@@ -48,20 +48,20 @@ facts("minimal_empty_test") do
 end
 
 facts("minimal_empty_dec_test") do
-    @fact isempty(Decorated(∅, trv)) --> true
-    @fact isempty(Decorated(BareInterval(-Inf, Inf), def)) --> false
-    @fact isempty(Decorated(BareInterval(1.0, 2.0), com)) --> false
-    @fact isempty(Decorated(BareInterval(-1.0, 2.0), trv)) --> false
-    @fact isempty(Decorated(BareInterval(-3.0, -2.0), dac)) --> false
-    @fact isempty(Decorated(BareInterval(-Inf, 2.0), trv)) --> false
-    @fact isempty(Decorated(BareInterval(-Inf, 0.0), trv)) --> false
-    @fact isempty(Decorated(BareInterval(-Inf, -0.0), trv)) --> false
-    @fact isempty(Decorated(BareInterval(0.0, Inf), def)) --> false
-    @fact isempty(Decorated(BareInterval(-0.0, Inf), trv)) --> false
-    @fact isempty(Decorated(BareInterval(-0.0, 0.0), com)) --> false
-    @fact isempty(Decorated(BareInterval(0.0, -0.0), trv)) --> false
-    @fact isempty(Decorated(BareInterval(0.0, 0.0), trv)) --> false
-    @fact isempty(Decorated(BareInterval(-0.0, -0.0), trv)) --> false
+    @fact isempty(Interval(∅, trv)) --> true
+    @fact isempty(Interval(BareInterval(-Inf, Inf), def)) --> false
+    @fact isempty(Interval(BareInterval(1.0, 2.0), com)) --> false
+    @fact isempty(Interval(BareInterval(-1.0, 2.0), trv)) --> false
+    @fact isempty(Interval(BareInterval(-3.0, -2.0), dac)) --> false
+    @fact isempty(Interval(BareInterval(-Inf, 2.0), trv)) --> false
+    @fact isempty(Interval(BareInterval(-Inf, 0.0), trv)) --> false
+    @fact isempty(Interval(BareInterval(-Inf, -0.0), trv)) --> false
+    @fact isempty(Interval(BareInterval(0.0, Inf), def)) --> false
+    @fact isempty(Interval(BareInterval(-0.0, Inf), trv)) --> false
+    @fact isempty(Interval(BareInterval(-0.0, 0.0), com)) --> false
+    @fact isempty(Interval(BareInterval(0.0, -0.0), trv)) --> false
+    @fact isempty(Interval(BareInterval(0.0, 0.0), trv)) --> false
+    @fact isempty(Interval(BareInterval(-0.0, -0.0), trv)) --> false
 end
 
 facts("minimal_entire_test") do
@@ -82,40 +82,40 @@ facts("minimal_entire_test") do
 end
 
 facts("minimal_entire_dec_test") do
-    @fact isentire(Decorated(∅, trv)) --> false
-    @fact isentire(Decorated(BareInterval(-Inf, Inf), trv)) --> true
-    @fact isentire(Decorated(BareInterval(-Inf, Inf), def)) --> true
-    @fact isentire(Decorated(BareInterval(-Inf, Inf), dac)) --> true
-    @fact isentire(Decorated(BareInterval(1.0, 2.0), com)) --> false
-    @fact isentire(Decorated(BareInterval(-1.0, 2.0), trv)) --> false
-    @fact isentire(Decorated(BareInterval(-3.0, -2.0), dac)) --> false
-    @fact isentire(Decorated(BareInterval(-Inf, 2.0), trv)) --> false
-    @fact isentire(Decorated(BareInterval(-Inf, 0.0), trv)) --> false
-    @fact isentire(Decorated(BareInterval(-Inf, -0.0), trv)) --> false
-    @fact isentire(Decorated(BareInterval(0.0, Inf), def)) --> false
-    @fact isentire(Decorated(BareInterval(-0.0, Inf), trv)) --> false
-    @fact isentire(Decorated(BareInterval(-0.0, 0.0), com)) --> false
-    @fact isentire(Decorated(BareInterval(0.0, -0.0), trv)) --> false
-    @fact isentire(Decorated(BareInterval(0.0, 0.0), trv)) --> false
-    @fact isentire(Decorated(BareInterval(-0.0, -0.0), trv)) --> false
+    @fact isentire(Interval(∅, trv)) --> false
+    @fact isentire(Interval(BareInterval(-Inf, Inf), trv)) --> true
+    @fact isentire(Interval(BareInterval(-Inf, Inf), def)) --> true
+    @fact isentire(Interval(BareInterval(-Inf, Inf), dac)) --> true
+    @fact isentire(Interval(BareInterval(1.0, 2.0), com)) --> false
+    @fact isentire(Interval(BareInterval(-1.0, 2.0), trv)) --> false
+    @fact isentire(Interval(BareInterval(-3.0, -2.0), dac)) --> false
+    @fact isentire(Interval(BareInterval(-Inf, 2.0), trv)) --> false
+    @fact isentire(Interval(BareInterval(-Inf, 0.0), trv)) --> false
+    @fact isentire(Interval(BareInterval(-Inf, -0.0), trv)) --> false
+    @fact isentire(Interval(BareInterval(0.0, Inf), def)) --> false
+    @fact isentire(Interval(BareInterval(-0.0, Inf), trv)) --> false
+    @fact isentire(Interval(BareInterval(-0.0, 0.0), com)) --> false
+    @fact isentire(Interval(BareInterval(0.0, -0.0), trv)) --> false
+    @fact isentire(Interval(BareInterval(0.0, 0.0), trv)) --> false
+    @fact isentire(Interval(BareInterval(-0.0, -0.0), trv)) --> false
 end
 
 facts("minimal_nai_dec_test") do
-    @fact isnai(Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact isnai(Decorated(BareInterval(-Inf, Inf), def)) --> false
-    @fact isnai(Decorated(BareInterval(-Inf, Inf), dac)) --> false
-    @fact isnai(Decorated(BareInterval(1.0, 2.0), com)) --> false
-    @fact isnai(Decorated(BareInterval(-1.0, 2.0), trv)) --> false
-    @fact isnai(Decorated(BareInterval(-3.0, -2.0), dac)) --> false
-    @fact isnai(Decorated(BareInterval(-Inf, 2.0), trv)) --> false
-    @fact isnai(Decorated(BareInterval(-Inf, 0.0), trv)) --> false
-    @fact isnai(Decorated(BareInterval(-Inf, -0.0), trv)) --> false
-    @fact isnai(Decorated(BareInterval(0.0, Inf), def)) --> false
-    @fact isnai(Decorated(BareInterval(-0.0, Inf), trv)) --> false
-    @fact isnai(Decorated(BareInterval(-0.0, 0.0), com)) --> false
-    @fact isnai(Decorated(BareInterval(0.0, -0.0), trv)) --> false
-    @fact isnai(Decorated(BareInterval(0.0, 0.0), trv)) --> false
-    @fact isnai(Decorated(BareInterval(-0.0, -0.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact isnai(Interval(BareInterval(-Inf, Inf), def)) --> false
+    @fact isnai(Interval(BareInterval(-Inf, Inf), dac)) --> false
+    @fact isnai(Interval(BareInterval(1.0, 2.0), com)) --> false
+    @fact isnai(Interval(BareInterval(-1.0, 2.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(-3.0, -2.0), dac)) --> false
+    @fact isnai(Interval(BareInterval(-Inf, 2.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(-Inf, 0.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(-Inf, -0.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(0.0, Inf), def)) --> false
+    @fact isnai(Interval(BareInterval(-0.0, Inf), trv)) --> false
+    @fact isnai(Interval(BareInterval(-0.0, 0.0), com)) --> false
+    @fact isnai(Interval(BareInterval(0.0, -0.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(0.0, 0.0), trv)) --> false
+    @fact isnai(Interval(BareInterval(-0.0, -0.0), trv)) --> false
 end
 
 facts("minimal_equal_test") do
@@ -137,22 +137,22 @@ facts("minimal_equal_test") do
 end
 
 facts("minimal_equal_dec_test") do
-    @fact Decorated(BareInterval(1.0, 2.0), def) == Decorated(BareInterval(1.0, 2.0), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.1), trv) == Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact Decorated(∅, trv) == Decorated(∅, trv) --> true
-    @fact Decorated(∅, trv) == Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact Decorated(∅, trv) == Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), def) == Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.4), trv) == Decorated(BareInterval(-Inf, Inf), trv) --> false
-    @fact Decorated(BareInterval(1.0, Inf), trv) == Decorated(BareInterval(1.0, Inf), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.4), def) == Decorated(BareInterval(1.0, Inf), trv) --> false
-    @fact Decorated(BareInterval(-Inf, 2.0), trv) == Decorated(BareInterval(-Inf, 2.0), trv) --> true
-    @fact Decorated(BareInterval(-Inf, 2.4), def) == Decorated(BareInterval(-Inf, 2.0), trv) --> false
-    @fact Decorated(BareInterval(-2.0, 0.0), trv) == Decorated(BareInterval(-2.0, 0.0), trv) --> true
-    @fact Decorated(BareInterval(-0.0, 2.0), def) == Decorated(BareInterval(0.0, 2.0), trv) --> true
-    @fact Decorated(BareInterval(-0.0, -0.0), trv) == Decorated(BareInterval(0.0, 0.0), trv) --> true
-    @fact Decorated(BareInterval(-0.0, 0.0), def) == Decorated(BareInterval(0.0, 0.0), trv) --> true
-    @fact Decorated(BareInterval(0.0, -0.0), trv) == Decorated(BareInterval(0.0, 0.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.0), def) == Interval(BareInterval(1.0, 2.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.1), trv) == Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact Interval(∅, trv) == Interval(∅, trv) --> true
+    @fact Interval(∅, trv) == Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact Interval(∅, trv) == Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact Interval(BareInterval(-Inf, Inf), def) == Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.4), trv) == Interval(BareInterval(-Inf, Inf), trv) --> false
+    @fact Interval(BareInterval(1.0, Inf), trv) == Interval(BareInterval(1.0, Inf), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.4), def) == Interval(BareInterval(1.0, Inf), trv) --> false
+    @fact Interval(BareInterval(-Inf, 2.0), trv) == Interval(BareInterval(-Inf, 2.0), trv) --> true
+    @fact Interval(BareInterval(-Inf, 2.4), def) == Interval(BareInterval(-Inf, 2.0), trv) --> false
+    @fact Interval(BareInterval(-2.0, 0.0), trv) == Interval(BareInterval(-2.0, 0.0), trv) --> true
+    @fact Interval(BareInterval(-0.0, 2.0), def) == Interval(BareInterval(0.0, 2.0), trv) --> true
+    @fact Interval(BareInterval(-0.0, -0.0), trv) == Interval(BareInterval(0.0, 0.0), trv) --> true
+    @fact Interval(BareInterval(-0.0, 0.0), def) == Interval(BareInterval(0.0, 0.0), trv) --> true
+    @fact Interval(BareInterval(0.0, -0.0), trv) == Interval(BareInterval(0.0, 0.0), trv) --> true
 end
 
 facts("minimal_subset_test") do
@@ -186,32 +186,32 @@ facts("minimal_subset_test") do
 end
 
 facts("minimal_subset_dec_test") do
-    @fact Decorated(∅, trv) ⊆ Decorated(BareInterval(0.0, 4.0), trv) --> true
-    @fact Decorated(∅, trv) ⊆ Decorated(BareInterval(-0.0, 4.0), def) --> true
-    @fact Decorated(∅, trv) ⊆ Decorated(BareInterval(-0.1, 1.0), trv) --> true
-    @fact Decorated(∅, trv) ⊆ Decorated(BareInterval(-0.1, 0.0), trv) --> true
-    @fact Decorated(∅, trv) ⊆ Decorated(BareInterval(-0.1, -0.0), trv) --> true
-    @fact Decorated(∅, trv) ⊆ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(0.0, 4.0), trv) ⊆ Decorated(∅, trv) --> false
-    @fact Decorated(BareInterval(-0.0, 4.0), def) ⊆ Decorated(∅, trv) --> false
-    @fact Decorated(BareInterval(-0.1, 1.0), trv) ⊆ Decorated(∅, trv) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ⊆ Decorated(∅, trv) --> false
-    @fact Decorated(BareInterval(0.0, 4.0), trv) ⊆ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(-0.0, 4.0), trv) ⊆ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(-0.1, 1.0), trv) ⊆ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ⊆ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.0), trv) ⊆ Decorated(BareInterval(1.0, 2.0), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.0), trv) ⊆ Decorated(BareInterval(0.0, 4.0), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.0), def) ⊆ Decorated(BareInterval(-0.0, 4.0), def) --> true
-    @fact Decorated(BareInterval(0.1, 0.2), trv) ⊆ Decorated(BareInterval(0.0, 4.0), trv) --> true
-    @fact Decorated(BareInterval(0.1, 0.2), trv) ⊆ Decorated(BareInterval(-0.0, 4.0), def) --> true
-    @fact Decorated(BareInterval(-0.1, -0.1), trv) ⊆ Decorated(BareInterval(-4.0, 3.4), trv) --> true
-    @fact Decorated(BareInterval(0.0, 0.0), trv) ⊆ Decorated(BareInterval(-0.0, -0.0), trv) --> true
-    @fact Decorated(BareInterval(-0.0, -0.0), trv) ⊆ Decorated(BareInterval(0.0, 0.0), def) --> true
-    @fact Decorated(BareInterval(-0.0, 0.0), trv) ⊆ Decorated(BareInterval(0.0, 0.0), trv) --> true
-    @fact Decorated(BareInterval(-0.0, 0.0), trv) ⊆ Decorated(BareInterval(0.0, -0.0), trv) --> true
-    @fact Decorated(BareInterval(0.0, -0.0), def) ⊆ Decorated(BareInterval(0.0, 0.0), trv) --> true
-    @fact Decorated(BareInterval(0.0, -0.0), trv) ⊆ Decorated(BareInterval(-0.0, 0.0), trv) --> true
+    @fact Interval(∅, trv) ⊆ Interval(BareInterval(0.0, 4.0), trv) --> true
+    @fact Interval(∅, trv) ⊆ Interval(BareInterval(-0.0, 4.0), def) --> true
+    @fact Interval(∅, trv) ⊆ Interval(BareInterval(-0.1, 1.0), trv) --> true
+    @fact Interval(∅, trv) ⊆ Interval(BareInterval(-0.1, 0.0), trv) --> true
+    @fact Interval(∅, trv) ⊆ Interval(BareInterval(-0.1, -0.0), trv) --> true
+    @fact Interval(∅, trv) ⊆ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(0.0, 4.0), trv) ⊆ Interval(∅, trv) --> false
+    @fact Interval(BareInterval(-0.0, 4.0), def) ⊆ Interval(∅, trv) --> false
+    @fact Interval(BareInterval(-0.1, 1.0), trv) ⊆ Interval(∅, trv) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) ⊆ Interval(∅, trv) --> false
+    @fact Interval(BareInterval(0.0, 4.0), trv) ⊆ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(-0.0, 4.0), trv) ⊆ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(-0.1, 1.0), trv) ⊆ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(-Inf, Inf), trv) ⊆ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.0), trv) ⊆ Interval(BareInterval(1.0, 2.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.0), trv) ⊆ Interval(BareInterval(0.0, 4.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.0), def) ⊆ Interval(BareInterval(-0.0, 4.0), def) --> true
+    @fact Interval(BareInterval(0.1, 0.2), trv) ⊆ Interval(BareInterval(0.0, 4.0), trv) --> true
+    @fact Interval(BareInterval(0.1, 0.2), trv) ⊆ Interval(BareInterval(-0.0, 4.0), def) --> true
+    @fact Interval(BareInterval(-0.1, -0.1), trv) ⊆ Interval(BareInterval(-4.0, 3.4), trv) --> true
+    @fact Interval(BareInterval(0.0, 0.0), trv) ⊆ Interval(BareInterval(-0.0, -0.0), trv) --> true
+    @fact Interval(BareInterval(-0.0, -0.0), trv) ⊆ Interval(BareInterval(0.0, 0.0), def) --> true
+    @fact Interval(BareInterval(-0.0, 0.0), trv) ⊆ Interval(BareInterval(0.0, 0.0), trv) --> true
+    @fact Interval(BareInterval(-0.0, 0.0), trv) ⊆ Interval(BareInterval(0.0, -0.0), trv) --> true
+    @fact Interval(BareInterval(0.0, -0.0), def) ⊆ Interval(BareInterval(0.0, 0.0), trv) --> true
+    @fact Interval(BareInterval(0.0, -0.0), trv) ⊆ Interval(BareInterval(-0.0, 0.0), trv) --> true
 end
 
 facts("minimal_less_test") do
@@ -270,60 +270,60 @@ facts("minimal_less_test") do
 end
 
 facts("minimal_less_dec_test") do
-    @fact <=(Decorated(BareInterval(1.0, 2.0), trv), Decorated(∅, trv)) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), trv) ≤ Decorated(∅, trv) --> false
-    @fact <=(Decorated(∅, trv), Decorated(BareInterval(1.0, 2.0), def)) --> false
-    @fact Decorated(∅, trv) ≤ Decorated(BareInterval(1.0, 2.0), def) --> false
-    @fact <=(Decorated(BareInterval(1.0, 2.0), trv), Decorated(∅, trv)) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), trv) ≤ Decorated(∅, trv) --> false
-    @fact <=(Decorated(∅, trv), Decorated(BareInterval(1.0, 2.0), trv)) --> false
-    @fact Decorated(∅, trv) ≤ Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact <=(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> true
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ≤ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact <=(Decorated(BareInterval(1.0, 2.0), def), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), def) ≤ Decorated(BareInterval(-Inf, Inf), trv) --> false
-    @fact <=(Decorated(BareInterval(0.0, 2.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact Decorated(BareInterval(0.0, 2.0), trv) ≤ Decorated(BareInterval(-Inf, Inf), trv) --> false
-    @fact <=(Decorated(BareInterval(-0.0, 2.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact Decorated(BareInterval(-0.0, 2.0), trv) ≤ Decorated(BareInterval(-Inf, Inf), trv) --> false
-    @fact <=(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(1.0, 2.0), trv)) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ≤ Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact <=(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(0.0, 2.0), def)) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ≤ Decorated(BareInterval(0.0, 2.0), def) --> false
-    @fact <=(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(-0.0, 2.0), trv)) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ≤ Decorated(BareInterval(-0.0, 2.0), trv) --> false
-    @fact <=(Decorated(BareInterval(0.0, 2.0), trv), Decorated(BareInterval(0.0, 2.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 2.0), trv) ≤ Decorated(BareInterval(0.0, 2.0), trv) --> true
-    @fact <=(Decorated(BareInterval(0.0, 2.0), trv), Decorated(BareInterval(-0.0, 2.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 2.0), trv) ≤ Decorated(BareInterval(-0.0, 2.0), trv) --> true
-    @fact <=(Decorated(BareInterval(0.0, 2.0), def), Decorated(BareInterval(1.0, 2.0), def)) --> true
-    @fact Decorated(BareInterval(0.0, 2.0), def) ≤ Decorated(BareInterval(1.0, 2.0), def) --> true
-    @fact <=(Decorated(BareInterval(-0.0, 2.0), trv), Decorated(BareInterval(1.0, 2.0), trv)) --> true
-    @fact Decorated(BareInterval(-0.0, 2.0), trv) ≤ Decorated(BareInterval(1.0, 2.0), trv) --> true
-    @fact <=(Decorated(BareInterval(1.0, 2.0), trv), Decorated(BareInterval(1.0, 2.0), trv)) --> true
-    @fact Decorated(BareInterval(1.0, 2.0), trv) ≤ Decorated(BareInterval(1.0, 2.0), trv) --> true
-    @fact <=(Decorated(BareInterval(1.0, 2.0), trv), Decorated(BareInterval(3.0, 4.0), def)) --> true
-    @fact Decorated(BareInterval(1.0, 2.0), trv) ≤ Decorated(BareInterval(3.0, 4.0), def) --> true
-    @fact <=(Decorated(BareInterval(1.0, 3.5), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact Decorated(BareInterval(1.0, 3.5), trv) ≤ Decorated(BareInterval(3.0, 4.0), trv) --> true
-    @fact <=(Decorated(BareInterval(1.0, 4.0), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact Decorated(BareInterval(1.0, 4.0), trv) ≤ Decorated(BareInterval(3.0, 4.0), trv) --> true
-    @fact <=(Decorated(BareInterval(-2.0, -1.0), trv), Decorated(BareInterval(-2.0, -1.0), trv)) --> true
-    @fact Decorated(BareInterval(-2.0, -1.0), trv) ≤ Decorated(BareInterval(-2.0, -1.0), trv) --> true
-    @fact <=(Decorated(BareInterval(-3.0, -1.5), trv), Decorated(BareInterval(-2.0, -1.0), trv)) --> true
-    @fact Decorated(BareInterval(-3.0, -1.5), trv) ≤ Decorated(BareInterval(-2.0, -1.0), trv) --> true
-    @fact <=(Decorated(BareInterval(0.0, 0.0), trv), Decorated(BareInterval(-0.0, -0.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 0.0), trv) ≤ Decorated(BareInterval(-0.0, -0.0), trv) --> true
-    @fact <=(Decorated(BareInterval(-0.0, -0.0), trv), Decorated(BareInterval(0.0, 0.0), def)) --> true
-    @fact Decorated(BareInterval(-0.0, -0.0), trv) ≤ Decorated(BareInterval(0.0, 0.0), def) --> true
-    @fact <=(Decorated(BareInterval(-0.0, 0.0), trv), Decorated(BareInterval(0.0, 0.0), trv)) --> true
-    @fact Decorated(BareInterval(-0.0, 0.0), trv) ≤ Decorated(BareInterval(0.0, 0.0), trv) --> true
-    @fact <=(Decorated(BareInterval(-0.0, 0.0), trv), Decorated(BareInterval(0.0, -0.0), trv)) --> true
-    @fact Decorated(BareInterval(-0.0, 0.0), trv) ≤ Decorated(BareInterval(0.0, -0.0), trv) --> true
-    @fact <=(Decorated(BareInterval(0.0, -0.0), def), Decorated(BareInterval(0.0, 0.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, -0.0), def) ≤ Decorated(BareInterval(0.0, 0.0), trv) --> true
-    @fact <=(Decorated(BareInterval(0.0, -0.0), trv), Decorated(BareInterval(-0.0, 0.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, -0.0), trv) ≤ Decorated(BareInterval(-0.0, 0.0), trv) --> true
+    @fact <=(Interval(BareInterval(1.0, 2.0), trv), Interval(∅, trv)) --> false
+    @fact Interval(BareInterval(1.0, 2.0), trv) ≤ Interval(∅, trv) --> false
+    @fact <=(Interval(∅, trv), Interval(BareInterval(1.0, 2.0), def)) --> false
+    @fact Interval(∅, trv) ≤ Interval(BareInterval(1.0, 2.0), def) --> false
+    @fact <=(Interval(BareInterval(1.0, 2.0), trv), Interval(∅, trv)) --> false
+    @fact Interval(BareInterval(1.0, 2.0), trv) ≤ Interval(∅, trv) --> false
+    @fact <=(Interval(∅, trv), Interval(BareInterval(1.0, 2.0), trv)) --> false
+    @fact Interval(∅, trv) ≤ Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact <=(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(-Inf, Inf), trv)) --> true
+    @fact Interval(BareInterval(-Inf, Inf), trv) ≤ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact <=(Interval(BareInterval(1.0, 2.0), def), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact Interval(BareInterval(1.0, 2.0), def) ≤ Interval(BareInterval(-Inf, Inf), trv) --> false
+    @fact <=(Interval(BareInterval(0.0, 2.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact Interval(BareInterval(0.0, 2.0), trv) ≤ Interval(BareInterval(-Inf, Inf), trv) --> false
+    @fact <=(Interval(BareInterval(-0.0, 2.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact Interval(BareInterval(-0.0, 2.0), trv) ≤ Interval(BareInterval(-Inf, Inf), trv) --> false
+    @fact <=(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(1.0, 2.0), trv)) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) ≤ Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact <=(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(0.0, 2.0), def)) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) ≤ Interval(BareInterval(0.0, 2.0), def) --> false
+    @fact <=(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(-0.0, 2.0), trv)) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) ≤ Interval(BareInterval(-0.0, 2.0), trv) --> false
+    @fact <=(Interval(BareInterval(0.0, 2.0), trv), Interval(BareInterval(0.0, 2.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, 2.0), trv) ≤ Interval(BareInterval(0.0, 2.0), trv) --> true
+    @fact <=(Interval(BareInterval(0.0, 2.0), trv), Interval(BareInterval(-0.0, 2.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, 2.0), trv) ≤ Interval(BareInterval(-0.0, 2.0), trv) --> true
+    @fact <=(Interval(BareInterval(0.0, 2.0), def), Interval(BareInterval(1.0, 2.0), def)) --> true
+    @fact Interval(BareInterval(0.0, 2.0), def) ≤ Interval(BareInterval(1.0, 2.0), def) --> true
+    @fact <=(Interval(BareInterval(-0.0, 2.0), trv), Interval(BareInterval(1.0, 2.0), trv)) --> true
+    @fact Interval(BareInterval(-0.0, 2.0), trv) ≤ Interval(BareInterval(1.0, 2.0), trv) --> true
+    @fact <=(Interval(BareInterval(1.0, 2.0), trv), Interval(BareInterval(1.0, 2.0), trv)) --> true
+    @fact Interval(BareInterval(1.0, 2.0), trv) ≤ Interval(BareInterval(1.0, 2.0), trv) --> true
+    @fact <=(Interval(BareInterval(1.0, 2.0), trv), Interval(BareInterval(3.0, 4.0), def)) --> true
+    @fact Interval(BareInterval(1.0, 2.0), trv) ≤ Interval(BareInterval(3.0, 4.0), def) --> true
+    @fact <=(Interval(BareInterval(1.0, 3.5), trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact Interval(BareInterval(1.0, 3.5), trv) ≤ Interval(BareInterval(3.0, 4.0), trv) --> true
+    @fact <=(Interval(BareInterval(1.0, 4.0), trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact Interval(BareInterval(1.0, 4.0), trv) ≤ Interval(BareInterval(3.0, 4.0), trv) --> true
+    @fact <=(Interval(BareInterval(-2.0, -1.0), trv), Interval(BareInterval(-2.0, -1.0), trv)) --> true
+    @fact Interval(BareInterval(-2.0, -1.0), trv) ≤ Interval(BareInterval(-2.0, -1.0), trv) --> true
+    @fact <=(Interval(BareInterval(-3.0, -1.5), trv), Interval(BareInterval(-2.0, -1.0), trv)) --> true
+    @fact Interval(BareInterval(-3.0, -1.5), trv) ≤ Interval(BareInterval(-2.0, -1.0), trv) --> true
+    @fact <=(Interval(BareInterval(0.0, 0.0), trv), Interval(BareInterval(-0.0, -0.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, 0.0), trv) ≤ Interval(BareInterval(-0.0, -0.0), trv) --> true
+    @fact <=(Interval(BareInterval(-0.0, -0.0), trv), Interval(BareInterval(0.0, 0.0), def)) --> true
+    @fact Interval(BareInterval(-0.0, -0.0), trv) ≤ Interval(BareInterval(0.0, 0.0), def) --> true
+    @fact <=(Interval(BareInterval(-0.0, 0.0), trv), Interval(BareInterval(0.0, 0.0), trv)) --> true
+    @fact Interval(BareInterval(-0.0, 0.0), trv) ≤ Interval(BareInterval(0.0, 0.0), trv) --> true
+    @fact <=(Interval(BareInterval(-0.0, 0.0), trv), Interval(BareInterval(0.0, -0.0), trv)) --> true
+    @fact Interval(BareInterval(-0.0, 0.0), trv) ≤ Interval(BareInterval(0.0, -0.0), trv) --> true
+    @fact <=(Interval(BareInterval(0.0, -0.0), def), Interval(BareInterval(0.0, 0.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, -0.0), def) ≤ Interval(BareInterval(0.0, 0.0), trv) --> true
+    @fact <=(Interval(BareInterval(0.0, -0.0), trv), Interval(BareInterval(-0.0, 0.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, -0.0), trv) ≤ Interval(BareInterval(-0.0, 0.0), trv) --> true
 end
 
 facts("minimal_precedes_test") do
@@ -351,28 +351,28 @@ facts("minimal_precedes_test") do
 end
 
 facts("minimal_precedes_dec_test") do
-    @fact precedes(Decorated(∅, trv), Decorated(BareInterval(3.0, 4.0), def)) --> true
-    @fact precedes(Decorated(BareInterval(3.0, 4.0), trv), Decorated(∅, trv)) --> true
-    @fact precedes(Decorated(∅, trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(3.0, 4.0), trv), Decorated(∅, trv)) --> true
-    @fact precedes(Decorated(BareInterval(1.0, 2.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact precedes(Decorated(BareInterval(0.0, 2.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact precedes(Decorated(BareInterval(-0.0, 2.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact precedes(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(1.0, 2.0), trv)) --> false
-    @fact precedes(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact precedes(Decorated(BareInterval(1.0, 2.0), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(1.0, 3.0), trv), Decorated(BareInterval(3.0, 4.0), def)) --> true
-    @fact precedes(Decorated(BareInterval(-3.0, -1.0), def), Decorated(BareInterval(-1.0, 0.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(-3.0, -1.0), trv), Decorated(BareInterval(-1.0, -0.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(1.0, 3.5), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> false
-    @fact precedes(Decorated(BareInterval(1.0, 4.0), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> false
-    @fact precedes(Decorated(BareInterval(-3.0, -0.1), trv), Decorated(BareInterval(-1.0, 0.0), trv)) --> false
-    @fact precedes(Decorated(BareInterval(0.0, 0.0), trv), Decorated(BareInterval(-0.0, -0.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(-0.0, -0.0), trv), Decorated(BareInterval(0.0, 0.0), def)) --> true
-    @fact precedes(Decorated(BareInterval(-0.0, 0.0), trv), Decorated(BareInterval(0.0, 0.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(-0.0, 0.0), def), Decorated(BareInterval(0.0, -0.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(0.0, -0.0), trv), Decorated(BareInterval(0.0, 0.0), trv)) --> true
-    @fact precedes(Decorated(BareInterval(0.0, -0.0), trv), Decorated(BareInterval(-0.0, 0.0), trv)) --> true
+    @fact precedes(Interval(∅, trv), Interval(BareInterval(3.0, 4.0), def)) --> true
+    @fact precedes(Interval(BareInterval(3.0, 4.0), trv), Interval(∅, trv)) --> true
+    @fact precedes(Interval(∅, trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(3.0, 4.0), trv), Interval(∅, trv)) --> true
+    @fact precedes(Interval(BareInterval(1.0, 2.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact precedes(Interval(BareInterval(0.0, 2.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact precedes(Interval(BareInterval(-0.0, 2.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact precedes(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(1.0, 2.0), trv)) --> false
+    @fact precedes(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact precedes(Interval(BareInterval(1.0, 2.0), trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(1.0, 3.0), trv), Interval(BareInterval(3.0, 4.0), def)) --> true
+    @fact precedes(Interval(BareInterval(-3.0, -1.0), def), Interval(BareInterval(-1.0, 0.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(-3.0, -1.0), trv), Interval(BareInterval(-1.0, -0.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(1.0, 3.5), trv), Interval(BareInterval(3.0, 4.0), trv)) --> false
+    @fact precedes(Interval(BareInterval(1.0, 4.0), trv), Interval(BareInterval(3.0, 4.0), trv)) --> false
+    @fact precedes(Interval(BareInterval(-3.0, -0.1), trv), Interval(BareInterval(-1.0, 0.0), trv)) --> false
+    @fact precedes(Interval(BareInterval(0.0, 0.0), trv), Interval(BareInterval(-0.0, -0.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(-0.0, -0.0), trv), Interval(BareInterval(0.0, 0.0), def)) --> true
+    @fact precedes(Interval(BareInterval(-0.0, 0.0), trv), Interval(BareInterval(0.0, 0.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(-0.0, 0.0), def), Interval(BareInterval(0.0, -0.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(0.0, -0.0), trv), Interval(BareInterval(0.0, 0.0), trv)) --> true
+    @fact precedes(Interval(BareInterval(0.0, -0.0), trv), Interval(BareInterval(-0.0, 0.0), trv)) --> true
 end
 
 facts("minimal_interior_test") do
@@ -411,38 +411,38 @@ facts("minimal_interior_test") do
 end
 
 facts("minimal_interior_dec_test") do
-    @fact Decorated(∅, trv) ⪽ Decorated(BareInterval(0.0, 4.0), trv) --> true
-    @fact interior(Decorated(∅, trv), Decorated(BareInterval(0.0, 4.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 4.0), def) ⪽ Decorated(∅, trv) --> false
-    @fact interior(Decorated(BareInterval(0.0, 4.0), def), Decorated(∅, trv)) --> false
-    @fact Decorated(BareInterval(0.0, 4.0), trv) ⪽ Decorated(∅, trv) --> false
-    @fact interior(Decorated(BareInterval(0.0, 4.0), trv), Decorated(∅, trv)) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ⪽ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact interior(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 4.0), trv) ⪽ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact interior(Decorated(BareInterval(0.0, 4.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> true
-    @fact Decorated(∅, trv) ⪽ Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact interior(Decorated(∅, trv), Decorated(BareInterval(-Inf, Inf), trv)) --> true
-    @fact Decorated(BareInterval(-Inf, Inf), trv) ⪽ Decorated(BareInterval(0.0, 4.0), trv) --> false
-    @fact interior(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(0.0, 4.0), trv)) --> false
-    @fact Decorated(BareInterval(0.0, 4.0), trv) ⪽ Decorated(BareInterval(0.0, 4.0), trv) --> false
-    @fact interior(Decorated(BareInterval(0.0, 4.0), trv), Decorated(BareInterval(0.0, 4.0), trv)) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), def) ⪽ Decorated(BareInterval(0.0, 4.0), trv) --> true
-    @fact interior(Decorated(BareInterval(1.0, 2.0), def), Decorated(BareInterval(0.0, 4.0), trv)) --> true
-    @fact Decorated(BareInterval(-2.0, 2.0), trv) ⪽ Decorated(BareInterval(-2.0, 4.0), def) --> false
-    @fact interior(Decorated(BareInterval(-2.0, 2.0), trv), Decorated(BareInterval(-2.0, 4.0), def)) --> false
-    @fact Decorated(BareInterval(-0.0, -0.0), trv) ⪽ Decorated(BareInterval(-2.0, 4.0), trv) --> true
-    @fact interior(Decorated(BareInterval(-0.0, -0.0), trv), Decorated(BareInterval(-2.0, 4.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 0.0), def) ⪽ Decorated(BareInterval(-2.0, 4.0), trv) --> true
-    @fact interior(Decorated(BareInterval(0.0, 0.0), def), Decorated(BareInterval(-2.0, 4.0), trv)) --> true
-    @fact Decorated(BareInterval(0.0, 0.0), trv) ⪽ Decorated(BareInterval(-0.0, -0.0), trv) --> false
-    @fact interior(Decorated(BareInterval(0.0, 0.0), trv), Decorated(BareInterval(-0.0, -0.0), trv)) --> false
-    @fact Decorated(BareInterval(0.0, 4.4), trv) ⪽ Decorated(BareInterval(0.0, 4.0), trv) --> false
-    @fact interior(Decorated(BareInterval(0.0, 4.4), trv), Decorated(BareInterval(0.0, 4.0), trv)) --> false
-    @fact Decorated(BareInterval(-1.0, -1.0), trv) ⪽ Decorated(BareInterval(0.0, 4.0), def) --> false
-    @fact interior(Decorated(BareInterval(-1.0, -1.0), trv), Decorated(BareInterval(0.0, 4.0), def)) --> false
-    @fact Decorated(BareInterval(2.0, 2.0), def) ⪽ Decorated(BareInterval(-2.0, -1.0), trv) --> false
-    @fact interior(Decorated(BareInterval(2.0, 2.0), def), Decorated(BareInterval(-2.0, -1.0), trv)) --> false
+    @fact Interval(∅, trv) ⪽ Interval(BareInterval(0.0, 4.0), trv) --> true
+    @fact interior(Interval(∅, trv), Interval(BareInterval(0.0, 4.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, 4.0), def) ⪽ Interval(∅, trv) --> false
+    @fact interior(Interval(BareInterval(0.0, 4.0), def), Interval(∅, trv)) --> false
+    @fact Interval(BareInterval(0.0, 4.0), trv) ⪽ Interval(∅, trv) --> false
+    @fact interior(Interval(BareInterval(0.0, 4.0), trv), Interval(∅, trv)) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) ⪽ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact interior(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(-Inf, Inf), trv)) --> true
+    @fact Interval(BareInterval(0.0, 4.0), trv) ⪽ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact interior(Interval(BareInterval(0.0, 4.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> true
+    @fact Interval(∅, trv) ⪽ Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact interior(Interval(∅, trv), Interval(BareInterval(-Inf, Inf), trv)) --> true
+    @fact Interval(BareInterval(-Inf, Inf), trv) ⪽ Interval(BareInterval(0.0, 4.0), trv) --> false
+    @fact interior(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(0.0, 4.0), trv)) --> false
+    @fact Interval(BareInterval(0.0, 4.0), trv) ⪽ Interval(BareInterval(0.0, 4.0), trv) --> false
+    @fact interior(Interval(BareInterval(0.0, 4.0), trv), Interval(BareInterval(0.0, 4.0), trv)) --> false
+    @fact Interval(BareInterval(1.0, 2.0), def) ⪽ Interval(BareInterval(0.0, 4.0), trv) --> true
+    @fact interior(Interval(BareInterval(1.0, 2.0), def), Interval(BareInterval(0.0, 4.0), trv)) --> true
+    @fact Interval(BareInterval(-2.0, 2.0), trv) ⪽ Interval(BareInterval(-2.0, 4.0), def) --> false
+    @fact interior(Interval(BareInterval(-2.0, 2.0), trv), Interval(BareInterval(-2.0, 4.0), def)) --> false
+    @fact Interval(BareInterval(-0.0, -0.0), trv) ⪽ Interval(BareInterval(-2.0, 4.0), trv) --> true
+    @fact interior(Interval(BareInterval(-0.0, -0.0), trv), Interval(BareInterval(-2.0, 4.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, 0.0), def) ⪽ Interval(BareInterval(-2.0, 4.0), trv) --> true
+    @fact interior(Interval(BareInterval(0.0, 0.0), def), Interval(BareInterval(-2.0, 4.0), trv)) --> true
+    @fact Interval(BareInterval(0.0, 0.0), trv) ⪽ Interval(BareInterval(-0.0, -0.0), trv) --> false
+    @fact interior(Interval(BareInterval(0.0, 0.0), trv), Interval(BareInterval(-0.0, -0.0), trv)) --> false
+    @fact Interval(BareInterval(0.0, 4.4), trv) ⪽ Interval(BareInterval(0.0, 4.0), trv) --> false
+    @fact interior(Interval(BareInterval(0.0, 4.4), trv), Interval(BareInterval(0.0, 4.0), trv)) --> false
+    @fact Interval(BareInterval(-1.0, -1.0), trv) ⪽ Interval(BareInterval(0.0, 4.0), def) --> false
+    @fact interior(Interval(BareInterval(-1.0, -1.0), trv), Interval(BareInterval(0.0, 4.0), def)) --> false
+    @fact Interval(BareInterval(2.0, 2.0), def) ⪽ Interval(BareInterval(-2.0, -1.0), trv) --> false
+    @fact interior(Interval(BareInterval(2.0, 2.0), def), Interval(BareInterval(-2.0, -1.0), trv)) --> false
 end
 
 facts("minimal_strictLess_test") do
@@ -463,21 +463,21 @@ facts("minimal_strictLess_test") do
 end
 
 facts("minimal_strictLess_dec_test") do
-    @fact Decorated(BareInterval(1.0, 2.0), trv) < Decorated(∅, trv) --> false
-    @fact Decorated(∅, trv) < Decorated(BareInterval(1.0, 2.0), def) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), def) < Decorated(∅, trv) --> false
-    @fact Decorated(∅, trv) < Decorated(BareInterval(1.0, 2.0), def) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) < Decorated(BareInterval(-Inf, Inf), trv) --> true
-    @fact Decorated(BareInterval(1.0, 2.0), trv) < Decorated(BareInterval(-Inf, Inf), trv) --> false
-    @fact Decorated(BareInterval(-Inf, Inf), trv) < Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), trv) < Decorated(BareInterval(1.0, 2.0), trv) --> false
-    @fact Decorated(BareInterval(1.0, 2.0), trv) < Decorated(BareInterval(3.0, 4.0), trv) --> true
-    @fact Decorated(BareInterval(1.0, 3.5), def) < Decorated(BareInterval(3.0, 4.0), trv) --> true
-    @fact Decorated(BareInterval(1.0, 4.0), trv) < Decorated(BareInterval(3.0, 4.0), def) --> false
-    @fact Decorated(BareInterval(0.0, 4.0), trv) < Decorated(BareInterval(0.0, 4.0), def) --> false
-    @fact Decorated(BareInterval(-0.0, 4.0), def) < Decorated(BareInterval(0.0, 4.0), trv) --> false
-    @fact Decorated(BareInterval(-2.0, -1.0), def) < Decorated(BareInterval(-2.0, -1.0), def) --> false
-    @fact Decorated(BareInterval(-3.0, -1.5), trv) < Decorated(BareInterval(-2.0, -1.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.0), trv) < Interval(∅, trv) --> false
+    @fact Interval(∅, trv) < Interval(BareInterval(1.0, 2.0), def) --> false
+    @fact Interval(BareInterval(1.0, 2.0), def) < Interval(∅, trv) --> false
+    @fact Interval(∅, trv) < Interval(BareInterval(1.0, 2.0), def) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) < Interval(BareInterval(-Inf, Inf), trv) --> true
+    @fact Interval(BareInterval(1.0, 2.0), trv) < Interval(BareInterval(-Inf, Inf), trv) --> false
+    @fact Interval(BareInterval(-Inf, Inf), trv) < Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact Interval(BareInterval(1.0, 2.0), trv) < Interval(BareInterval(1.0, 2.0), trv) --> false
+    @fact Interval(BareInterval(1.0, 2.0), trv) < Interval(BareInterval(3.0, 4.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 3.5), def) < Interval(BareInterval(3.0, 4.0), trv) --> true
+    @fact Interval(BareInterval(1.0, 4.0), trv) < Interval(BareInterval(3.0, 4.0), def) --> false
+    @fact Interval(BareInterval(0.0, 4.0), trv) < Interval(BareInterval(0.0, 4.0), def) --> false
+    @fact Interval(BareInterval(-0.0, 4.0), def) < Interval(BareInterval(0.0, 4.0), trv) --> false
+    @fact Interval(BareInterval(-2.0, -1.0), def) < Interval(BareInterval(-2.0, -1.0), def) --> false
+    @fact Interval(BareInterval(-3.0, -1.5), trv) < Interval(BareInterval(-2.0, -1.0), trv) --> true
 end
 
 facts("minimal_strictPrecedes_test") do
@@ -498,21 +498,21 @@ facts("minimal_strictPrecedes_test") do
 end
 
 facts("minimal_strictPrecedes_dec_test") do
-    @fact strictprecedes(Decorated(∅, trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact strictprecedes(Decorated(BareInterval(3.0, 4.0), def), Decorated(∅, trv)) --> true
-    @fact strictprecedes(Decorated(∅, trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact strictprecedes(Decorated(BareInterval(3.0, 4.0), def), Decorated(∅, trv)) --> true
-    @fact strictprecedes(Decorated(BareInterval(1.0, 2.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(1.0, 2.0), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(1.0, 2.0), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact strictprecedes(Decorated(BareInterval(1.0, 3.0), def), Decorated(BareInterval(3.0, 4.0), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(-3.0, -1.0), trv), Decorated(BareInterval(-1.0, 0.0), def)) --> false
-    @fact strictprecedes(Decorated(BareInterval(-3.0, -0.0), def), Decorated(BareInterval(0.0, 1.0), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(-3.0, 0.0), trv), Decorated(BareInterval(-0.0, 1.0), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(1.0, 3.5), trv), Decorated(BareInterval(3.0, 4.0), trv)) --> false
-    @fact strictprecedes(Decorated(BareInterval(1.0, 4.0), trv), Decorated(BareInterval(3.0, 4.0), def)) --> false
-    @fact strictprecedes(Decorated(BareInterval(-3.0, -0.1), trv), Decorated(BareInterval(-1.0, 0.0), trv)) --> false
+    @fact strictprecedes(Interval(∅, trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact strictprecedes(Interval(BareInterval(3.0, 4.0), def), Interval(∅, trv)) --> true
+    @fact strictprecedes(Interval(∅, trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact strictprecedes(Interval(BareInterval(3.0, 4.0), def), Interval(∅, trv)) --> true
+    @fact strictprecedes(Interval(BareInterval(1.0, 2.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(1.0, 2.0), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(1.0, 2.0), trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact strictprecedes(Interval(BareInterval(1.0, 3.0), def), Interval(BareInterval(3.0, 4.0), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(-3.0, -1.0), trv), Interval(BareInterval(-1.0, 0.0), def)) --> false
+    @fact strictprecedes(Interval(BareInterval(-3.0, -0.0), def), Interval(BareInterval(0.0, 1.0), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(-3.0, 0.0), trv), Interval(BareInterval(-0.0, 1.0), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(1.0, 3.5), trv), Interval(BareInterval(3.0, 4.0), trv)) --> false
+    @fact strictprecedes(Interval(BareInterval(1.0, 4.0), trv), Interval(BareInterval(3.0, 4.0), def)) --> false
+    @fact strictprecedes(Interval(BareInterval(-3.0, -0.1), trv), Interval(BareInterval(-1.0, 0.0), trv)) --> false
 end
 
 facts("minimal_disjoint_test") do
@@ -529,16 +529,16 @@ facts("minimal_disjoint_test") do
 end
 
 facts("minimal_disjoint_dec_test") do
-    @fact isdisjoint(Decorated(∅, trv), Decorated(BareInterval(3.0, 4.0), def)) --> true
-    @fact isdisjoint(Decorated(BareInterval(3.0, 4.0), trv), Decorated(∅, trv)) --> true
-    @fact isdisjoint(Decorated(∅, trv), Decorated(BareInterval(3.0, 4.0), trv)) --> true
-    @fact isdisjoint(Decorated(BareInterval(3.0, 4.0), trv), Decorated(∅, trv)) --> true
-    @fact isdisjoint(Decorated(BareInterval(3.0, 4.0), trv), Decorated(BareInterval(1.0, 2.0), def)) --> true
-    @fact isdisjoint(Decorated(BareInterval(0.0, 0.0), trv), Decorated(BareInterval(-0.0, -0.0), trv)) --> false
-    @fact isdisjoint(Decorated(BareInterval(0.0, -0.0), trv), Decorated(BareInterval(-0.0, 0.0), trv)) --> false
-    @fact isdisjoint(Decorated(BareInterval(3.0, 4.0), def), Decorated(BareInterval(1.0, 7.0), def)) --> false
-    @fact isdisjoint(Decorated(BareInterval(3.0, 4.0), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
-    @fact isdisjoint(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(1.0, 7.0), trv)) --> false
-    @fact isdisjoint(Decorated(BareInterval(-Inf, Inf), trv), Decorated(BareInterval(-Inf, Inf), trv)) --> false
+    @fact isdisjoint(Interval(∅, trv), Interval(BareInterval(3.0, 4.0), def)) --> true
+    @fact isdisjoint(Interval(BareInterval(3.0, 4.0), trv), Interval(∅, trv)) --> true
+    @fact isdisjoint(Interval(∅, trv), Interval(BareInterval(3.0, 4.0), trv)) --> true
+    @fact isdisjoint(Interval(BareInterval(3.0, 4.0), trv), Interval(∅, trv)) --> true
+    @fact isdisjoint(Interval(BareInterval(3.0, 4.0), trv), Interval(BareInterval(1.0, 2.0), def)) --> true
+    @fact isdisjoint(Interval(BareInterval(0.0, 0.0), trv), Interval(BareInterval(-0.0, -0.0), trv)) --> false
+    @fact isdisjoint(Interval(BareInterval(0.0, -0.0), trv), Interval(BareInterval(-0.0, 0.0), trv)) --> false
+    @fact isdisjoint(Interval(BareInterval(3.0, 4.0), def), Interval(BareInterval(1.0, 7.0), def)) --> false
+    @fact isdisjoint(Interval(BareInterval(3.0, 4.0), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
+    @fact isdisjoint(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(1.0, 7.0), trv)) --> false
+    @fact isdisjoint(Interval(BareInterval(-Inf, Inf), trv), Interval(BareInterval(-Inf, Inf), trv)) --> false
 end
 # FactCheck.exitstatus()
