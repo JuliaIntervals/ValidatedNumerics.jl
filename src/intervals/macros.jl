@@ -44,20 +44,20 @@ end
 
 doc"""The `@round` macro creates a rounded interval according to the current
 interval rounding mode. It is the main function used to create intervals in the
-library (e.g. when adding two intervals, etc.). It uses the interval rounding mode (see rounding(Interval))"""
+library (e.g. when adding two intervals, etc.). It uses the interval rounding mode (see rounding(BareInterval))"""
 macro round(T, expr1, expr2)
     #@show "round", expr1, expr2
     quote
-        mode = rounding(Interval)
+        mode = rounding(BareInterval)
 
         if mode == :wide  #works with any rounding mode set, but the result will depend on the rounding mode
             # we assume RoundNearest
-            Interval(prevfloat($expr1), nextfloat($expr2))
+            BareInterval(prevfloat($expr1), nextfloat($expr2))
 
         else # mode == :narrow
             lo = @setrounding($T, $expr1, RoundDown)
             hi = @setrounding($T, $expr2, RoundUp)
-            Interval(lo, hi)
+            BareInterval(lo, hi)
         end
     end
 end
@@ -118,13 +118,13 @@ and making each literal (0.1, 1, etc.) into a corresponding interval constructio
 by calling `transform`."""
 
 function make_interval(T, expr1, expr2)
-    expr1 = transform(expr1, :convert, :(Interval{$T}))
+    expr1 = transform(expr1, :convert, :(BareInterval{$T}))
 
     if isempty(expr2)  # only one argument
-        return expr1
+        return :(Interval($expr1))
     end
 
-    expr2 = transform(expr2[1], :convert, :(Interval{$T}))
+    expr2 = transform(expr2[1], :convert, :(BareInterval{$T}))
 
-    :(hull($expr1, $expr2))
+    :(Interval(hull($expr1, $expr2)))
 end

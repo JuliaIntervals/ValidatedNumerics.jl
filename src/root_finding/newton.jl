@@ -5,7 +5,7 @@
 # What is this guarded_mid for? Shouldn't it be checking if f(m)==0?
 doc"""Returns the midpoint of the interval x, slightly shifted in case
 it is zero"""
-function guarded_mid{T}(x::Interval{T})
+function guarded_mid{T}(x::BareInterval{T})
     m = mid(x)
     if m == zero(T)                     # midpoint exactly 0
         α = convert(T, 0.46875)      # close to 0.5, but exactly representable as a floating point
@@ -18,9 +18,9 @@ function guarded_mid{T}(x::Interval{T})
 end
 
 
-function N{T}(f::Function, x::Interval{T}, deriv::Interval{T})
+function N{T}(f::Function, x::BareInterval{T}, deriv::BareInterval{T})
     m = guarded_mid(x)
-    m = Interval(m)
+    m = BareInterval(m)
 
     m - (f(m) / deriv)
 end
@@ -28,7 +28,7 @@ end
 
 doc"""If a root is known to be inside an interval,
 `newton_refine` iterates the interval Newton method until that root is found."""
-function newton_refine{T}(f::Function, f_prime::Function, x::Interval{T};
+function newton_refine{T}(f::Function, f_prime::Function, x::BareInterval{T};
                           tolerance=eps(T), debug=false)
 
     debug && (print("Entering newton_refine:"); @show x)
@@ -58,7 +58,7 @@ with its optional derivative `f_prime` and initial interval `x`.
 Optional keyword arguments give the `tolerance`, `maxlevel` at which to stop
 subdividing, and a `debug` boolean argument that prints out diagnostic information."""
 
-function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
+function newton{T}(f::Function, f_prime::Function, x::BareInterval{T}, level::Int=0;
                    tolerance=eps(T), debug=false, maxlevel=30)
 
     debug && (print("Entering newton:"); @show(level); @show(x))
@@ -91,9 +91,9 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
 
         # bisect:
         roots = vcat(
-            newton(f, f_prime, Interval(x.lo, m), level+1,
+            newton(f, f_prime, BareInterval(x.lo, m), level+1,
                    tolerance=tolerance, debug=debug, maxlevel=maxlevel),
-            newton(f, f_prime, Interval(nextfloat(m), x.hi), level+1,
+            newton(f, f_prime, BareInterval(nextfloat(m), x.hi), level+1,
                    tolerance=tolerance, debug=debug, maxlevel=maxlevel)
             # note the nextfloat here to prevent repetition
             )
@@ -102,8 +102,8 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
 
     else  # 0 in deriv; this does extended interval division by hand
 
-        y1 = Interval(deriv.lo, -z)
-        y2 = Interval(z, deriv.hi)
+        y1 = BareInterval(deriv.lo, -z)
+        y2 = BareInterval(z, deriv.hi)
 
         if debug
             @show (y1, y2)
@@ -134,16 +134,16 @@ end
 
 
 # use automatic differentiation if no derivative function given:
-newton{T}(f::Function, x::Interval{T};  args...) = newton(f, D(f), x; args...)
+newton{T}(f::Function, x::BareInterval{T};  args...) = newton(f, D(f), x; args...)
 
 
 
 # newton for vector of intervals:
-newton{T}(f::Function, f_prime::Function, xx::Vector{Interval{T}}; args...) =
+newton{T}(f::Function, f_prime::Function, xx::Vector{BareInterval{T}}; args...) =
 
     vcat([newton(f, f_prime, @interval(x); args...) for x in xx]...)
 
-newton{T}(f::Function,  xx::Vector{Interval{T}}, level; args...) =
+newton{T}(f::Function,  xx::Vector{BareInterval{T}}, level; args...) =
 
     newton(f, D(f), xx, 0, args...)
 

@@ -3,20 +3,20 @@
 # The order in which files are included is important,
 # since certain things need to be defined before others use them
 
-## Interval type
+## BareInterval type
 
 abstract AbstractInterval <: Real
 
-immutable Interval{T<:Real} <: AbstractInterval
+immutable BareInterval{T<:Real} <: AbstractInterval
     lo :: T
     hi :: T
 
-    function Interval(a::Real, b::Real)
+    function BareInterval(a::Real, b::Real)
 
         if a > b
             (isinf(a) && isinf(b)) && return new(a, b)  # empty interval = [∞,-∞]
 
-            throw(ArgumentError("Must have a ≤ b to construct Interval(a, b)."))
+            throw(ArgumentError("Must have a ≤ b to construct BareInterval(a, b)."))
         end
 
         new(a, b)
@@ -26,20 +26,22 @@ end
 
 ## Outer constructors
 
-Interval{T<:Real}(a::T, b::T) = Interval{T}(a, b)
-Interval{T<:Real}(a::T) = Interval(a, a)
-Interval(a::Tuple) = Interval(a...)
-Interval{T<:Real, S<:Real}(a::T, b::S) = Interval(promote(a,b)...)
+BareInterval{T<:Real}(a::T, b::T) = BareInterval{T}(a, b)
+BareInterval{T<:Real}(a::T) = BareInterval(a, a)
+BareInterval(a::Tuple) = BareInterval(a...)
+BareInterval{T<:Real, S<:Real}(a::T, b::S) = BareInterval(promote(a,b)...)
 
-## Concrete constructors for Interval, to effectively deal only with Float64,
+## Concrete constructors for BareInterval, to effectively deal only with Float64,
 # BigFloat or Rational{Integer} intervals.
-Interval{T<:Integer}(a::T, b::T) = Interval(float(a), float(b))
-Interval{T<:Irrational}(a::T, b::T) = Interval(float(a), float(b))
+BareInterval{T<:Integer}(a::T, b::T) = BareInterval(float(a), float(b))
+BareInterval{T<:Irrational}(a::T, b::T) = BareInterval(float(a), float(b))
 
-eltype{T<:Real}(x::Interval{T}) = T
+eltype{T<:Real}(x::BareInterval{T}) = T
 
 
 ## Include files
+
+
 include("special.jl")
 include("macros.jl")
 include("conversion.jl")

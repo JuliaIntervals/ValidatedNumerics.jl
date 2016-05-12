@@ -26,10 +26,10 @@ function generate_wilkinson(n)#, T=BigFloat)   # SLOW
 end
 
 
-setprecision(Interval, Float64)
+setprecision(BareInterval, Float64)
 float_pi = @interval(pi)
 
-setprecision(Interval, 10000)
+setprecision(BareInterval, 10000)
 big_pi = @interval(pi)
 # Using precision "only" 256 leads to overestimation of the true roots for `cos`
 # i.e the Newton method gives more accurate results!
@@ -52,12 +52,12 @@ function_list = [
 facts("Testing root finding") do
 
     for rounding_type in (:wide, :narrow)
-        context("Interval rounding: $rounding_type") do
-            setrounding(Interval, rounding_type)
+        context("BareInterval rounding: $rounding_type") do
+            setrounding(BareInterval, rounding_type)
 
             for prec in ( (BigFloat,53), (BigFloat,256), (Float64,64) )
                 context("Precision: $prec") do
-                    setprecision(Interval, prec)
+                    setprecision(BareInterval, prec)
 
                     for method in (newton, krawczyk)
                         context("Method $method") do
@@ -110,7 +110,7 @@ facts() do
     @fact length(roots) --> 0
 end
 
-setprecision(Interval, Float64)
+setprecision(BareInterval, Float64)
 
 facts("find_roots tests") do
     f(x) = x^2 - 2
@@ -123,7 +123,7 @@ facts("find_roots tests") do
     roots = find_roots(f, -5, 5)
     @fact length(roots) --> 2
 
-    setprecision(Interval, 256)
+    setprecision(BareInterval, 256)
 
     for method in (newton, krawczyk)
         new_roots = method(f, roots)

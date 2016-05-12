@@ -8,7 +8,7 @@ To install the package, from within Julia do
     julia> Pkg.add("ValidatedNumerics")
 
 
-## Interval arithmetic
+## BareInterval arithmetic
 All calculations are carried out using **interval arithmetic**: all quantities are treated as intervals, which are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
 
 The aim of the package is correctness over speed, although performance considerations are also taken into account
@@ -23,11 +23,11 @@ The aim of the package is correctness over speed, although performance considera
 ## Bibliography
 
 - *Validated Numerics: A Short Introduction to Rigorous Computations*, W. Tucker, Princeton University Press (2010)
-- *Introduction to Interval Analysis*, R.E. Moore, R.B. Kearfott & M.J. Cloud, SIAM (2009)
+- *Introduction to BareInterval Analysis*, R.E. Moore, R.B. Kearfott & M.J. Cloud, SIAM (2009)
 
 ## Related packages
 - [MPFI.jl](https://github.com/andrioni/MPFI.jl), a Julia wrapper around the [MPFI C library](http://perso.ens-lyon.fr/nathalie.revol/software.html), a multiple-precision interval arithmetic library based on MPFR
-- [Intervals.jl](https://github.com/andrioni/Intervals.jl), an alternative implementation of basic interval functions.
+- [BareIntervals.jl](https://github.com/andrioni/BareIntervals.jl), an alternative implementation of basic interval functions.
 - [Unums.jl](https://github.com/JuliaComputing/Unums.jl), an implementation of interval
 arithmetic with variable precision ("ubounds")
 

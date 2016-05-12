@@ -5,10 +5,10 @@ using FactCheck
 using Compat
 
 
-FactCheck.roughly(a::Interval) = b -> (dist(a, b) < 2*max(eps(a), eps(b)))
+FactCheck.roughly(a::BareInterval) = b -> (dist(a, b) < 2*max(eps(a), eps(b)))
 roughly = FactCheck.roughly
 
-# Interval tests:
+# BareInterval tests:
 
 include("interval_tests/intervals.jl")
 include("multidim_tests/multidim.jl")

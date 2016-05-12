@@ -6,15 +6,15 @@
 # Use the BigFloat version from MPFR instead, which is correctly-rounded:
 
 # Write explicitly like this to avoid ambiguity warnings:
-for T in (:Integer, :Rational, :Float64, :BigFloat, :Interval)
+for T in (:Integer, :Rational, :Float64, :BigFloat, :BareInterval)
 
-    @eval ^(a::Interval{Float64}, x::$T) = convert(Interval{Float64}, big53(a)^x)
+    @eval ^(a::BareInterval{Float64}, x::$T) = convert(BareInterval{Float64}, big53(a)^x)
 end
 
 
 # Integer power:
 
-function ^(a::Interval{BigFloat}, n::Integer)
+function ^(a::BareInterval{BigFloat}, n::Integer)
     isempty(a) && return a
     n == 0 && return one(a)
     n == 1 && return a
@@ -64,7 +64,7 @@ function ^(a::Interval{BigFloat}, n::Integer)
     end
 end
 
-function sqr{T<:Real}(a::Interval{T})
+function sqr{T<:Real}(a::BareInterval{T})
     isempty(a) && return a
     if a.lo ≥ zero(T)
         return @round(T, a.lo^2, a.hi^2)
@@ -77,9 +77,9 @@ function sqr{T<:Real}(a::Interval{T})
 end
 
 # Floating-point power of a BigFloat interval:
-function ^(a::Interval{BigFloat}, x::AbstractFloat)
+function ^(a::BareInterval{BigFloat}, x::AbstractFloat)
     T = BigFloat
-    domain = Interval(zero(T), convert(T, Inf))
+    domain = BareInterval(zero(T), convert(T, Inf))
 
     if a == zero(a)
         a = a ∩ domain
@@ -93,7 +93,7 @@ function ^(a::Interval{BigFloat}, x::AbstractFloat)
     a = a ∩ domain
     (isempty(x) || isempty(a)) && return emptyinterval(a)
 
-    xx = convert(Interval{BigFloat}, x)
+    xx = convert(BareInterval{BigFloat}, x)
 
     lo = @round(T, a.lo^xx.lo, a.lo^xx.lo)
     lo1 = @round(T, a.lo^xx.hi, a.lo^xx.hi)
@@ -106,16 +106,16 @@ function ^(a::Interval{BigFloat}, x::AbstractFloat)
     return hull(lo, hi)
 end
 
-function ^{T<:Integer,}(a::Interval{Rational{T}}, x::AbstractFloat)
-    a = Interval(a.lo.num/a.lo.den, a.hi.num/a.hi.den)
+function ^{T<:Integer,}(a::BareInterval{Rational{T}}, x::AbstractFloat)
+    a = BareInterval(a.lo.num/a.lo.den, a.hi.num/a.hi.den)
     a = a^x
-    convert(Interval{Rational{T}}, a)
+    convert(BareInterval{Rational{T}}, a)
 end
 
 # Rational power
-function ^{S<:Integer}(a::Interval{BigFloat}, r::Rational{S})
+function ^{S<:Integer}(a::BareInterval{BigFloat}, r::Rational{S})
     T = BigFloat
-    domain = Interval(zero(a.lo), convert(T, Inf))
+    domain = BareInterval(zero(a.lo), convert(T, Inf))
 
     if a == zero(a)
         a = a ∩ domain
@@ -123,21 +123,21 @@ function ^{S<:Integer}(a::Interval{BigFloat}, r::Rational{S})
         return emptyinterval(a)
     end
 
-    isinteger(r) && return convert(Interval{T}, a^round(S,r))
+    isinteger(r) && return convert(BareInterval{T}, a^round(S,r))
     r == one(S)//2 && return sqrt(a)
 
     a = a ∩ domain
     (isempty(r) || isempty(a)) && return emptyinterval(a)
 
-    y = convert(Interval{BigFloat}, r)
+    y = convert(BareInterval{BigFloat}, r)
 
     a^y
 end
 
-# Interval power of an interval:
-function ^(a::Interval{BigFloat}, x::Interval)
+# BareInterval power of an interval:
+function ^(a::BareInterval{BigFloat}, x::BareInterval)
     T = BigFloat
-    domain = Interval(zero(T), convert(T, Inf))
+    domain = BareInterval(zero(T), convert(T, Inf))
 
     a = a ∩ domain
 
@@ -158,8 +158,8 @@ end
 Base.inf(x::Rational) = 1//0  # to allow sqrt()
 
 
-function sqrt{T}(a::Interval{T})
-    domain = Interval(zero(T), convert(T, Inf))
+function sqrt{T}(a::BareInterval{T})
+    domain = BareInterval(zero(T), convert(T, Inf))
     a = a ∩ domain
 
     isempty(a) && return a
@@ -170,9 +170,9 @@ end
 
 for f in (:exp, :expm1)
     @eval begin
-        function ($f){T}(a::Interval{T})
+        function ($f){T}(a::BareInterval{T})
             isempty(a) && return a
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            BareInterval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
         end
     end
 end
@@ -185,23 +185,23 @@ for f in (:exp2, :exp10)
             end
         end
 
-    @eval ($f)(a::Interval{Float64}) = float($f(big53(a)))  # no CRlibm version
+    @eval ($f)(a::BareInterval{Float64}) = float($f(big53(a)))  # no CRlibm version
 
-    @eval function ($f)(a::Interval{BigFloat})
+    @eval function ($f)(a::BareInterval{BigFloat})
             isempty(a) && return a
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            BareInterval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
         end
 end
 
 
 for f in (:log, :log2, :log10, :log1p)
 
-    @eval function ($f){T}(a::Interval{T})
-            domain = Interval(zero(T), convert(T, Inf))
+    @eval function ($f){T}(a::BareInterval{T})
+            domain = BareInterval(zero(T), convert(T, Inf))
             a = a ∩ domain
 
             (isempty(a) || a.hi ≤ zero(T)) && return emptyinterval(a)
 
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            BareInterval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
         end
 end

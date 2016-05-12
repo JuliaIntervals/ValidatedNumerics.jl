@@ -2,15 +2,15 @@
 using ValidatedNumerics
 using FactCheck
 
-setprecision(Interval, Float64)
+setprecision(BareInterval, Float64)
 
 facts("displaymode tests") do
 
-    context("Interval") do
+    context("BareInterval") do
 
         a = 1..2
         b = -1.1..1.3
-        c = Interval(pi)
+        c = BareInterval(pi)
         d = @interval(π)
 
         context("6 sig figs") do
@@ -43,10 +43,10 @@ facts("displaymode tests") do
         context("Full") do
             displaymode(format=:full)
 
-            @fact string(a) --> "Interval(1.0, 2.0)"
-            @fact string(b) --> "Interval(-1.1, 1.3)"
-            @fact string(c) --> "Interval(3.141592653589793, 3.141592653589793)"
-            @fact string(d) --> "Interval(3.141592653589793, 3.1415926535897936)"
+            @fact string(a) --> "BareInterval(1.0, 2.0)"
+            @fact string(b) --> "BareInterval(-1.1, 1.3)"
+            @fact string(c) --> "BareInterval(3.141592653589793, 3.141592653589793)"
+            @fact string(d) --> "BareInterval(3.141592653589793, 3.1415926535897936)"
         end
 
         context("Midpoint") do
@@ -61,7 +61,7 @@ facts("displaymode tests") do
 
     end
 
-    context("DecoratedInterval") do
+    context("Interval") do
         a = @decorated(1, 2)
 
         displaymode(format=:standard, decorations=false)

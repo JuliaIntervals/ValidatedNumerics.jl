@@ -16,7 +16,7 @@ function standard_map(X::IntervalBox, k = 1.0)
     IntervalBox(p′, θ′)
 end
 
-function IntervalBox{T}(X::Vector{Interval{T}}, Y::Vector{Interval{T}})
+function IntervalBox{T}(X::Vector{BareInterval{T}}, Y::Vector{BareInterval{T}})
     vec([IntervalBox(x, y) for x in X, y in Y])
 end
 
@@ -29,7 +29,7 @@ end
 
 
 import Base.mod
-function mod(X::Interval, width::Real)
+function mod(X::BareInterval, width::Real)
 
 
     @show X, width
@@ -38,18 +38,18 @@ function mod(X::Interval, width::Real)
 
     if diam(X) >= 1.
 
-        return [Interval(0, 1) * width]
+        return [BareInterval(0, 1) * width]
     end
 
     a = X.lo - floor(X.lo)
     b = X.hi - floor(X.hi)
 
     if a < b
-        return [Interval(a, b)*width]
+        return [BareInterval(a, b)*width]
 
     end
 
-    return [Interval(0, b)*width, Interval(a, 1)*width]
+    return [BareInterval(0, b)*width, BareInterval(a, 1)*width]
 
 end
 
@@ -64,6 +64,6 @@ function mod(X::IntervalBox, width::Real)
 end
 
 
-mod2pi{T}(x::Interval{T}) = mod(x, ValidatedNumerics.two_pi(T))
+mod2pi{T}(x::BareInterval{T}) = mod(x, ValidatedNumerics.two_pi(T))
 
-mod2pi{T}(X::Vector{Interval{T}}) = vcat(map(mod2pi, X)...)
+mod2pi{T}(X::Vector{BareInterval{T}}) = vcat(map(mod2pi, X)...)

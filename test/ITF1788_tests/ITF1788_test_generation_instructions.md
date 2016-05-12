@@ -1,4 +1,4 @@
-This folder contains Julia output files from the ITF1788 test suite, which tests conformance with the document IEEE Std 1788-2015, IEEE Standard on Interval Arithmetic (https://standards.ieee.org/findstds/standard/1788-2015.html)
+This folder contains Julia output files from the ITF1788 test suite, which tests conformance with the document IEEE Std 1788-2015, IEEE Standard on BareInterval Arithmetic (https://standards.ieee.org/findstds/standard/1788-2015.html)
 
 The complete test suite is available at
 
