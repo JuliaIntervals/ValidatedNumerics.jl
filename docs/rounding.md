@@ -28,11 +28,11 @@ julia> big"0.1"
 
 Suppose that we create a thin interval, containing just the floating-point number `0.1`:
 ```
-julia> II = Interval(0.1)
+julia> II = BareInterval(0.1)
 [0.1, 0.100001]
 
 julia> showall(II)
-Interval(0.1, 0.1)
+BareInterval(0.1, 0.1)
 ```
 
 It looks like `II` contains (the true) 0.1, but from the above discussion we see that *it does not*. In order to contain 0.1, the end-points of the interval must be rounded outwards ("directed rounding"): the lower bound is rounded down, and the upper bound is rounded up.
@@ -55,7 +55,7 @@ julia> f(a)
 [0.399999, 0.400001]
 
 julia> showall(f(a))
-Interval(0.39999999999999997, 0.4)
+BareInterval(0.39999999999999997, 0.4)
 ```
 The result correctly contains the true 0.4.
 

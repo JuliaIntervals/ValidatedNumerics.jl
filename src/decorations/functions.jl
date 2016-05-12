@@ -325,7 +325,7 @@ restricted_functions2 = Dict(
 
 # Define functions with restricted domains on Decorated's:
 for (f, domain) in restricted_functions1
-    domain = Interval(domain...)
+    domain = BareInterval(domain...)
     @eval function Base.$(f){T}(xx::Decorated{T})
         x = interval_part(xx)
         r = $(f)(x)
@@ -336,7 +336,7 @@ for (f, domain) in restricted_functions1
 end
 
 for (f, domain) in restricted_functions2
-    domain = Interval(domain...)
+    domain = BareInterval(domain...)
     @eval function Base.$(f){T}(xx::Decorated{T})
         x = interval_part(xx)
         r = $(f)(x)

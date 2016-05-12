@@ -3,10 +3,10 @@ using FactCheck
 
 
 
-facts("Interval loop tests") do
+facts("BareInterval loop tests") do
     i = 1
 
-    @fact Interval(i,i).lo --> 1
+    @fact BareInterval(i,i).lo --> 1
     @fact @interval(i).lo --> 1
 
 
@@ -20,7 +20,7 @@ end
 
 ## Calculate pi by summing 1/i^2 to give pi^2/6:
 
-setprecision(Interval, 53)
+setprecision(BareInterval, 53)
 
 function calc_pi1(N)
     S1 = @interval(0)

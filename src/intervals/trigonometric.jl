@@ -5,9 +5,9 @@ half_pi{T<:AbstractFloat}(x::T) = half_pi(T)
 
 two_pi{T}(::Type{T})  = pi_interval(T) * 2
 
-range_atan2{T<:Real}(::Type{T}) = Interval(-(pi_interval(T).hi), pi_interval(T).hi)
-half_range_atan2{T}(::Type{T}) = (temp = half_pi(T); Interval(-(temp.hi), temp.hi) )
-pos_range_atan2{T<:Real}(::Type{T}) = Interval(zero(T), pi_interval(T).hi)
+range_atan2{T<:Real}(::Type{T}) = BareInterval(-(pi_interval(T).hi), pi_interval(T).hi)
+half_range_atan2{T}(::Type{T}) = (temp = half_pi(T); BareInterval(-(temp.hi), temp.hi) )
+pos_range_atan2{T<:Real}(::Type{T}) = BareInterval(zero(T), pi_interval(T).hi)
 
 
 doc"""Finds the quadrant(s) corresponding to a given floating-point
@@ -24,10 +24,10 @@ function find_quadrants(x::AbstractFloat)
     (floor(Int, temp.lo), floor(Int, temp.hi))
 end
 
-function sin{T}(a::Interval{T})
+function sin{T}(a::BareInterval{T})
     isempty(a) && return a
 
-    whole_range = Interval(-one(T), one(T))
+    whole_range = BareInterval(-one(T), one(T))
 
     diam(a) > two_pi(T).lo && return whole_range
 
@@ -40,21 +40,21 @@ function sin{T}(a::Interval{T})
     # Different cases depending on the two quadrants:
     if lo_quadrant == hi_quadrant
         a.hi - a.lo > pi_interval(T).lo && return whole_range  # in same quadrant but separated by almost 2pi
-        lo = Interval(sin(a.lo, RoundDown), sin(a.lo, RoundUp))
-        hi = Interval(sin(a.hi, RoundDown), sin(a.hi, RoundUp))
+        lo = BareInterval(sin(a.lo, RoundDown), sin(a.lo, RoundUp))
+        hi = BareInterval(sin(a.hi, RoundDown), sin(a.hi, RoundUp))
         return hull(lo, hi)
 
     elseif lo_quadrant==3 && hi_quadrant==0
-        return Interval(sin(a.lo, RoundDown), sin(a.hi, RoundUp))
+        return BareInterval(sin(a.lo, RoundDown), sin(a.hi, RoundUp))
 
     elseif lo_quadrant==1 && hi_quadrant==2
-        return Interval(sin(a.hi, RoundDown), sin(a.lo, RoundUp))
+        return BareInterval(sin(a.hi, RoundDown), sin(a.lo, RoundUp))
 
     elseif ( lo_quadrant == 0 || lo_quadrant==3 ) && ( hi_quadrant==1 || hi_quadrant==2 )
-        return Interval(min(sin(a.lo, RoundDown), sin(a.hi, RoundDown)), one(T))
+        return BareInterval(min(sin(a.lo, RoundDown), sin(a.hi, RoundDown)), one(T))
 
     elseif ( lo_quadrant == 1 || lo_quadrant==2 ) && ( hi_quadrant==3 || hi_quadrant==0 )
-        return Interval(-one(T), max(sin(a.lo, RoundUp), sin(a.hi, RoundUp)))
+        return BareInterval(-one(T), max(sin(a.lo, RoundUp), sin(a.hi, RoundUp)))
 
     else#if( lo_quadrant == 0 && hi_quadrant==3 ) || ( lo_quadrant == 2 && hi_quadrant==1 )
         return whole_range
@@ -62,10 +62,10 @@ function sin{T}(a::Interval{T})
 end
 
 
-function cos{T}(a::Interval{T})
+function cos{T}(a::BareInterval{T})
     isempty(a) && return a
 
-    whole_range = Interval(-one(T), one(T))
+    whole_range = BareInterval(-one(T), one(T))
 
     diam(a) > two_pi(T).lo && return whole_range
 
@@ -76,23 +76,23 @@ function cos{T}(a::Interval{T})
     hi_quadrant = mod(hi_quadrant, 4)
 
     # Different cases depending on the two quadrants:
-    if lo_quadrant == hi_quadrant # Interval limits in the same quadrant
+    if lo_quadrant == hi_quadrant # BareInterval limits in the same quadrant
         a.hi - a.lo > pi_interval(T).lo && return whole_range
-        lo = Interval(cos(a.lo, RoundDown), cos(a.lo, RoundUp))
-        hi = Interval(cos(a.hi, RoundDown), cos(a.hi, RoundUp))
+        lo = BareInterval(cos(a.lo, RoundDown), cos(a.lo, RoundUp))
+        hi = BareInterval(cos(a.hi, RoundDown), cos(a.hi, RoundUp))
         return hull(lo, hi)
 
     elseif lo_quadrant == 2 && hi_quadrant==3
-        return Interval(cos(a.lo, RoundDown), cos(a.hi, RoundUp))
+        return BareInterval(cos(a.lo, RoundDown), cos(a.hi, RoundUp))
 
     elseif lo_quadrant == 0 && hi_quadrant==1
-        return Interval(cos(a.hi, RoundDown), cos(a.lo, RoundUp))
+        return BareInterval(cos(a.hi, RoundDown), cos(a.lo, RoundUp))
 
     elseif ( lo_quadrant == 2 || lo_quadrant==3 ) && ( hi_quadrant==0 || hi_quadrant==1 )
-        return Interval(min(cos(a.lo, RoundDown), cos(a.hi, RoundDown)), one(T))
+        return BareInterval(min(cos(a.lo, RoundDown), cos(a.hi, RoundDown)), one(T))
 
     elseif ( lo_quadrant == 0 || lo_quadrant==1 ) && ( hi_quadrant==2 || hi_quadrant==3 )
-        return Interval(-one(T), max(cos(a.lo, RoundUp), cos(a.hi, RoundUp)))
+        return BareInterval(-one(T), max(cos(a.lo, RoundUp), cos(a.hi, RoundUp)))
 
     else#if ( lo_quadrant == 3 && hi_quadrant==2 ) || ( lo_quadrant == 1 && hi_quadrant==0 )
         return whole_range
@@ -100,7 +100,7 @@ function cos{T}(a::Interval{T})
 end
 
 
-function tan{T}(a::Interval{T})
+function tan{T}(a::BareInterval{T})
     isempty(a) && return a
 
     diam(a) > pi_interval(T).lo && return entireinterval(a)
@@ -117,56 +117,56 @@ function tan{T}(a::Interval{T})
         hi_quadrant == lo_quadrant+2 && return entireinterval(a)
     end
 
-    Interval(tan(a.lo, RoundDown), tan(a.hi, RoundUp))
+    BareInterval(tan(a.lo, RoundDown), tan(a.hi, RoundUp))
 end
 
-function asin{T}(a::Interval{T})
+function asin{T}(a::BareInterval{T})
 
-    domain = Interval(-one(T), one(T))
+    domain = BareInterval(-one(T), one(T))
     a = a ∩ domain
 
     isempty(a) && return a
 
-    Interval(asin(a.lo, RoundDown), asin(a.hi, RoundUp))
+    BareInterval(asin(a.lo, RoundDown), asin(a.hi, RoundUp))
 end
 
-function acos{T}(a::Interval{T})
+function acos{T}(a::BareInterval{T})
 
-    domain = Interval(-one(T), one(T))
+    domain = BareInterval(-one(T), one(T))
     a = a ∩ domain
 
     isempty(a) && return a
 
-    Interval(acos(a.hi, RoundDown), acos(a.lo, RoundUp))
+    BareInterval(acos(a.hi, RoundDown), acos(a.lo, RoundUp))
 end
 
 
-function atan{T}(a::Interval{T})
+function atan{T}(a::BareInterval{T})
     isempty(a) && return a
 
-    Interval(atan(a.lo, RoundDown), atan(a.hi, RoundUp))
+    BareInterval(atan(a.lo, RoundDown), atan(a.hi, RoundUp))
 end
 
 
-#atan2{T<:Real, S<:Real}(y::Interval{T}, x::Interval{S}) = atan2(promote(y, x)...)
+#atan2{T<:Real, S<:Real}(y::BareInterval{T}, x::BareInterval{S}) = atan2(promote(y, x)...)
 
-function atan2(y::Interval{Float64}, x::Interval{Float64})
+function atan2(y::BareInterval{Float64}, x::BareInterval{Float64})
     (isempty(y) || isempty(x)) && return emptyinterval(Float64)
 
     float(atan2(big53(y), big53(x)))
 end
 
-function atan2(y::Interval{BigFloat}, x::Interval{BigFloat})
+function atan2(y::BareInterval{BigFloat}, x::BareInterval{BigFloat})
     (isempty(y) || isempty(x)) && return emptyinterval(BigFloat)
 
     T = BigFloat
 
     # Prevents some non-sense results whenever y has a zero signed
     if y.lo == zero(T)
-        y = Interval(zero(T), y.hi)
+        y = BareInterval(zero(T), y.hi)
     end
     if y.hi == zero(T)
-        y = Interval(y.lo, zero(T))
+        y = BareInterval(y.lo, zero(T))
     end
 
     # Check cases based on x

@@ -23,7 +23,7 @@ facts("Operations on boxes") do
     Y = IntervalBox(1..2)  # single interval
     @fact isa(Y, IntervalBox) --> true
     @fact length(Y.intervals) --> 1
-    @fact Y --> IntervalBox( (Interval(1., 2.),) )
+    @fact Y --> IntervalBox( (BareInterval(1., 2.),) )
 
 end
 

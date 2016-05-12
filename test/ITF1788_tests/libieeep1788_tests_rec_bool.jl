@@ -27,110 +27,110 @@ using ValidatedNumerics
 
 #Preamble
 setprecision(53)
-setprecision(Interval, Float64)
-setrounding(Interval, :narrow)
+setprecision(BareInterval, Float64)
+setrounding(BareInterval, :narrow)
 
-facts("minimal_isCommonInterval_test") do
-    @fact iscommon(Interval(-27.0, -27.0)) --> true
-    @fact iscommon(Interval(-27.0, 0.0)) --> true
-    @fact iscommon(Interval(0.0, 0.0)) --> true
-    @fact iscommon(Interval(-0.0, -0.0)) --> true
-    @fact iscommon(Interval(-0.0, 0.0)) --> true
-    @fact iscommon(Interval(0.0, -0.0)) --> true
-    @fact iscommon(Interval(5.0, 12.4)) --> true
-    @fact iscommon(Interval(-0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023)) --> true
+facts("minimal_isCommonBareInterval_test") do
+    @fact iscommon(BareInterval(-27.0, -27.0)) --> true
+    @fact iscommon(BareInterval(-27.0, 0.0)) --> true
+    @fact iscommon(BareInterval(0.0, 0.0)) --> true
+    @fact iscommon(BareInterval(-0.0, -0.0)) --> true
+    @fact iscommon(BareInterval(-0.0, 0.0)) --> true
+    @fact iscommon(BareInterval(0.0, -0.0)) --> true
+    @fact iscommon(BareInterval(5.0, 12.4)) --> true
+    @fact iscommon(BareInterval(-0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023)) --> true
     @fact iscommon(entireinterval(Float64)) --> false
     @fact iscommon(∅) --> false
-    @fact iscommon(Interval(-Inf, 0.0)) --> false
-    @fact iscommon(Interval(0.0, Inf)) --> false
+    @fact iscommon(BareInterval(-Inf, 0.0)) --> false
+    @fact iscommon(BareInterval(0.0, Inf)) --> false
 end
 
-facts("minimal_isCommonInterval_dec_test") do
-    @fact iscommon(Decorated(Interval(-27.0, -27.0), com)) --> true
-    @fact iscommon(Decorated(Interval(-27.0, 0.0), com)) --> true
-    @fact iscommon(Decorated(Interval(0.0, 0.0), com)) --> true
-    @fact iscommon(Decorated(Interval(-0.0, -0.0), com)) --> true
-    @fact iscommon(Decorated(Interval(-0.0, 0.0), com)) --> true
-    @fact iscommon(Decorated(Interval(0.0, -0.0), com)) --> true
-    @fact iscommon(Decorated(Interval(5.0, 12.4), com)) --> true
-    @fact iscommon(Decorated(Interval(-0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023), com)) --> true
-    @fact iscommon(Decorated(Interval(-27.0, -27.0), trv)) --> true
-    @fact iscommon(Decorated(Interval(-27.0, 0.0), def)) --> true
-    @fact iscommon(Decorated(Interval(0.0, 0.0), dac)) --> true
-    @fact iscommon(Decorated(Interval(-0.0, -0.0), trv)) --> true
-    @fact iscommon(Decorated(Interval(-0.0, 0.0), def)) --> true
-    @fact iscommon(Decorated(Interval(0.0, -0.0), dac)) --> true
-    @fact iscommon(Decorated(Interval(5.0, 12.4), def)) --> true
-    @fact iscommon(Decorated(Interval(-0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023), trv)) --> true
+facts("minimal_isCommonBareInterval_dec_test") do
+    @fact iscommon(Decorated(BareInterval(-27.0, -27.0), com)) --> true
+    @fact iscommon(Decorated(BareInterval(-27.0, 0.0), com)) --> true
+    @fact iscommon(Decorated(BareInterval(0.0, 0.0), com)) --> true
+    @fact iscommon(Decorated(BareInterval(-0.0, -0.0), com)) --> true
+    @fact iscommon(Decorated(BareInterval(-0.0, 0.0), com)) --> true
+    @fact iscommon(Decorated(BareInterval(0.0, -0.0), com)) --> true
+    @fact iscommon(Decorated(BareInterval(5.0, 12.4), com)) --> true
+    @fact iscommon(Decorated(BareInterval(-0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023), com)) --> true
+    @fact iscommon(Decorated(BareInterval(-27.0, -27.0), trv)) --> true
+    @fact iscommon(Decorated(BareInterval(-27.0, 0.0), def)) --> true
+    @fact iscommon(Decorated(BareInterval(0.0, 0.0), dac)) --> true
+    @fact iscommon(Decorated(BareInterval(-0.0, -0.0), trv)) --> true
+    @fact iscommon(Decorated(BareInterval(-0.0, 0.0), def)) --> true
+    @fact iscommon(Decorated(BareInterval(0.0, -0.0), dac)) --> true
+    @fact iscommon(Decorated(BareInterval(5.0, 12.4), def)) --> true
+    @fact iscommon(Decorated(BareInterval(-0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023), trv)) --> true
     @fact iscommon(Decorated(entireinterval(Float64), dac)) --> false
     @fact iscommon(Decorated(∅, trv)) --> false
     @fact iscommon(Decorated(∅, trv)) --> false
-    @fact iscommon(Decorated(Interval(-Inf, 0.0), trv)) --> false
-    @fact iscommon(Decorated(Interval(0.0, Inf), def)) --> false
+    @fact iscommon(Decorated(BareInterval(-Inf, 0.0), trv)) --> false
+    @fact iscommon(Decorated(BareInterval(0.0, Inf), def)) --> false
 end
 
 facts("minimal_isSingleton_test") do
-    @fact isthin(Interval(-27.0, -27.0)) --> true
-    @fact isthin(Interval(-2.0, -2.0)) --> true
-    @fact isthin(Interval(12.0, 12.0)) --> true
-    @fact isthin(Interval(17.1, 17.1)) --> true
-    @fact isthin(Interval(-0.0, -0.0)) --> true
-    @fact isthin(Interval(0.0, 0.0)) --> true
-    @fact isthin(Interval(-0.0, 0.0)) --> true
-    @fact isthin(Interval(0.0, -0.0)) --> true
+    @fact isthin(BareInterval(-27.0, -27.0)) --> true
+    @fact isthin(BareInterval(-2.0, -2.0)) --> true
+    @fact isthin(BareInterval(12.0, 12.0)) --> true
+    @fact isthin(BareInterval(17.1, 17.1)) --> true
+    @fact isthin(BareInterval(-0.0, -0.0)) --> true
+    @fact isthin(BareInterval(0.0, 0.0)) --> true
+    @fact isthin(BareInterval(-0.0, 0.0)) --> true
+    @fact isthin(BareInterval(0.0, -0.0)) --> true
     @fact isthin(∅) --> false
     @fact isthin(entireinterval(Float64)) --> false
-    @fact isthin(Interval(-1.0, 0.0)) --> false
-    @fact isthin(Interval(-1.0, -0.5)) --> false
-    @fact isthin(Interval(1.0, 2.0)) --> false
-    @fact isthin(Interval(-Inf, -0x1.fffffffffffffp1023)) --> false
-    @fact isthin(Interval(-1.0, Inf)) --> false
+    @fact isthin(BareInterval(-1.0, 0.0)) --> false
+    @fact isthin(BareInterval(-1.0, -0.5)) --> false
+    @fact isthin(BareInterval(1.0, 2.0)) --> false
+    @fact isthin(BareInterval(-Inf, -0x1.fffffffffffffp1023)) --> false
+    @fact isthin(BareInterval(-1.0, Inf)) --> false
 end
 
 facts("minimal_isSingleton_dec_test") do
-    @fact isthin(Decorated(Interval(-27.0, -27.0), def)) --> true
-    @fact isthin(Decorated(Interval(-2.0, -2.0), trv)) --> true
-    @fact isthin(Decorated(Interval(12.0, 12.0), dac)) --> true
-    @fact isthin(Decorated(Interval(17.1, 17.1), com)) --> true
-    @fact isthin(Decorated(Interval(-0.0, -0.0), def)) --> true
-    @fact isthin(Decorated(Interval(0.0, 0.0), com)) --> true
-    @fact isthin(Decorated(Interval(-0.0, 0.0), def)) --> true
-    @fact isthin(Decorated(Interval(0.0, -0.0), dac)) --> true
+    @fact isthin(Decorated(BareInterval(-27.0, -27.0), def)) --> true
+    @fact isthin(Decorated(BareInterval(-2.0, -2.0), trv)) --> true
+    @fact isthin(Decorated(BareInterval(12.0, 12.0), dac)) --> true
+    @fact isthin(Decorated(BareInterval(17.1, 17.1), com)) --> true
+    @fact isthin(Decorated(BareInterval(-0.0, -0.0), def)) --> true
+    @fact isthin(Decorated(BareInterval(0.0, 0.0), com)) --> true
+    @fact isthin(Decorated(BareInterval(-0.0, 0.0), def)) --> true
+    @fact isthin(Decorated(BareInterval(0.0, -0.0), dac)) --> true
     @fact isthin(Decorated(∅, trv)) --> false
     @fact isthin(Decorated(∅, trv)) --> false
     @fact isthin(Decorated(entireinterval(Float64), def)) --> false
-    @fact isthin(Decorated(Interval(-1.0, 0.0), dac)) --> false
-    @fact isthin(Decorated(Interval(-1.0, -0.5), com)) --> false
-    @fact isthin(Decorated(Interval(1.0, 2.0), def)) --> false
-    @fact isthin(Decorated(Interval(-Inf, -0x1.fffffffffffffp1023), dac)) --> false
-    @fact isthin(Decorated(Interval(-1.0, Inf), trv)) --> false
+    @fact isthin(Decorated(BareInterval(-1.0, 0.0), dac)) --> false
+    @fact isthin(Decorated(BareInterval(-1.0, -0.5), com)) --> false
+    @fact isthin(Decorated(BareInterval(1.0, 2.0), def)) --> false
+    @fact isthin(Decorated(BareInterval(-Inf, -0x1.fffffffffffffp1023), dac)) --> false
+    @fact isthin(Decorated(BareInterval(-1.0, Inf), trv)) --> false
 end
 
 facts("minimal_isMember_test") do
-    @fact -27.0 ∈ Interval(-27.0, -27.0) --> true
-    @fact in(-27.0, Interval(-27.0, -27.0)) --> true
-    @fact -27.0 ∈ Interval(-27.0, 0.0) --> true
-    @fact in(-27.0, Interval(-27.0, 0.0)) --> true
-    @fact -7.0 ∈ Interval(-27.0, 0.0) --> true
-    @fact in(-7.0, Interval(-27.0, 0.0)) --> true
-    @fact 0.0 ∈ Interval(-27.0, 0.0) --> true
-    @fact in(0.0, Interval(-27.0, 0.0)) --> true
-    @fact -0.0 ∈ Interval(0.0, 0.0) --> true
-    @fact in(-0.0, Interval(0.0, 0.0)) --> true
-    @fact 0.0 ∈ Interval(0.0, 0.0) --> true
-    @fact in(0.0, Interval(0.0, 0.0)) --> true
-    @fact 0.0 ∈ Interval(-0.0, -0.0) --> true
-    @fact in(0.0, Interval(-0.0, -0.0)) --> true
-    @fact 0.0 ∈ Interval(-0.0, 0.0) --> true
-    @fact in(0.0, Interval(-0.0, 0.0)) --> true
-    @fact 0.0 ∈ Interval(0.0, -0.0) --> true
-    @fact in(0.0, Interval(0.0, -0.0)) --> true
-    @fact 5.0 ∈ Interval(5.0, 12.4) --> true
-    @fact in(5.0, Interval(5.0, 12.4)) --> true
-    @fact 6.3 ∈ Interval(5.0, 12.4) --> true
-    @fact in(6.3, Interval(5.0, 12.4)) --> true
-    @fact 12.4 ∈ Interval(5.0, 12.4) --> true
-    @fact in(12.4, Interval(5.0, 12.4)) --> true
+    @fact -27.0 ∈ BareInterval(-27.0, -27.0) --> true
+    @fact in(-27.0, BareInterval(-27.0, -27.0)) --> true
+    @fact -27.0 ∈ BareInterval(-27.0, 0.0) --> true
+    @fact in(-27.0, BareInterval(-27.0, 0.0)) --> true
+    @fact -7.0 ∈ BareInterval(-27.0, 0.0) --> true
+    @fact in(-7.0, BareInterval(-27.0, 0.0)) --> true
+    @fact 0.0 ∈ BareInterval(-27.0, 0.0) --> true
+    @fact in(0.0, BareInterval(-27.0, 0.0)) --> true
+    @fact -0.0 ∈ BareInterval(0.0, 0.0) --> true
+    @fact in(-0.0, BareInterval(0.0, 0.0)) --> true
+    @fact 0.0 ∈ BareInterval(0.0, 0.0) --> true
+    @fact in(0.0, BareInterval(0.0, 0.0)) --> true
+    @fact 0.0 ∈ BareInterval(-0.0, -0.0) --> true
+    @fact in(0.0, BareInterval(-0.0, -0.0)) --> true
+    @fact 0.0 ∈ BareInterval(-0.0, 0.0) --> true
+    @fact in(0.0, BareInterval(-0.0, 0.0)) --> true
+    @fact 0.0 ∈ BareInterval(0.0, -0.0) --> true
+    @fact in(0.0, BareInterval(0.0, -0.0)) --> true
+    @fact 5.0 ∈ BareInterval(5.0, 12.4) --> true
+    @fact in(5.0, BareInterval(5.0, 12.4)) --> true
+    @fact 6.3 ∈ BareInterval(5.0, 12.4) --> true
+    @fact in(6.3, BareInterval(5.0, 12.4)) --> true
+    @fact 12.4 ∈ BareInterval(5.0, 12.4) --> true
+    @fact in(12.4, BareInterval(5.0, 12.4)) --> true
     @fact 0.0 ∈ entireinterval(Float64) --> true
     @fact in(0.0, entireinterval(Float64)) --> true
     @fact 5.0 ∈ entireinterval(Float64) --> true
@@ -139,20 +139,20 @@ facts("minimal_isMember_test") do
     @fact in(6.3, entireinterval(Float64)) --> true
     @fact 12.4 ∈ entireinterval(Float64) --> true
     @fact in(12.4, entireinterval(Float64)) --> true
-    @fact -71.0 ∈ Interval(-27.0, 0.0) --> false
-    @fact in(-71.0, Interval(-27.0, 0.0)) --> false
-    @fact 0.1 ∈ Interval(-27.0, 0.0) --> false
-    @fact in(0.1, Interval(-27.0, 0.0)) --> false
-    @fact -0.01 ∈ Interval(0.0, 0.0) --> false
-    @fact in(-0.01, Interval(0.0, 0.0)) --> false
-    @fact 0.000001 ∈ Interval(0.0, 0.0) --> false
-    @fact in(0.000001, Interval(0.0, 0.0)) --> false
-    @fact 111110.0 ∈ Interval(-0.0, -0.0) --> false
-    @fact in(111110.0, Interval(-0.0, -0.0)) --> false
-    @fact 4.9 ∈ Interval(5.0, 12.4) --> false
-    @fact in(4.9, Interval(5.0, 12.4)) --> false
-    @fact -6.3 ∈ Interval(5.0, 12.4) --> false
-    @fact in(-6.3, Interval(5.0, 12.4)) --> false
+    @fact -71.0 ∈ BareInterval(-27.0, 0.0) --> false
+    @fact in(-71.0, BareInterval(-27.0, 0.0)) --> false
+    @fact 0.1 ∈ BareInterval(-27.0, 0.0) --> false
+    @fact in(0.1, BareInterval(-27.0, 0.0)) --> false
+    @fact -0.01 ∈ BareInterval(0.0, 0.0) --> false
+    @fact in(-0.01, BareInterval(0.0, 0.0)) --> false
+    @fact 0.000001 ∈ BareInterval(0.0, 0.0) --> false
+    @fact in(0.000001, BareInterval(0.0, 0.0)) --> false
+    @fact 111110.0 ∈ BareInterval(-0.0, -0.0) --> false
+    @fact in(111110.0, BareInterval(-0.0, -0.0)) --> false
+    @fact 4.9 ∈ BareInterval(5.0, 12.4) --> false
+    @fact in(4.9, BareInterval(5.0, 12.4)) --> false
+    @fact -6.3 ∈ BareInterval(5.0, 12.4) --> false
+    @fact in(-6.3, BareInterval(5.0, 12.4)) --> false
     @fact 0.0 ∈ ∅ --> false
     @fact in(0.0, ∅) --> false
     @fact -4535.3 ∈ ∅ --> false
@@ -168,30 +168,30 @@ facts("minimal_isMember_test") do
 end
 
 facts("minimal_isMember_dec_test") do
-    @fact -27.0 ∈ Decorated(Interval(-27.0, -27.0), trv) --> true
-    @fact in(-27.0, Decorated(Interval(-27.0, -27.0), trv)) --> true
-    @fact -27.0 ∈ Decorated(Interval(-27.0, 0.0), def) --> true
-    @fact in(-27.0, Decorated(Interval(-27.0, 0.0), def)) --> true
-    @fact -7.0 ∈ Decorated(Interval(-27.0, 0.0), dac) --> true
-    @fact in(-7.0, Decorated(Interval(-27.0, 0.0), dac)) --> true
-    @fact 0.0 ∈ Decorated(Interval(-27.0, 0.0), com) --> true
-    @fact in(0.0, Decorated(Interval(-27.0, 0.0), com)) --> true
-    @fact -0.0 ∈ Decorated(Interval(0.0, 0.0), trv) --> true
-    @fact in(-0.0, Decorated(Interval(0.0, 0.0), trv)) --> true
-    @fact 0.0 ∈ Decorated(Interval(0.0, 0.0), def) --> true
-    @fact in(0.0, Decorated(Interval(0.0, 0.0), def)) --> true
-    @fact 0.0 ∈ Decorated(Interval(-0.0, -0.0), dac) --> true
-    @fact in(0.0, Decorated(Interval(-0.0, -0.0), dac)) --> true
-    @fact 0.0 ∈ Decorated(Interval(-0.0, 0.0), com) --> true
-    @fact in(0.0, Decorated(Interval(-0.0, 0.0), com)) --> true
-    @fact 0.0 ∈ Decorated(Interval(0.0, -0.0), trv) --> true
-    @fact in(0.0, Decorated(Interval(0.0, -0.0), trv)) --> true
-    @fact 5.0 ∈ Decorated(Interval(5.0, 12.4), def) --> true
-    @fact in(5.0, Decorated(Interval(5.0, 12.4), def)) --> true
-    @fact 6.3 ∈ Decorated(Interval(5.0, 12.4), dac) --> true
-    @fact in(6.3, Decorated(Interval(5.0, 12.4), dac)) --> true
-    @fact 12.4 ∈ Decorated(Interval(5.0, 12.4), com) --> true
-    @fact in(12.4, Decorated(Interval(5.0, 12.4), com)) --> true
+    @fact -27.0 ∈ Decorated(BareInterval(-27.0, -27.0), trv) --> true
+    @fact in(-27.0, Decorated(BareInterval(-27.0, -27.0), trv)) --> true
+    @fact -27.0 ∈ Decorated(BareInterval(-27.0, 0.0), def) --> true
+    @fact in(-27.0, Decorated(BareInterval(-27.0, 0.0), def)) --> true
+    @fact -7.0 ∈ Decorated(BareInterval(-27.0, 0.0), dac) --> true
+    @fact in(-7.0, Decorated(BareInterval(-27.0, 0.0), dac)) --> true
+    @fact 0.0 ∈ Decorated(BareInterval(-27.0, 0.0), com) --> true
+    @fact in(0.0, Decorated(BareInterval(-27.0, 0.0), com)) --> true
+    @fact -0.0 ∈ Decorated(BareInterval(0.0, 0.0), trv) --> true
+    @fact in(-0.0, Decorated(BareInterval(0.0, 0.0), trv)) --> true
+    @fact 0.0 ∈ Decorated(BareInterval(0.0, 0.0), def) --> true
+    @fact in(0.0, Decorated(BareInterval(0.0, 0.0), def)) --> true
+    @fact 0.0 ∈ Decorated(BareInterval(-0.0, -0.0), dac) --> true
+    @fact in(0.0, Decorated(BareInterval(-0.0, -0.0), dac)) --> true
+    @fact 0.0 ∈ Decorated(BareInterval(-0.0, 0.0), com) --> true
+    @fact in(0.0, Decorated(BareInterval(-0.0, 0.0), com)) --> true
+    @fact 0.0 ∈ Decorated(BareInterval(0.0, -0.0), trv) --> true
+    @fact in(0.0, Decorated(BareInterval(0.0, -0.0), trv)) --> true
+    @fact 5.0 ∈ Decorated(BareInterval(5.0, 12.4), def) --> true
+    @fact in(5.0, Decorated(BareInterval(5.0, 12.4), def)) --> true
+    @fact 6.3 ∈ Decorated(BareInterval(5.0, 12.4), dac) --> true
+    @fact in(6.3, Decorated(BareInterval(5.0, 12.4), dac)) --> true
+    @fact 12.4 ∈ Decorated(BareInterval(5.0, 12.4), com) --> true
+    @fact in(12.4, Decorated(BareInterval(5.0, 12.4), com)) --> true
     @fact 0.0 ∈ Decorated(entireinterval(Float64), trv) --> true
     @fact in(0.0, Decorated(entireinterval(Float64), trv)) --> true
     @fact 5.0 ∈ Decorated(entireinterval(Float64), def) --> true
@@ -200,20 +200,20 @@ facts("minimal_isMember_dec_test") do
     @fact in(6.3, Decorated(entireinterval(Float64), dac)) --> true
     @fact 12.4 ∈ Decorated(entireinterval(Float64), trv) --> true
     @fact in(12.4, Decorated(entireinterval(Float64), trv)) --> true
-    @fact -71.0 ∈ Decorated(Interval(-27.0, 0.0), trv) --> false
-    @fact in(-71.0, Decorated(Interval(-27.0, 0.0), trv)) --> false
-    @fact 0.1 ∈ Decorated(Interval(-27.0, 0.0), def) --> false
-    @fact in(0.1, Decorated(Interval(-27.0, 0.0), def)) --> false
-    @fact -0.01 ∈ Decorated(Interval(0.0, 0.0), dac) --> false
-    @fact in(-0.01, Decorated(Interval(0.0, 0.0), dac)) --> false
-    @fact 0.000001 ∈ Decorated(Interval(0.0, 0.0), com) --> false
-    @fact in(0.000001, Decorated(Interval(0.0, 0.0), com)) --> false
-    @fact 111110.0 ∈ Decorated(Interval(-0.0, -0.0), trv) --> false
-    @fact in(111110.0, Decorated(Interval(-0.0, -0.0), trv)) --> false
-    @fact 4.9 ∈ Decorated(Interval(5.0, 12.4), def) --> false
-    @fact in(4.9, Decorated(Interval(5.0, 12.4), def)) --> false
-    @fact -6.3 ∈ Decorated(Interval(5.0, 12.4), dac) --> false
-    @fact in(-6.3, Decorated(Interval(5.0, 12.4), dac)) --> false
+    @fact -71.0 ∈ Decorated(BareInterval(-27.0, 0.0), trv) --> false
+    @fact in(-71.0, Decorated(BareInterval(-27.0, 0.0), trv)) --> false
+    @fact 0.1 ∈ Decorated(BareInterval(-27.0, 0.0), def) --> false
+    @fact in(0.1, Decorated(BareInterval(-27.0, 0.0), def)) --> false
+    @fact -0.01 ∈ Decorated(BareInterval(0.0, 0.0), dac) --> false
+    @fact in(-0.01, Decorated(BareInterval(0.0, 0.0), dac)) --> false
+    @fact 0.000001 ∈ Decorated(BareInterval(0.0, 0.0), com) --> false
+    @fact in(0.000001, Decorated(BareInterval(0.0, 0.0), com)) --> false
+    @fact 111110.0 ∈ Decorated(BareInterval(-0.0, -0.0), trv) --> false
+    @fact in(111110.0, Decorated(BareInterval(-0.0, -0.0), trv)) --> false
+    @fact 4.9 ∈ Decorated(BareInterval(5.0, 12.4), def) --> false
+    @fact in(4.9, Decorated(BareInterval(5.0, 12.4), def)) --> false
+    @fact -6.3 ∈ Decorated(BareInterval(5.0, 12.4), dac) --> false
+    @fact in(-6.3, Decorated(BareInterval(5.0, 12.4), dac)) --> false
     @fact 0.0 ∈ Decorated(∅, trv) --> false
     @fact in(0.0, Decorated(∅, trv)) --> false
     @fact 0.0 ∈ Decorated(∅, trv) --> false

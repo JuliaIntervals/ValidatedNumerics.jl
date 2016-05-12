@@ -17,7 +17,7 @@ The following options are available:
 - `format`: interval output format
 
     - `:standard`: `[1, 2]`
-    - `:full`: `Interval(1, 2)`
+    - `:full`: `BareInterval(1, 2)`
     - `:midpoint`: 1.5 ± 0.5
 
 - `sigfigs`: number of significant figures to show in `standard` mode
@@ -64,7 +64,7 @@ end
 round_string(x::Real, digits::Int, r::RoundingMode) = round_string(big(x), digits, r)
 
 
-function representation(a::Interval, format=nothing)
+function representation(a::BareInterval, format=nothing)
     if isempty(a)
         return "∅"
     end
@@ -87,7 +87,7 @@ function representation(a::Interval, format=nothing)
         output = replace(output, "Inf", "∞")
 
     elseif format == :full
-        output = "Interval($(a.lo), $(a.hi))"
+        output = "BareInterval($(a.lo), $(a.hi))"
 
     elseif format == :midpoint
         m = round_string(mid(a), sigfigs, RoundNearest)
@@ -98,13 +98,13 @@ function representation(a::Interval, format=nothing)
     output
 end
 
-function representation(a::Interval{BigFloat})
+function representation(a::BareInterval{BigFloat})
     if display_params.format == :standard
-        string( invoke(representation, (Interval,), a),
+        string( invoke(representation, (BareInterval,), a),
                     subscriptify(precision(a.lo)) )
 
     elseif display_params.format == :full
-        invoke(representation, (Interval,), a)
+        invoke(representation, (BareInterval,), a)
     end
 end
 
@@ -124,10 +124,10 @@ function representation(a::Decorated)
 
 end
 
-show(io::IO, a::Interval) = print(io, representation(a))
+show(io::IO, a::BareInterval) = print(io, representation(a))
 show(io::IO, a::Decorated) = print(io, representation(a))
 
-showall(io::IO, a::Interval) = print(io, representation(a, :full))
+showall(io::IO, a::BareInterval) = print(io, representation(a, :full))
 
 function subscriptify(n::Int)
     subscript_digits = [c for c in "₀₁₂₃₄₅₆₇₈₉"]

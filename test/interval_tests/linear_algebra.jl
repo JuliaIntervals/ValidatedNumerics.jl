@@ -23,7 +23,7 @@ facts("Linear algebra with intervals tests") do
             @interval(-12, 12)
         ]
 
-    # Example from Moore et al., Introduction to Interval Analysis (2009), pg. 88:
+    # Example from Moore et al., Introduction to BareInterval Analysis (2009), pg. 88:
 
     @fact A \ b -->
         [

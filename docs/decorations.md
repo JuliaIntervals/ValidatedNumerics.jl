@@ -32,7 +32,7 @@ Suppose that a decorated interval $(X, d)$ is the result of evaluating a functio
 
 - `trv` ("trivial"): always true; gives no information
 
-- `ill` ("ill-formed"): Not an Interval (an error occurred), e.g. $\mathrm{Dom}(f) = \emptyset$.
+- `ill` ("ill-formed"): Not an BareInterval (an error occurred), e.g. $\mathrm{Dom}(f) = \emptyset$.
 
 An example will be given at the end of this section.
 

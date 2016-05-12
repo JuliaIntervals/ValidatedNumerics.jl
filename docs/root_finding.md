@@ -17,10 +17,10 @@
 
 # Root finding
 
-Interval arithmetic not only provides guaranteed numerical calculations; it also
+BareInterval arithmetic not only provides guaranteed numerical calculations; it also
 makes possible fundamentally new algorithms.
 
-## Interval Newton method
+## BareInterval Newton method
 One such algorithm is the **interval Newton method**. This is a version of the
 standard Newton (or Newton-Raphson) algorithm, an iterative method for finding
 roots (zeros) of functions.
@@ -104,7 +104,7 @@ julia> roots = newton(f, @interval(-5, 5))
  Root([-1.4142135623730951, -1.414213562373095], :unique)
  Root([1.414213562373095, 1.4142135623730951], :unique)
 
-julia> setprecision(Interval, 256)
+julia> setprecision(BareInterval, 256)
 256
 
 julia> newton(f, roots)

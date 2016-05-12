@@ -5,7 +5,7 @@ using ForwardDiff
 const D = ForwardDiff.derivative
 
 immutable Root{T<:Real}
-    interval::Interval{T}
+    interval::BareInterval{T}
     root_type::Symbol
 end
 
@@ -13,7 +13,7 @@ show(io::IO, root::Root) = print(io, "Root($(root.interval), :$(root.root_type))
 
 is_unique{T}(root::Root{T}) = root.root_type == :unique
 
-⊆(a::Interval, b::Root) = a ⊆ b.interval   # the Root object has the interval in the first entry
+⊆(a::BareInterval, b::Root) = a ⊆ b.interval   # the Root object has the interval in the first entry
 ⊆(a::Root, b::Root) = a.interval ⊆ b.interval
 
 
@@ -22,13 +22,13 @@ include("newton.jl")
 include("krawczyk.jl")
 
 
-function find_roots{T}(f::Function, a::Interval{T}, method::Function = newton;
+function find_roots{T}(f::Function, a::BareInterval{T}, method::Function = newton;
                     tolerance = eps(T), debug = false, maxlevel = 30)
 
     method(f, a; tolerance=tolerance, debug=debug, maxlevel=maxlevel)
 end
 
-function find_roots{T}(f::Function, f_prime::Function, a::Interval{T}, method::Function=newton;
+function find_roots{T}(f::Function, f_prime::Function, a::BareInterval{T}, method::Function=newton;
                     tolerance=eps(T), debug=false, maxlevel=30)
 
     method(f, f_prime, a; tolerance=tolerance, debug=debug, maxlevel=maxlevel)
@@ -38,7 +38,7 @@ function find_roots(f::Function, a::Real, b::Real, method::Function=newton;
            tolerance=eps(1.0*a), debug=false, maxlevel=30, precision::Int=-1)
 
     if precision >= 0
-        setprecision(Interval, precision) do
+        setprecision(BareInterval, precision) do
             find_roots(f, @interval(a, b), method; tolerance=tolerance, debug=debug, maxlevel=maxlevel)
         end
 
@@ -80,7 +80,7 @@ function find_roots_midpoint(f::Function, a::Real, b::Real, method::Function=new
 
 end
 
-function Base.lexcmp{T}(a::Interval{T}, b::Interval{T})
+function Base.lexcmp{T}(a::BareInterval{T}, b::BareInterval{T})
     #@show a, b
     if a.lo < b.lo
         return -1

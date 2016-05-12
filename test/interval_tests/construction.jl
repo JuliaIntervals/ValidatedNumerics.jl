@@ -5,15 +5,15 @@ using FactCheck
 
 
 facts("Constructing intervals") do
-    setprecision(Interval, 53)
+    setprecision(BareInterval, 53)
     @fact ValidatedNumerics.parameters.precision --> 53
 
-    setprecision(Interval, Float64)
+    setprecision(BareInterval, Float64)
     @fact ValidatedNumerics.parameters.precision --> 53
 
     # There is an inexplicable error on 0.5 with the following:
     @pending precision(BigFloat) --> 53
-    @pending precision(Interval) --> (Float64, 53)
+    @pending precision(BareInterval) --> (Float64, 53)
 
     # Checks for parameters
     @fact ValidatedNumerics.parameters.precision_type --> Float64
@@ -22,53 +22,53 @@ facts("Constructing intervals") do
     @fact ValidatedNumerics.parameters.pi --> @biginterval(pi)
 
     # Naive constructors, with no conversion involved
-    @fact Interval(1) --> Interval(1.0, 1.0)
-    @fact Interval(big(1)) --> Interval(1.0, 1.0)
-    @fact Interval(eu) --> Interval(1.0*eu)
-    @fact Interval(1//10) --> Interval{Rational{Int}}(1//10, 1//10)
-    @fact Interval(BigInt(1)//10) --> Interval{Rational{BigInt}}(1//10, 1//10)
-    @fact Interval( (1.0, 2.0) ) --> Interval(1.0, 2.0)
+    @fact BareInterval(1) --> BareInterval(1.0, 1.0)
+    @fact BareInterval(big(1)) --> BareInterval(1.0, 1.0)
+    @fact BareInterval(eu) --> BareInterval(1.0*eu)
+    @fact BareInterval(1//10) --> BareInterval{Rational{Int}}(1//10, 1//10)
+    @fact BareInterval(BigInt(1)//10) --> BareInterval{Rational{BigInt}}(1//10, 1//10)
+    @fact BareInterval( (1.0, 2.0) ) --> BareInterval(1.0, 2.0)
 
-    @fact Interval{Rational{Int}}(1) --> Interval(1//1)
-    #@fact Interval{Rational{Int}}(pi) --> Interval(rationalize(1.0*pi))
+    @fact BareInterval{Rational{Int}}(1) --> BareInterval(1//1)
+    #@fact BareInterval{Rational{Int}}(pi) --> BareInterval(rationalize(1.0*pi))
 
-    @fact Interval{BigFloat}(1) --> Interval{BigFloat}(big(1.0),big(1.0))
-    @fact Interval{BigFloat}(pi) -->
-        Interval{BigFloat}(big(3.1415926535897931), big(3.1415926535897936))
+    @fact BareInterval{BigFloat}(1) --> BareInterval{BigFloat}(big(1.0),big(1.0))
+    @fact BareInterval{BigFloat}(pi) -->
+        BareInterval{BigFloat}(big(3.1415926535897931), big(3.1415926535897936))
 
     # Disallowed conversions with a > b
 
-    @fact_throws ArgumentError Interval(2, 1)
-    @fact_throws ArgumentError Interval(big(2), big(1))
-    @fact_throws ArgumentError Interval(BigInt(1), 1//10)
-    @fact_throws ArgumentError Interval(1, 0.1)
-    @fact_throws ArgumentError Interval(big(1), big(0.1))
+    @fact_throws ArgumentError BareInterval(2, 1)
+    @fact_throws ArgumentError BareInterval(big(2), big(1))
+    @fact_throws ArgumentError BareInterval(BigInt(1), 1//10)
+    @fact_throws ArgumentError BareInterval(1, 0.1)
+    @fact_throws ArgumentError BareInterval(big(1), big(0.1))
 
 
     # Conversions; may involve rounding
-    # @fact convert(Interval, 1) --> Interval(1.0)
-    # @fact convert(Interval, pi) --> @interval(pi)
-    # @fact convert(Interval, eu) --> @interval(eu)
-    # @fact convert(Interval, BigInt(1)) --> Interval(BigInt(1))
-    # @fact convert(Interval, 1//10) --> @interval(1//10)
-    # @fact convert(Interval, 0.1) --> Interval(0.09999999999999999, 0.1)
-    # @fact convert(Interval, BigFloat(0.1)) --> Interval(big(0.1))
+    # @fact convert(BareInterval, 1) --> BareInterval(1.0)
+    # @fact convert(BareInterval, pi) --> @interval(pi)
+    # @fact convert(BareInterval, eu) --> @interval(eu)
+    # @fact convert(BareInterval, BigInt(1)) --> BareInterval(BigInt(1))
+    # @fact convert(BareInterval, 1//10) --> @interval(1//10)
+    # @fact convert(BareInterval, 0.1) --> BareInterval(0.09999999999999999, 0.1)
+    # @fact convert(BareInterval, BigFloat(0.1)) --> BareInterval(big(0.1))
 
 
-    @fact convert(Interval{Rational{Int}}, 0.1) --> Interval(1//10)
-    # @fact convert(Interval{Rational{BigInt}}, pi) --> Interval{Rational{BigInt}}(pi)
+    @fact convert(BareInterval{Rational{Int}}, 0.1) --> BareInterval(1//10)
+    # @fact convert(BareInterval{Rational{BigInt}}, pi) --> BareInterval{Rational{BigInt}}(pi)
 
 
     # Constructors from the macros @interval, @floatinterval @biginterval
-    setprecision(Interval, 53)
+    setprecision(BareInterval, 53)
 
     a = @interval(0.1)
     b = @interval(pi)
 
     @fact nextfloat(a.lo) --> a.hi
-    @fact typeof(a) --> Interval{BigFloat}
+    @fact typeof(a) --> BareInterval{BigFloat}
     @fact a --> @biginterval("0.1")
-    @fact convert(Interval{Float64}, a) --> @floatinterval(0.1)
+    @fact convert(BareInterval{Float64}, a) --> @floatinterval(0.1)
     @fact nextfloat(b.lo) --> b.hi
 
     @fact b --> @biginterval(pi)
@@ -81,16 +81,16 @@ facts("Constructing intervals") do
     @fact nextfloat(a.lo) --> a.hi
 
 
-    setprecision(Interval, Float64)
+    setprecision(BareInterval, Float64)
     a = @interval(0.1)
     b = @interval(pi)
 
     @fact a --> @floatinterval("0.1")
-    @fact typeof(a) --> Interval{Float64}
+    @fact typeof(a) --> BareInterval{Float64}
     @fact nextfloat(a.lo) --> a.hi
     @fact b --> @floatinterval(pi)
     @fact nextfloat(b.lo) --> b.hi
-    @fact convert(Interval{Float64}, @biginterval(0.1)) --> a
+    @fact convert(BareInterval{Float64}, @biginterval(0.1)) --> a
     x = typemax(Int)
     @fact @interval(x) --> @floatinterval(x)
     @fact isthin(@interval(x)) --> false
@@ -109,7 +109,7 @@ facts("Constructing intervals") do
 
 
     for precision in (64, Float64)
-        setprecision(Interval, precision)
+        setprecision(BareInterval, precision)
         d = big(3)
         f = @interval(d, 2d)
         @fact @interval(3, 6) ⊆ f --> true
@@ -118,65 +118,65 @@ facts("Constructing intervals") do
 
     for rounding in (:wide, :narrow)
         a = @interval(0.1, 0.2)
-        @fact a ⊆ Interval(0.09999999999999999, 0.20000000000000004) --> true
+        @fact a ⊆ BareInterval(0.09999999999999999, 0.20000000000000004) --> true
 
         b = @interval(0.1)
-        @fact b ⊆ Interval(0.09999999999999999, 0.10000000000000002) --> true
+        @fact b ⊆ BareInterval(0.09999999999999999, 0.10000000000000002) --> true
 
-        b = setprecision(Interval, 128) do
+        b = setprecision(BareInterval, 128) do
             @interval(0.1, 0.2)
         end
-        @fact b ⊆ Interval(0.09999999999999999, 0.20000000000000004) --> true
+        @fact b ⊆ BareInterval(0.09999999999999999, 0.20000000000000004) --> true
 
         @fact float(b) ⊆ a --> true
 
         c = @interval("0.1", "0.2")
         @fact c ⊆ a --> true  # c is narrower than a
-        @fact Interval(1//2) == Interval(0.5) --> true
-        @fact Interval(1//10).lo == rationalize(0.1) --> true
+        @fact BareInterval(1//2) == BareInterval(0.5) --> true
+        @fact BareInterval(1//10).lo == rationalize(0.1) --> true
     end
 
     @fact string(emptyinterval()) == "∅" --> true
 
-    params = ValidatedNumerics.IntervalParameters()
+    params = ValidatedNumerics.BareIntervalParameters()
     @fact params.precision_type == BigFloat --> true
     @fact params.precision == 256 --> true
     @fact params.rounding == :narrow --> true
 
-    setprecision(Interval, 53)
+    setprecision(BareInterval, 53)
     a = big(1)//3
-    @pending @interval(a) --> Interval(3.3333333333333331e-01, 3.3333333333333337e-01)
+    @pending @interval(a) --> BareInterval(3.3333333333333331e-01, 3.3333333333333337e-01)
 
 end
 
 facts("Big intervals") do
     a = @floatinterval(3)
-    @fact typeof(big(a)) --> Interval{BigFloat}
+    @fact typeof(big(a)) --> BareInterval{BigFloat}
 
-    @fact @floatinterval(123412341234123412341241234) --> Interval(1.234123412341234e26, 1.2341234123412342e26)
+    @fact @floatinterval(123412341234123412341241234) --> BareInterval(1.234123412341234e26, 1.2341234123412342e26)
     @fact @interval(big"3") --> @floatinterval(3)
-    @fact @floatinterval(big"1e10000") --> Interval(1.7976931348623157e308, ∞)
+    @fact @floatinterval(big"1e10000") --> BareInterval(1.7976931348623157e308, ∞)
 
     a = big(10)^10000
-    @fact @floatinterval(a) --> Interval(1.7976931348623157e308, ∞)
-    setprecision(Interval, 53)
-    @fact @biginterval(a) --> Interval(big"9.9999999999999994e+9999", big"1.0000000000000001e+10000")
+    @fact @floatinterval(a) --> BareInterval(1.7976931348623157e308, ∞)
+    setprecision(BareInterval, 53)
+    @fact @biginterval(a) --> BareInterval(big"9.9999999999999994e+9999", big"1.0000000000000001e+10000")
 
 end
 
 facts("Complex intervals") do
     a = @floatinterval(3 + 4im)
-    @fact a --> Interval(3) + im*Interval(4)
+    @fact a --> BareInterval(3) + im*BareInterval(4)
 
     b = exp(a)
-    @fact real(b) --> Interval(-13.12878308146216, -13.128783081462153)
-    @fact imag(b) --> Interval(-15.200784463067956, -15.20078446306795)
+    @fact real(b) --> BareInterval(-13.12878308146216, -13.128783081462153)
+    @fact imag(b) --> BareInterval(-15.200784463067956, -15.20078446306795)
 end
 
 facts("± tests") do
-    setprecision(Interval, Float64)
+    setprecision(BareInterval, Float64)
     
-    @fact 3 ± 0.5 --> Interval(2.5, 3.5)
-    @fact 3 ± 0.1 --> Interval(2.9, 3.1)
-    @fact 0.5 ± 1 --> Interval(-0.5, 1.5)
+    @fact 3 ± 0.5 --> BareInterval(2.5, 3.5)
+    @fact 3 ± 0.1 --> BareInterval(2.9, 3.1)
+    @fact 0.5 ± 1 --> BareInterval(-0.5, 1.5)
 end

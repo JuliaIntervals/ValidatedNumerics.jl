@@ -10,11 +10,11 @@
 
 # v0.3
 
-- [Added `IntervalBox` type](https://github.com/dpsanders/ValidatedNumerics.jl/pull/88), representing a multi-dimensional (hyper-)box as a `FixedSizeArray` of `Interval`s.
+- [Added `IntervalBox` type](https://github.com/dpsanders/ValidatedNumerics.jl/pull/88), representing a multi-dimensional (hyper-)box as a `FixedSizeArray` of `BareInterval`s.
 
 - Internal clean-up, including rewriting what was the internal, unexported `make_interval`
 function as (exported) methods for `convert`, so that you can now write e.g.
-`convert(Interval{Float64}, "0.1")`; this is used by `@interval`.
+`convert(BareInterval{Float64}, "0.1")`; this is used by `@interval`.
 
 - [Replaced](https://github.com/dpsanders/ValidatedNumerics.jl/pull/101) the simple automatic differentiation functionality that was part of
 the package with the sophisticated `ForwardDiff` package.
@@ -23,20 +23,20 @@ the package with the sophisticated `ForwardDiff` package.
 precision and rounding functions with the
 new, [flexible names](https://github.com/JuliaLang/julia/pull/13232) in Julia v0.5:
 
-- `set_interval_precision(x)` -> `setprecision(Interval, x)`.
-- `get_interval_precision()` -> `precision(Interval)`
-- `set_interval_rounding(x)` -> `setrounding(Interval, x)`
-- `get_interval_rounding()` -> `rounding(Interval)`
+- `set_interval_precision(x)` -> `setprecision(BareInterval, x)`.
+- `get_interval_precision()` -> `precision(BareInterval)`
+- `set_interval_rounding(x)` -> `setrounding(BareInterval, x)`
+- `get_interval_rounding()` -> `rounding(BareInterval)`
 
 - The ITF1788 test suite has been temporarily disabled on Julia v0.5 due to a
 performance regression in parsing long test suites.
 
-- `convert(Interval, x)` has been removed. You must specify the element type of
-the interval, e.g. `convert(Interval{Float64}, 0.1)`
+- `convert(BareInterval, x)` has been removed. You must specify the element type of
+the interval, e.g. `convert(BareInterval{Float64}, 0.1)`
 
 # v0.2
 
-- Significant progress has been made towards conformance with the [IEEE 1788-2015 - IEEE Standard for Interval Arithmetic] (https://standards.ieee.org/findstds/standard/1788-2015.html), with many functions added, including hyperbolic functions (`cosh`, etc.)
+- Significant progress has been made towards conformance with the [IEEE 1788-2015 - IEEE Standard for BareInterval Arithmetic] (https://standards.ieee.org/findstds/standard/1788-2015.html), with many functions added, including hyperbolic functions (`cosh`, etc.)
 
 - The [CRlibm.jl](https://github.com/dpsanders/CRlibm.jl) (Correctly-Rounded mathematics library) is now used to obtain correctly-rounded elementary functions (`sin`, `exp`, etc.) for `Float64` arguments. Functions that are not available in `CRlibm.jl` are taken from MPFR, and are hence slower; note that this includes the `^` function.
 
@@ -51,7 +51,7 @@ the interval, e.g. `convert(Interval{Float64}, 0.1)`
 
 ## 0.1.3
 
-- Improvements towards conformance with the [IEEE-1788](https://standards.ieee.org/findstds/standard/1788-2015.html) standard for Interval Arithmetic:
+- Improvements towards conformance with the [IEEE-1788](https://standards.ieee.org/findstds/standard/1788-2015.html) standard for BareInterval Arithmetic:
 
  - New `special_intervals.jl` file, with definitions of `emptyinterval`, `entireinterval`, `nai` and related functions. Add new interval functions (`<=`, `radius`, `precedes`, `strictprecedes`, `≺`, etc).
 
@@ -68,20 +68,20 @@ supports Julia v0.3.
 
 ## 0.1.1
 
-- Re-enable tests for `Interval{Float64}` (`e0f3c1506f`)
+- Re-enable tests for `BareInterval{Float64}` (`e0f3c1506f`)
 
 # v0.1
 
 v0.1 is the first public release of the package.
 
-### Interval arithmetic
+### BareInterval arithmetic
 - Two methods for interval rounding are available:
  (i) narrow/slow (which uses hardward rounding mode changes for `Float64` intervals, and (ii) wide/fast (which does not change the rounding mode)
 - The current interval precision and rounding mode are stored in the `parameters` object
 - The macro `@interval` generates intervals based on the current interval precision
 - Trigonometric functions are "nearly" rigorous (for `Float64` intervals, correct rounding is not currently guaranteed)
 - Inverse trigonometric functions are available
-- Intervals of `BigFloat`s are displayed with the precision as a subscript numeral
+- BareIntervals of `BigFloat`s are displayed with the precision as a subscript numeral
 
 ### Root finding
 - Newton and Krawczyk methods are implemented for rigorously finding simple roots of 1D real functions

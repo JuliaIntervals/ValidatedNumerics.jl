@@ -27,7 +27,7 @@ import Base:
     show, showall
 
 export
-    Interval, AbstractInterval,
+    BareInterval, AbstractBareInterval,
     @interval, @biginterval, @floatinterval, @make_interval,
     diam, radius, mid, mag, mig, hull,
     emptyinterval, ∅, ∞, isempty, interior, isdisjoint, ⪽,
@@ -77,8 +77,8 @@ function __init__()
     setrounding(BigFloat, RoundNearest)
     setrounding(Float64, RoundNearest)
 
-    setprecision(Interval, 256)  # set up pi
-    setprecision(Interval, Float64)
+    setprecision(BareInterval, 256)  # set up pi
+    setprecision(BareInterval, Float64)
 end
 
 

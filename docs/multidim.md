@@ -5,7 +5,7 @@ Starting with v0.3, multi-dimensional (hyper-)boxes are implemented in the
 These represent Cartesian products of intervals, i.e. rectangles (in 2D),
 cuboids (in 3D), etc.
 
-`IntervalBox`es are constructed from an array of `Interval`s; it is
+`IntervalBox`es are constructed from an array of `BareInterval`s; it is
 often convenient to use the `..` notation:
 
 ```julia
@@ -43,6 +43,6 @@ julia> X = IntervalBox(1..1, 2..2)
 julia> f(X)
 [3.0, 3.0] × [-1.0, -1.0]
 ```
-The first version takes a tuple of `Interval`s and returns another tuple of `Interval`s;
+The first version takes a tuple of `BareInterval`s and returns another tuple of `BareInterval`s;
 the second version takes a single `IntervalBox` and automatically does the
 necessary unpacking and packing to return an `IntervalBox.`

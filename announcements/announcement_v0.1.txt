@@ -1,10 +1,10 @@
-ANN: ValidatedNumerics v0.1: Interval arithmetic and rigorous root finding
+ANN: ValidatedNumerics v0.1: BareInterval arithmetic and rigorous root finding
 
 We are happy to announce the first release version of the ValidatedNumerics.jl package, a Julia package for doing rigorous floating-point calculations:
 
 julia> Pkg.add("ValidatedNumerics")
 
-The package provides an Interval type and operations defined on it in such a way that the result of any mathematical operations is *guaranteed* to
+The package provides an BareInterval type and operations defined on it in such a way that the result of any mathematical operations is *guaranteed* to
 contain the true result. For example,
 
 julia> julia> @interval sin(0.1) + cos(0.2)
@@ -12,7 +12,7 @@ julia> julia> @interval sin(0.1) + cos(0.2)
 
 Just wrapping an operation with the `@interval` macro automatically provides a guaranteed rigorous interval containing the true result (an "enclosure").
 
-Interval arithmetic provides a means to develop new algorithms that also provide rigorous guaranteed results, for example for root finding.
+BareInterval arithmetic provides a means to develop new algorithms that also provide rigorous guaranteed results, for example for root finding.
 The interval Newton method is implemented in the function `newton`, e.g.:
 
 julia> f(x) = x^2 - 2

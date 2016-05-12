@@ -12,7 +12,7 @@ facts("Decorated tests") do
 
     a = Decorated(@interval(-1, 1), com)
     b = sqrt(a)
-    @fact interval_part(b) --> sqrt(Interval(0, 1))
+    @fact interval_part(b) --> sqrt(BareInterval(0, 1))
     @fact decoration(b) --> trv
 
     d = Decorated(a, dac)

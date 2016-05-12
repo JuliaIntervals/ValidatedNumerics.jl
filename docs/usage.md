@@ -22,7 +22,7 @@ The basic elements of the package are **intervals**, i.e. sets of real numbers (
 $$[a, b] := \{ a \le x \le b \} \subseteq \mathbb{R}.$$
 
 ## Creating intervals
-Intervals are created using the `@interval` macro, which takes one or two expressions:
+BareIntervals are created using the `@interval` macro, which takes one or two expressions:
 ```
 julia> using ValidatedNumerics
 
@@ -30,27 +30,27 @@ julia> a = @interval(1)
 [1, 1]
 
 julia> typeof(ans)
-Interval{Float64} (constructor with 1 method)
+BareInterval{Float64} (constructor with 1 method)
 
 julia> b = @interval(1, 2)
 [1, 2]
 ```
 
-These return objects of the parametrised type `Interval`, the basic object in the package.
-By default, `Interval` objects contain `Float64`s, but the library also allows using
+These return objects of the parametrised type `BareInterval`, the basic object in the package.
+By default, `BareInterval` objects contain `Float64`s, but the library also allows using
 `BigFloat`s, for example:
 ```
 julia> @biginterval(1, 2)
 [1, 2]₂₅₆
 
 julia> showall(ans)
-Interval(1.000000000000000000000000000000000000000000000000000000000000000000000000000000, 2.000000000000000000000000000000000000000000000000000000000000000000000000000000)
+BareInterval(1.000000000000000000000000000000000000000000000000000000000000000000000000000000, 2.000000000000000000000000000000000000000000000000000000000000000000000000000000)
 ```
 
-The constructor of the `Interval` type may be used directly, but this is generally not recommended, for the following reason:
+The constructor of the `BareInterval` type may be used directly, but this is generally not recommended, for the following reason:
 
 ```
-julia> a = Interval(0.1, 0.3)
+julia> a = BareInterval(0.1, 0.3)
 [0.1, 0.3]
 
 julia> b = @interval(0.1, 0.3)
@@ -107,7 +107,7 @@ julia> @interval 3π/2 + 1
 ```
 
 ## Constructing intervals
-Intervals may be constructed using rationals:
+BareIntervals may be constructed using rationals:
 ```
 julia> @interval(1//10)
 [0.0999999, 0.100001]
@@ -124,13 +124,13 @@ julia> @interval(0.1)
 If you instead know which exactly-representable floating-point number $a$ you need and really
 want to make a *thin interval*, i.e., an interval of the form $[a, a]$,
 containing precisely one float, then you can
-use the `Interval` constructor directly:
+use the `BareInterval` constructor directly:
 ```
-julia> a = Interval(0.1)
+julia> a = BareInterval(0.1)
 [0.1, 0.100001]
 
 julia> showall(a)
-Interval(0.1, 0.1)
+BareInterval(0.1, 0.1)
 ```
 Here, the `showall` function shows the internal representation of the interval,
 in a reproducible form that may be copied and pasted directly. It uses Julia's
@@ -146,7 +146,7 @@ julia> @biginterval "0.1"*2
 [0.199999, 0.200001]₂₅₆
 
 julia> showall(ans)
-Interval(1.999999999999999999999999999999999999999999999999999999999999999999999999999983e-01, 2.000000000000000000000000000000000000000000000000000000000000000000000000000004e-01)
+BareInterval(1.999999999999999999999999999999999999999999999999999999999999999999999999999983e-01, 2.000000000000000000000000000000000000000000000000000000000000000000000000000004e-01)
 
 ```
 
@@ -156,7 +156,7 @@ julia> @interval "[1.2, 3.4]"
 [1.19999, 3.40001]
 ```
 
-Intervals can be created from variables:
+BareIntervals can be created from variables:
 ```
 julia> a = 3.6
 3.6
@@ -246,21 +246,21 @@ julia> @interval 3π/2 + 1
 [5.71238, 5.71239]
 
 julia> showall(ans)
-Interval(5.71238898038469, 5.712388980384691)
-julia> setprecision(Interval, 256)
+BareInterval(5.71238898038469, 5.712388980384691)
+julia> setprecision(BareInterval, 256)
 256
 
 julia> @interval 3π/2 + 1
 [5.71238, 5.71239]₂₅₆
 
 julia> showall(ans)
-Interval(5.712388980384689857693965074919254326295754099062658731462416888461724609429262, 5.712388980384689857693965074919254326295754099062658731462416888461724609429401)
+BareInterval(5.712388980384689857693965074919254326295754099062658731462416888461724609429262, 5.712388980384689857693965074919254326295754099062658731462416888461724609429401)
 ```
 The subscript `256` at the end denotes the precision.
 
 To change back to `Float64`s, use
 ```
-julia> setprecision(Interval, Float64)
+julia> setprecision(BareInterval, Float64)
 Float64
 
 julia> @interval(pi)
@@ -269,12 +269,12 @@ julia> @interval(pi)
 
 To check which mode is currently set, use
 ```
-julia> precision(Interval)
+julia> precision(BareInterval)
 (Float64,256)
 ```
 The result is a tuple of the type (currently `Float64` or `BigFloat`) and the current `BigFloat` precision.
 
-Note that the `BigFloat` precision is set internally by `setprecision(Interval)`.
+Note that the `BigFloat` precision is set internally by `setprecision(BareInterval)`.
 You should *not* use `setprecision(BigFloat)` directly,  
 since the package carries out additional steps to ensure internal
 consistency of operations involving π, in particular
@@ -284,9 +284,9 @@ trigonometric functions.
 ## Elementary functions
 
 The main elementary functions are implemented, for both
-`Interval{Float64}` and `Interval{BigFloat}`.
+`BareInterval{Float64}` and `BareInterval{BigFloat}`.
 
-The functions for `Interval{Float64}` internally use routines from the correctly-rounded [`CRlibm` library](https://github.com/dpsanders/CRlibm.jl) where possible, i.e. for the following functions defined in that library:
+The functions for `BareInterval{Float64}` internally use routines from the correctly-rounded [`CRlibm` library](https://github.com/dpsanders/CRlibm.jl) where possible, i.e. for the following functions defined in that library:
 
 - `exp`, `expm1`
 - `log`, `log1p`, `log2`, `log10`
@@ -294,8 +294,8 @@ The functions for `Interval{Float64}` internally use routines from the correctly
 - `asin`, `acos`, `atan`
 - `sinh`, `cosh`
 
-Other functions that are implemented for `Interval{Float64}` internally convert
-to an `Interval{BigFloat}`, and then use routines from the `MPFR` library
+Other functions that are implemented for `BareInterval{Float64}` internally convert
+to an `BareInterval{BigFloat}`, and then use routines from the `MPFR` library
 (`BigFloat` in Julia):
 
 - `^`
@@ -319,7 +319,7 @@ julia> cos(cosh(a))
 ```
 
 ```
-julia> setprecision(Interval, 53)
+julia> setprecision(BareInterval, 53)
 53
 
 julia> sin(@interval(1))
@@ -330,7 +330,7 @@ julia> @interval sin(0.1) + cos(0.2)
 ```
 
 ```
-julia> setprecision(Interval, 128)
+julia> setprecision(BareInterval, 128)
 128
 
 julia> @interval sin(1)
@@ -338,22 +338,22 @@ julia> @interval sin(1)
 ```
 
 
-## Interval rounding modes
+## BareInterval rounding modes
 By default, the directed rounding used corresponds to using the `RoundDown` and `RoundUp` rounding modes when performing calculations; this gives the narrowest resulting intervals, and is set by
 
 ```
-setrounding(Interval, :narrow)
+setrounding(BareInterval, :narrow)
 ```
 
 An alternative rounding method is to perform calculations using the (standard) `RoundNearest` rounding mode, and then widen the result by one machine epsilon in each direction using `prevfloat` and `nextfloat`. This is achived by
 ```
-setrounding(Interval, :wide)
+setrounding(BareInterval, :wide)
 ```
 It generally results in wider intervals, but seems to be significantly faster.
 
 The current interval rounding mode may be obtained by
 ```
-rounding(Interval)
+rounding(BareInterval)
 ```
 
 ## Display modes
@@ -364,7 +364,7 @@ the following options, specified by keyword arguments (type `?displaymode` to ge
 
     - `:standard`: output of the form `[1.09999, 1.30001]`, rounded to the current number of significant figures
 
-    - `:full`: output of the form `Interval(1.0999999999999999, 1.3)`, as in the `showall` function
+    - `:full`: output of the form `BareInterval(1.0999999999999999, 1.3)`, as in the `showall` function
 
     - `:midpoint`: output in the midpoint-radius form, e.g. `1.2 ± 0.100001`
 
@@ -386,7 +386,7 @@ julia> a
 julia> displaymode(format=:full)
 
 julia> a
-Interval(1.0999999999999999, 3.1415926535897936)
+BareInterval(1.0999999999999999, 3.1415926535897936)
 
 julia> displaymode(format=:midpoint)
 

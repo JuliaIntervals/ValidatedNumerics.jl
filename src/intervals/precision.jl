@@ -1,66 +1,66 @@
 # This file is part of the ValidatedNumerics.jl package; MIT licensed
 
-type IntervalParameters
+type BareIntervalParameters
 
     precision_type::Type
     precision::Int
     rounding::Symbol
-    pi::Interval{BigFloat}
+    pi::BareInterval{BigFloat}
 
-    IntervalParameters() = new(BigFloat, 256, :narrow)  # leave out pi
+    BareIntervalParameters() = new(BigFloat, 256, :narrow)  # leave out pi
 end
 
-const parameters = IntervalParameters()
+const parameters = BareIntervalParameters()
 
 
 ## Precision:
 
 doc"`big53` creates an equivalent `BigFloat` interval to a given `Float64` interval."
-function big53(a::Interval{Float64})
-    x = setprecision(Interval, 53) do  # precision of Float64
-        convert(Interval{BigFloat}, a)
+function big53(a::BareInterval{Float64})
+    x = setprecision(BareInterval, 53) do  # precision of Float64
+        convert(BareInterval{BigFloat}, a)
     end
 end
 
 
-setprecision(::Type{Interval}, ::Type{Float64}) = parameters.precision_type = Float64
+setprecision(::Type{BareInterval}, ::Type{Float64}) = parameters.precision_type = Float64
 # does not change the BigFloat precision
 
 
-function setprecision{T<:AbstractFloat}(::Type{Interval}, ::Type{T}, prec::Integer)
+function setprecision{T<:AbstractFloat}(::Type{BareInterval}, ::Type{T}, prec::Integer)
     #println("SETTING BIGFLOAT PRECISION TO $precision")
     setprecision(BigFloat, prec)
 
     parameters.precision_type = T
     parameters.precision = prec
-    parameters.pi = convert(Interval{BigFloat}, pi)
+    parameters.pi = convert(BareInterval{BigFloat}, pi)
 
     prec
 end
 
-setprecision{T<:AbstractFloat}(::Type{Interval{T}}, prec) = setprecision(Interval, T, prec)
+setprecision{T<:AbstractFloat}(::Type{BareInterval{T}}, prec) = setprecision(BareInterval, T, prec)
 
-setprecision(::Type{Interval}, prec::Integer) = setprecision(Interval, BigFloat, prec)
+setprecision(::Type{BareInterval}, prec::Integer) = setprecision(BareInterval, BigFloat, prec)
 
-function setprecision(f::Function, ::Type{Interval}, prec::Integer)
+function setprecision(f::Function, ::Type{BareInterval}, prec::Integer)
 
-    old_precision = precision(Interval)
-    setprecision(Interval, prec)
+    old_precision = precision(BareInterval)
+    setprecision(BareInterval, prec)
 
     try
         return f()
     finally
-        setprecision(Interval, old_precision)
+        setprecision(BareInterval, old_precision)
     end
 end
 
-# setprecision(::Type{Interval}, precision) = setprecision(Interval, precision)
-setprecision(::Type{Interval}, t::Tuple) = setprecision(Interval, t...)
+# setprecision(::Type{BareInterval}, precision) = setprecision(BareInterval, precision)
+setprecision(::Type{BareInterval}, t::Tuple) = setprecision(BareInterval, t...)
 
-precision(::Type{Interval}) = (parameters.precision_type, parameters.precision)
+precision(::Type{BareInterval}) = (parameters.precision_type, parameters.precision)
 
 
-const float_interval_pi = convert(Interval{Float64}, pi)  # does not change
+const float_interval_pi = convert(BareInterval{Float64}, pi)  # does not change
 
 pi_interval(::Type{BigFloat}) = parameters.pi
 pi_interval(::Type{Float64})  = float_interval_pi
@@ -92,14 +92,14 @@ else
 end
 
 
-float(x::Interval) =
+float(x::BareInterval) =
     # @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi))
-    convert(Interval{Float64}, x)
+    convert(BareInterval{Float64}, x)
 
 ## Change type of interval rounding:
 
 
-doc"""`rounding(Interval)` returns the current interval rounding mode.
+doc"""`rounding(BareInterval)` returns the current interval rounding mode.
 There are two possible rounding modes:
 
 - :narrow  -- changes the floating-point rounding mode to `RoundUp` and `RoundDown`.
@@ -109,9 +109,9 @@ This gives the narrowest possible interval.
 `prevfloat` and `nextfloat` to achieve directed rounding. This creates an interval of width 2`eps`.
 """
 
-rounding(::Type{Interval}) = parameters.rounding
+rounding(::Type{BareInterval}) = parameters.rounding
 
-function setrounding(::Type{Interval}, mode)
+function setrounding(::Type{BareInterval}, mode)
     if mode ∉ [:wide, :narrow]
         throw(ArgumentError("Only possible interval rounding modes are `:wide` and `:narrow`"))
     end
@@ -119,4 +119,4 @@ function setrounding(::Type{Interval}, mode)
     parameters.rounding = mode  # a symbol
 end
 
-big{T}(x::Interval{T}) = convert(Interval{BigFloat}, x)
+big{T}(x::BareInterval{T}) = convert(BareInterval{BigFloat}, x)

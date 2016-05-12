@@ -7,7 +7,7 @@
 Checks if the number `x` is a member of the interval `a`, treated as a set.
 Corresponds to `isMember` in the ITF-1788 Standard.
 """
-function in{T<:Real}(x::T, a::Interval)
+function in{T<:Real}(x::T, a::BareInterval)
     isinf(x) && return false
     a.lo <= x <= a.hi
 end
@@ -20,11 +20,11 @@ end
 
 Checks if the intervals `a` and `b` are equal.
 """
-function ==(a::Interval, b::Interval)
+function ==(a::BareInterval, b::BareInterval)
     isempty(a) && isempty(b) && return true
     a.lo == b.lo && a.hi == b.hi
 end
-!=(a::Interval, b::Interval) = !(a==b)
+!=(a::BareInterval, b::BareInterval) = !(a==b)
 
 """
     issubset(a,b)
@@ -32,7 +32,7 @@ end
 
 Checks if all the points of the interval `a` are within the interval `b`.
 """
-function ⊆(a::Interval, b::Interval)
+function ⊆(a::BareInterval, b::BareInterval)
     isempty(a) && return true
     b.lo ≤ a.lo && a.hi ≤ b.hi
 end
@@ -44,40 +44,40 @@ function islessprime{T<:Real}(a::T, b::T)
 end
 
 # Interior
-function interior(a::Interval, b::Interval)
+function interior(a::BareInterval, b::BareInterval)
     isempty(a) && return true
     islessprime(b.lo, a.lo) && islessprime(a.hi, b.hi)
 end
 const ⪽ = interior  # \subsetdot
 
 # Disjoint:
-function isdisjoint(a::Interval, b::Interval)
+function isdisjoint(a::BareInterval, b::BareInterval)
     (isempty(a) || isempty(b)) && return true
     islessprime(b.hi, a.lo) || islessprime(a.hi, b.lo)
 end
 
 # Weakly less, \le, <=
-function <=(a::Interval, b::Interval)
+function <=(a::BareInterval, b::BareInterval)
     isempty(a) && isempty(b) && return true
     (isempty(a) || isempty(b)) && return false
     (a.lo ≤ b.lo) && (a.hi ≤ b.hi)
 end
 
 # Strict less: <
-function <(a::Interval, b::Interval)
+function <(a::BareInterval, b::BareInterval)
     isempty(a) && isempty(b) && return true
     (isempty(a) || isempty(b)) && return false
     islessprime(a.lo, b.lo) && islessprime(a.hi, b.hi)
 end
 
 # precedes
-function precedes(a::Interval, b::Interval)
+function precedes(a::BareInterval, b::BareInterval)
     (isempty(a) || isempty(b)) && return true
     a.hi ≤ b.lo
 end
 
 # strictpreceds
-function strictprecedes(a::Interval, b::Interval)
+function strictprecedes(a::BareInterval, b::BareInterval)
     (isempty(a) || isempty(b)) && return true
     # islessprime(a.hi, b.lo)
     a.hi < b.lo
@@ -86,23 +86,23 @@ const ≺ = strictprecedes # \prec
 
 
 # zero, one
-zero{T<:Real}(a::Interval{T}) = Interval(zero(T))
-zero{T<:Real}(::Type{Interval{T}}) = Interval(zero(T))
-one{T<:Real}(a::Interval{T}) = Interval(one(T))
-one{T<:Real}(::Type{Interval{T}}) = Interval(one(T))
+zero{T<:Real}(a::BareInterval{T}) = BareInterval(zero(T))
+zero{T<:Real}(::Type{BareInterval{T}}) = BareInterval(zero(T))
+one{T<:Real}(a::BareInterval{T}) = BareInterval(one(T))
+one{T<:Real}(::Type{BareInterval{T}}) = BareInterval(one(T))
 
 
 ## Addition and subtraction
 
-+(a::Interval) = a
--(a::Interval) = Interval(-a.hi, -a.lo)
++(a::BareInterval) = a
+-(a::BareInterval) = BareInterval(-a.hi, -a.lo)
 
-function +{T<:Real}(a::Interval{T}, b::Interval{T})
+function +{T<:Real}(a::BareInterval{T}, b::BareInterval{T})
     (isempty(a) || isempty(b)) && return emptyinterval(T)
     @round(T, a.lo + b.lo, a.hi + b.hi)
 end
 
-function -{T<:Real}(a::Interval{T}, b::Interval{T})
+function -{T<:Real}(a::BareInterval{T}, b::BareInterval{T})
     (isempty(a) || isempty(b)) && return emptyinterval(T)
     @round(T, a.lo - b.hi, a.hi - b.lo)
 end
@@ -110,7 +110,7 @@ end
 
 ## Multiplication
 
-function *{T<:Real}(a::Interval{T}, b::Interval{T})
+function *{T<:Real}(a::BareInterval{T}, b::BareInterval{T})
     (isempty(a) || isempty(b)) && return emptyinterval(T)
 
     (a == zero(a) || b == zero(b)) && return zero(a)
@@ -133,7 +133,7 @@ end
 
 ## Division
 
-function inv{T<:Real}(a::Interval{T})
+function inv{T<:Real}(a::BareInterval{T})
     isempty(a) && return emptyinterval(a)
 
     if zero(T) ∈ a
@@ -146,7 +146,7 @@ function inv{T<:Real}(a::Interval{T})
     @round(T, inv(a.hi), inv(a.lo))
 end
 
-function /{T<:Real}(a::Interval{T}, b::Interval{T})
+function /{T<:Real}(a::BareInterval{T}, b::BareInterval{T})
 
     S = typeof(a.lo / b.lo)
     (isempty(a) || isempty(b)) && return emptyinterval(S)
@@ -166,7 +166,7 @@ function /{T<:Real}(a::Interval{T}, b::Interval{T})
 
     else   # b contains zero, but is not zero(b)
 
-        a == zero(a) && return zero(Interval{S})
+        a == zero(a) && return zero(BareInterval{S})
 
         if b.lo == zero(T)
 
@@ -188,11 +188,11 @@ function /{T<:Real}(a::Interval{T}, b::Interval{T})
     end
 end
 
-//(a::Interval, b::Interval) = a / b    # to deal with rationals
+//(a::BareInterval, b::BareInterval) = a / b    # to deal with rationals
 
 
 ## fma: fused multiply-add
-function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
+function fma{T}(a::BareInterval{T}, b::BareInterval{T}, c::BareInterval{T})
     #T = promote_type(eltype(a), eltype(b), eltype(c))
 
     (isempty(a) || isempty(b) || isempty(c)) && return emptyinterval(T)
@@ -219,13 +219,13 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         hi4 = fma(a.hi, b.hi, c.hi)
         max(hi1, hi2, hi3, hi4)
     end
-    Interval(lo, hi)
+    BareInterval(lo, hi)
 end
 
 
 ## Scalar functions on intervals (no directed rounding used)
 
-function mag{T<:Real}(a::Interval{T})
+function mag{T<:Real}(a::BareInterval{T})
     isempty(a) && return convert(eltype(a), NaN)
     # r1, r2 = setrounding(T, RoundUp) do
     #     abs(a.lo), abs(a.hi)
@@ -233,7 +233,7 @@ function mag{T<:Real}(a::Interval{T})
     max( abs(a.lo), abs(a.hi) )
 end
 
-function mig{T<:Real}(a::Interval{T})
+function mig{T<:Real}(a::BareInterval{T})
     isempty(a) && return convert(eltype(a), NaN)
     zero(a.lo) ∈ a && return zero(a.lo)
     r1, r2 = setrounding(T, RoundDown) do
@@ -244,26 +244,26 @@ end
 
 
 # Infimum and supremum of an interval
-infimum(a::Interval) = a.lo
-supremum(a::Interval) = a.hi
+infimum(a::BareInterval) = a.lo
+supremum(a::BareInterval) = a.hi
 
 
 ## Functions needed for generic linear algebra routines to work
-real(a::Interval) = a
+real(a::BareInterval) = a
 
-function abs(a::Interval)
+function abs(a::BareInterval)
     isempty(a) && return emptyinterval(a)
-    Interval(mig(a), mag(a))
+    BareInterval(mig(a), mag(a))
 end
 
-function min(a::Interval, b::Interval)
+function min(a::BareInterval, b::BareInterval)
     (isempty(a) || isempty(b)) && return emptyinterval(a)
-    Interval( min(a.lo, b.lo), min(a.hi, b.hi))
+    BareInterval( min(a.lo, b.lo), min(a.hi, b.hi))
 end
 
-function max(a::Interval, b::Interval)
+function max(a::BareInterval, b::BareInterval)
     (isempty(a) || isempty(b)) && return emptyinterval(a)
-    Interval( max(a.lo, b.lo), max(a.hi, b.hi))
+    BareInterval( max(a.lo, b.lo), max(a.hi, b.hi))
 end
 
 
@@ -276,13 +276,13 @@ Returns the intersection of the intervals `a` and `b`, considered as
 (extended) sets of real numbers. That is, the set that contains
 the points common in `a` and `b`.
 """
-function intersect{T}(a::Interval{T}, b::Interval{T})
+function intersect{T}(a::BareInterval{T}, b::BareInterval{T})
     isdisjoint(a,b) && return emptyinterval(T)
 
-    Interval(max(a.lo, b.lo), min(a.hi, b.hi))
+    BareInterval(max(a.lo, b.lo), min(a.hi, b.hi))
 end
 # Specific promotion rule for intersect:
-intersect{T,S}(a::Interval{T}, b::Interval{S}) = intersect(promote(a,b)...)
+intersect{T,S}(a::BareInterval{T}, b::BareInterval{S}) = intersect(promote(a,b)...)
 
 
 ## Hull
@@ -293,7 +293,7 @@ Returns the "convex hull" of the intervals `a` and `b`, considered as
 (extended) sets of real numbers. That is, the minimum set that contains
 all points in `a` and `b`.
 """
-hull{T}(a::Interval{T}, b::Interval{T}) = Interval(min(a.lo, b.lo), max(a.hi, b.hi))
+hull{T}(a::BareInterval{T}, b::BareInterval{T}) = BareInterval(min(a.lo, b.lo), max(a.hi, b.hi))
 
 """
     union(a, b)
@@ -302,41 +302,41 @@ hull{T}(a::Interval{T}, b::Interval{T}) = Interval(min(a.lo, b.lo), max(a.hi, b.
 Returns the union (convex hull) of the intervals `a` and `b`; it is equivalent
 to `hull(a,b)`.
 """
-union(a::Interval, b::Interval) = hull(a, b)
+union(a::BareInterval, b::BareInterval) = hull(a, b)
 
 
-dist(a::Interval, b::Interval) = max(abs(a.lo-b.lo), abs(a.hi-b.hi))
-eps(a::Interval) = max(eps(a.lo), eps(a.hi))
+dist(a::BareInterval, b::BareInterval) = max(abs(a.lo-b.lo), abs(a.hi-b.hi))
+eps(a::BareInterval) = max(eps(a.lo), eps(a.hi))
 
 
 ## floor, ceil, trunc, sign, roundTiesToEven, roundTiesToAway
-function floor(a::Interval)
+function floor(a::BareInterval)
     isempty(a) && return emptyinterval(a)
-    Interval(floor(a.lo), floor(a.hi))
+    BareInterval(floor(a.lo), floor(a.hi))
 end
 
-function ceil(a::Interval)
+function ceil(a::BareInterval)
     isempty(a) && return emptyinterval(a)
-    Interval(ceil(a.lo), ceil(a.hi))
+    BareInterval(ceil(a.lo), ceil(a.hi))
 end
 
-function trunc(a::Interval)
+function trunc(a::BareInterval)
     isempty(a) && return emptyinterval(a)
-    Interval(trunc(a.lo), trunc(a.hi))
+    BareInterval(trunc(a.lo), trunc(a.hi))
 end
 
-function sign{T<:Real}(a::Interval{T})
+function sign{T<:Real}(a::BareInterval{T})
     isempty(a) && return emptyinterval(a)
 
     a == zero(a) && return a
     if a ≤ zero(a)
-        zero(T) ∈ a && return Interval(-one(T), zero(T))
-        return Interval(-one(T))
+        zero(T) ∈ a && return BareInterval(-one(T), zero(T))
+        return BareInterval(-one(T))
     elseif a ≥ zero(a)
-        zero(T) ∈ a && return Interval(zero(T), one(T))
-        return Interval(one(T))
+        zero(T) ∈ a && return BareInterval(zero(T), one(T))
+        return BareInterval(one(T))
     end
-    return Interval(-one(T), one(T))
+    return BareInterval(-one(T), one(T))
 end
 
 # RoundTiesToEven is an alias of `RoundNearest`
@@ -345,7 +345,7 @@ const RoundTiesToEven = RoundNearest
 const RoundTiesToAway = RoundNearestTiesAway
 
 """
-    round(a::Interval[, RoundingMode])
+    round(a::BareInterval[, RoundingMode])
 
 Returns the interval with rounded to an interger limits.
 
@@ -353,34 +353,34 @@ For compliance with the IEEE Std 1788-2015, "roundTiesToEven" corresponds
 to `round(a)` or `round(a, RoundNearest)`, and "roundTiesToAway"
 to `round(a, RoundNearestTiesAway)`.
 """
-round(a::Interval) = round(a, RoundNearest)
-round(a::Interval, ::RoundingMode{:ToZero}) = trunc(a)
-round(a::Interval, ::RoundingMode{:Up}) = ceil(a)
-round(a::Interval, ::RoundingMode{:Down}) = floor(a)
+round(a::BareInterval) = round(a, RoundNearest)
+round(a::BareInterval, ::RoundingMode{:ToZero}) = trunc(a)
+round(a::BareInterval, ::RoundingMode{:Up}) = ceil(a)
+round(a::BareInterval, ::RoundingMode{:Down}) = floor(a)
 
-function round(a::Interval, ::RoundingMode{:Nearest})
+function round(a::BareInterval, ::RoundingMode{:Nearest})
     isempty(a) && return emptyinterval(a)
-    Interval(round(a.lo), round(a.hi))
+    BareInterval(round(a.lo), round(a.hi))
 end
 
-function round(a::Interval, ::RoundingMode{:NearestTiesAway})
+function round(a::BareInterval, ::RoundingMode{:NearestTiesAway})
     isempty(a) && return emptyinterval(a)
-    Interval(round(a.lo, RoundNearestTiesAway), round(a.hi, RoundNearestTiesAway))
+    BareInterval(round(a.lo, RoundNearestTiesAway), round(a.hi, RoundNearestTiesAway))
 end
 
 # mid, diam, radius
-function mid(a::Interval)
+function mid(a::BareInterval)
     isentire(a) && return zero(a.lo)
     (a.lo + a.hi) / 2
 end
 
-function diam{T<:Real}(a::Interval{T})
+function diam{T<:Real}(a::BareInterval{T})
     isempty(a) && return convert(T, NaN)
     @setrounding(T, a.hi - a.lo, RoundUp) #cf page 64 of IEEE1788
 end
 
 # Should `radius` this yield diam(a)/2? This affects other functions!
-function radius(a::Interval)
+function radius(a::BareInterval)
     isempty(a) && return convert(eltype(a), NaN)
     m = mid(a)
     max(m - a.lo, a.hi - m)
@@ -392,7 +392,7 @@ end
 
 Return the unique interval `c` such that `b+c=a`.
 """
-function cancelminus(a::Interval, b::Interval)
+function cancelminus(a::BareInterval, b::BareInterval)
     T = promote_type(eltype(a), eltype(b))
 
     (isempty(a) && (isempty(b) || !isunbounded(b))) && return emptyinterval(T)
@@ -420,10 +420,10 @@ end
 Returns the unique interval `c` such that `b-c=a`;
 it is equivalent to `cancelminus(a, −b)`.
 """
-cancelplus(a::Interval, b::Interval) = cancelminus(a, -b)
+cancelplus(a::BareInterval, b::BareInterval) = cancelminus(a, -b)
 
 
 # midpoint-radius forms
-midpoint_radius(a::Interval) = (mid(a), radius(a))
+midpoint_radius(a::BareInterval) = (mid(a), radius(a))
 
-interval_from_midpoint_radius(midpoint, radius) = Interval(midpoint-radius, midpoint+radius)
+interval_from_midpoint_radius(midpoint, radius) = BareInterval(midpoint-radius, midpoint+radius)

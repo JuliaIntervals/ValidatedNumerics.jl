@@ -27,8 +27,8 @@ using ValidatedNumerics
 
 #Preamble
 setprecision(53)
-setprecision(Interval, Float64)
-setrounding(Interval, :narrow)
+setprecision(BareInterval, Float64)
+setrounding(BareInterval, :narrow)
 
 facts("minimal_sqrRev_test") do
 
