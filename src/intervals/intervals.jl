@@ -5,9 +5,9 @@
 
 ## BareInterval type
 
-abstract AbstractBareInterval <: Real
+abstract AbstractInterval <: Real
 
-immutable BareInterval{T<:Real} <: AbstractBareInterval
+immutable BareInterval{T<:Real} <: AbstractInterval
     lo :: T
     hi :: T
 
@@ -40,6 +40,8 @@ eltype{T<:Real}(x::BareInterval{T}) = T
 
 
 ## Include files
+
+
 include("special.jl")
 include("macros.jl")
 include("conversion.jl")

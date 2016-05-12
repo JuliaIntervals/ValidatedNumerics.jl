@@ -118,13 +118,13 @@ and making each literal (0.1, 1, etc.) into a corresponding interval constructio
 by calling `transform`."""
 
 function make_interval(T, expr1, expr2)
-    expr1 = transform(expr1, :convert, :(Interval{$T}))
+    expr1 = transform(expr1, :convert, :(BareInterval{$T}))
 
     if isempty(expr2)  # only one argument
-        return expr1
+        return :(Interval($expr1))
     end
 
-    expr2 = transform(expr2[1], :convert, :(Interval{$T}))
+    expr2 = transform(expr2[1], :convert, :(BareInterval{$T}))
 
-    :(hull($expr1, $expr2))
+    :(Interval(hull($expr1, $expr2)))
 end
