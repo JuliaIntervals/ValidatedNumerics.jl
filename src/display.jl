@@ -100,11 +100,10 @@ end
 
 
 
-const subscript_digits = [c for c in "₀₁₂₃₄₅₆₇₈₉"]
-
 function subscriptify(n::Int)
     dig = reverse(digits(n))
-    join([subscript_digits[i+1] for i in dig])
+    subscript_0 = Int('₀')    # 0x2080
+    join( [Char(subscript_0 + i) for i in dig])
 end
 
 function representation(a::Interval{BigFloat})
