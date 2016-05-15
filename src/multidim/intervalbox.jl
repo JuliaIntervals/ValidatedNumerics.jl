@@ -18,6 +18,23 @@ mid(X::IntervalBox) = [mid(x) for x in X.intervals]
 ∩(X::IntervalBox, Y::IntervalBox) = IntervalBox([x ∩ y for (x,y) in zip(X.intervals, Y.intervals)]...)
 isempty(X::IntervalBox) = any(map(isempty, X.intervals))
 
+doc"""
+    setdiff(x::IntervalBox, y::IntervalBox)
+
+Calculate the set difference `X \ Y`, i.e. the set of values
+that are inside the box `X` but not inside `Y`.
+"""
+function setdiff(X::IntervalBox, Y::IntervalBox)
+    IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)]... )
+end
+
+doc"""
+    \(X::IntervalBox, Y::IntervalBox)
+
+Calculate the set difference of `X` and `Y`; alias for `setdiff(x, y)`.
+"""
+\(X::IntervalBox, Y::IntervalBox) = setdiff(X, Y)
+
 
 function show(io::IO, X::IntervalBox)
     for (i, x) in enumerate(X)
