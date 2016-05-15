@@ -16,7 +16,7 @@ mid(X::IntervalBox) = [mid(x) for x in X]
 ⊆(X::IntervalBox, Y::IntervalBox) = all([x ⊆ y for (x,y) in zip(X, Y)])
 
 ∩(X::IntervalBox, Y::IntervalBox) = IntervalBox([x ∩ y for (x,y) in zip(X, Y)]...)
-isempty(X::IntervalBox) = any(map(isempty, X))
+isempty(X::IntervalBox) = any([isempty(x) for x in X])
 
 
 function show(io::IO, X::IntervalBox)
