@@ -37,6 +37,51 @@ function ⊆(a::Interval, b::Interval)
     b.lo ≤ a.lo && a.hi ≤ b.hi
 end
 
+
+doc"""
+    setdiff(x::Interval, y::Interval)
+
+Calculate the set difference `x \ y`, i.e. the set of values
+that are inside the interval `x` but not inside `y`.
+"""
+function setdiff(x::Interval, y::Interval)
+    intersection = x ∩ y
+
+    isempty(intersection) && return x
+    intersection == x && return emptyinterval(x)
+
+    x.lo == intersection.lo && return Interval(intersection.hi, x.hi)
+    x.hi == intersection.hi && return Interval(x.lo, intersection.lo)
+
+    return x   # intersection is inside x; the hull of the setdiff is the whole interval
+
+end
+
+doc"""
+    setdiff(x::IntervalBox, y::IntervalBox)
+
+Calculate the set difference `X \ Y`, i.e. the set of values
+that are inside the box `X` but not inside `Y`.
+"""
+function setdiff(X::IntervalBox, Y::IntervalBox)
+    IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)] )
+end
+
+doc"""
+    \(x::Interval, y::Interval)
+
+Calculate the set difference of `x` and `y`; an alias for `setdiff(x, y)`.
+"""
+\(x::Interval, y::Interval) = setdiff(x, y)
+
+doc"""
+    \(X::IntervalBox, Y::IntervalBox)
+
+Calculated the set difference of `X` and `Y`; an alias for `setdiff(x, y)`.
+"""
+\(X::IntervalBox, Y::IntervalBox) = setdiff(X, Y)
+
+
 # Auxiliary functions: equivalent to </<=, but Inf <,<= Inf returning true
 function islessprime{T<:Real}(a::T, b::T)
     (isinf(a) || isinf(b)) && a==b && return true
