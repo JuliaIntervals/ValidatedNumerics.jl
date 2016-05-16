@@ -11,6 +11,9 @@ facts("Operations on boxes") do
 
     @fact A ⊆ B --> true
 
+    @fact diam(A) --> 1
+    @fact diam(B) --> 3
+
     X = IntervalBox(1..2, 3..4)
     Y = IntervalBox(3..4, 3..4)
 
@@ -24,6 +27,8 @@ facts("Operations on boxes") do
     @fact isa(Y, IntervalBox) --> true
     @fact length(Y.intervals) --> 1
     @fact Y --> IntervalBox( (Interval(1., 2.),) )
+
+
 
 end
 

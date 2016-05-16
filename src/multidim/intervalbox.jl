@@ -18,6 +18,9 @@ mid(X::IntervalBox) = [mid(x) for x in X.intervals]
 ∩(X::IntervalBox, Y::IntervalBox) = IntervalBox([x ∩ y for (x,y) in zip(X.intervals, Y.intervals)]...)
 isempty(X::IntervalBox) = any(map(isempty, X.intervals))
 
+diam(X::IntervalBox) = maximum([diam(x) for x in X])
+
+
 doc"""
     setdiff(x::IntervalBox, y::IntervalBox)
 
