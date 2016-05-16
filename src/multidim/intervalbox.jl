@@ -31,12 +31,12 @@ function setdiff(X::IntervalBox, Y::IntervalBox)
     IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)]... )
 end
 
-doc"""
-    \(X::IntervalBox, Y::IntervalBox)
-
-Calculate the set difference of `X` and `Y`; alias for `setdiff(x, y)`.
-"""
-\(X::IntervalBox, Y::IntervalBox) = setdiff(X, Y)
+# doc"""
+#     \(X::IntervalBox, Y::IntervalBox)
+#
+# Calculate the set difference of `X` and `Y`; alias for `setdiff(x, y)`.
+# """
+# \(X::IntervalBox, Y::IntervalBox) = setdiff(X, Y)
 
 
 function show(io::IO, X::IntervalBox)

@@ -102,9 +102,9 @@ end
 
 
 
-doc"""
-    \(x::Interval, y::Interval)
-
-Calculate the set difference of `x` and `y`; an alias for `setdiff(x, y)`.
-"""
-\(x::Interval, y::Interval) = setdiff(x, y)
+# doc"""
+#     \(x::Interval, y::Interval)
+#
+# Calculate the set difference of `x` and `y`; an alias for `setdiff(x, y)`.
+# """
+# \(x::Interval, y::Interval) = setdiff(x, y)
