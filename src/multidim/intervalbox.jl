@@ -27,8 +27,47 @@ doc"""
 Calculate the set difference `X \ Y`, i.e. the set of values
 that are inside the box `X` but not inside `Y`.
 """
-function setdiff(X::IntervalBox, Y::IntervalBox)
-    IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)]... )
+function setdiff{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T})
+    result = Interval{T}[]
+    partial_overlaps = 0
+    full_overlaps = 0
+    partial_overlap_position = -1
+    local partial_overlap
+
+    which = 1
+    for (x,y) in zip(X, Y)
+        diff = setdiff(x, y)
+
+        if diff == X # intersection is empty
+            return X
+        end
+
+        if isempty(diff)
+            full_overlaps += 1
+
+        else
+            partial_overlaps += 1
+            partial_overlap_position = which
+            partial_overlap = diff
+        end
+
+        which += 1
+
+    end
+
+    @show partial_overlaps, full_overlaps
+
+    #IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)]... )
+    if partial_overlaps == 1
+        return IntervalBox(X[1:which-1]..., diff, X[which+1...end]... )
+    end
+
+
+    if partial_overlaps > 1
+        return X
+    end
+
+
 end
 
 # doc"""
