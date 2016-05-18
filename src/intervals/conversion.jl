@@ -46,7 +46,12 @@ function convert{T<:AbstractFloat, S<:Real}(::Type{Interval{T}}, x::S)
 end
 
 function convert{T<:AbstractFloat}(::Type{Interval{T}}, x::Float64)
-    convert(Interval{T}, rationalize(x))
+    # convert(Interval{T}, rationalize(x))
+    II = convert(Interval{T}, rationalize(x))
+    if !(x ∈ II)
+        II = Interval{T}(string(x))
+    end
+    II
 end
 
 function convert{T<:AbstractFloat}(::Type{Interval{T}}, x::Interval)
