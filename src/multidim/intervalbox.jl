@@ -27,46 +27,70 @@ doc"""
 Calculate the set difference `X \ Y`, i.e. the set of values
 that are inside the box `X` but not inside `Y`.
 """
+# function setdiff{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T})
+#     result = Interval{T}[]
+#     partial_overlaps = 0
+#     full_overlaps = 0
+#     which = -1
+#     local overlap
+#     local d
+#
+#     #which = 1
+#     #@show (X, Y)
+#     for (i, (x,y)) in enumerate(zip(X, Y))
+#
+#         if isempty(x ∩ y)  # or d == x
+#             return X
+#         end
+#
+#         d = setdiff(x, y)
+#         #@show d, typeof(d)
+#
+#         # if d == x # intersection is empty
+#         #     return X
+#         # end
+#
+#         if isempty(d)
+#             full_overlaps += 1
+#
+#         else
+#             partial_overlaps += 1
+#
+#             if partial_overlaps > 1  # there can only be one partial overlap
+#                 # else the setdiff as an IntervalBox is the whole of the original IntervalBox
+#                 warn("HELLO")
+#                 @show X
+#                 @show Y
+#                 return X
+#
+#             end
+#
+#             which = i
+#             overlap = d
+#         end
+#
+#         #which += 1
+#
+#     end
+#
+#     #@show partial_overlaps, full_overlaps
+#
+#     #IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)]... )
+#     if partial_overlaps == 1
+#         return IntervalBox(X[1:which-1]..., overlap, X[which+1:end]...)
+#     end
+#
+#     @assert full_overlaps == length(X)
+#
+#     # all full overlaps
+#
+#     return IntervalBox([emptyinterval() for i in 1:length(X)]...)
+#
+#
+# end
+
 function setdiff{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T})
-    result = Interval{T}[]
-    partial_overlaps = 0
-    full_overlaps = 0
-    partial_overlap_position = -1
-    local partial_overlap
-
-    which = 1
-    for (x,y) in zip(X, Y)
-        diff = setdiff(x, y)
-
-        if diff == X # intersection is empty
-            return X
-        end
-
-        if isempty(diff)
-            full_overlaps += 1
-
-        else
-            partial_overlaps += 1
-            partial_overlap_position = which
-            partial_overlap = diff
-        end
-
-        which += 1
-
-    end
-
-    @show partial_overlaps, full_overlaps
-
-    #IntervalBox( [setdiff(x,y) for (x,y) in zip(X, Y)]... )
-    if partial_overlaps == 1
-        return IntervalBox(X[1:which-1]..., diff, X[which+1...end]... )
-    end
-
-
-    if partial_overlaps > 1
-        return X
-    end
-
+    IntervalBox([setdiff(x, y) for (x,y) in zip(X, Y)]...)
 
 end
 
