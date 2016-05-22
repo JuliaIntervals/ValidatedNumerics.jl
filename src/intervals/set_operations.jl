@@ -86,25 +86,24 @@ doc"""
 
 Calculate the set difference `x \ y`, i.e. the set of values
 that are inside the interval `x` but not inside `y`.
+
+Returns an array of intervals.
+The array may:
+
+- be empty if `x ⊆ y`;
+- contain a single interval, if `y` overlaps `x`
+- contain two intervals, if `y` is strictly contained within `x`.
 """
 function setdiff(x::Interval, y::Interval)
     intersection = x ∩ y
 
-    isempty(intersection) && return x
-    intersection == x && return emptyinterval(x)
+    isempty(intersection) && return [x]
+    intersection == x && return typeof(x)[]  # x is subset of y; setdiff is empty
 
-    x.lo == intersection.lo && return Interval(intersection.hi, x.hi)
-    x.hi == intersection.hi && return Interval(x.lo, intersection.lo)
+    x.lo == intersection.lo && return [Interval(intersection.hi, x.hi)]
+    x.hi == intersection.hi && return [Interval(x.lo, intersection.lo)]
 
-    return x   # intersection is inside x; the hull of the setdiff is the whole interval
+    return [Interval(x.lo, y.lo),
+            Interval(y.hi, x.hi)]
 
 end
-
-
-
-# doc"""
-#     \(x::Interval, y::Interval)
-#
-# Calculate the set difference of `x` and `y`; an alias for `setdiff(x, y)`.
-# """
-# \(x::Interval, y::Interval) = setdiff(x, y)
