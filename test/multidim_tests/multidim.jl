@@ -51,6 +51,11 @@ facts("setdiff for IntervalBox") do
 
 
     X = IntervalBox(2..5, 3..6)
+    Y = IntervalBox(-10..10, 4..5)
+    @fact setdiff(X, Y) --> [IntervalBox(2..5, 3..4),
+                            IntervalBox(2..5, 5..6)]
+
+    X = IntervalBox(2..5, 3..6)
     Y = IntervalBox(4..6, 4..5)
     @fact setdiff(X, Y) --> [IntervalBox(2..4, 3..6),
                             IntervalBox(4..5, 3..4),
