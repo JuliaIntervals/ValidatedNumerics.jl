@@ -21,6 +21,7 @@ isempty(X::IntervalBox) = any([isempty(x) for x in X])
 diam(X::IntervalBox) = maximum([diam(x) for x in X])
 
 
+
 function show(io::IO, X::IntervalBox)
     for (i, x) in enumerate(X)
         print(io, x)

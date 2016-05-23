@@ -28,9 +28,8 @@ facts("Operations on boxes") do
     @fact length(Y) --> 1
     @fact Y --> IntervalBox( (Interval(1., 2.),) )
 
-
-
 end
+
 
 facts("@intervalbox tests") do
     @intervalbox f(x, y) = (x + y, x - y)
@@ -40,6 +39,40 @@ facts("@intervalbox tests") do
 
     @intervalbox g(x, y) = x - y
     @fact isa(g(X), IntervalBox) --> true
+
+end
+
+
+facts("setdiff for IntervalBox") do
+    X = IntervalBox(2..4, 3..5)
+    Y = IntervalBox(3..5, 4..6)
+    @fact setdiff(X, Y) --> [IntervalBox(2..3, 3..5),
+                            IntervalBox(3..4, 3..4)]
+
+
+    X = IntervalBox(2..5, 3..6)
+    Y = IntervalBox(4..6, 4..5)
+    @fact setdiff(X, Y) --> [IntervalBox(2..4, 3..6),
+                            IntervalBox(4..5, 3..4),
+                            IntervalBox(4..5, 5..6)]
+
+
+    X = IntervalBox(2..5, 3..6)
+    Y = IntervalBox(3..4, 4..5)
+    @fact setdiff(X, Y) --> [IntervalBox(2..3, 3..6),
+                            IntervalBox(3..4, 3..4),
+                            IntervalBox(3..4, 5..6),
+                            IntervalBox(4..5, 3..6)]
+
+    X = IntervalBox(2..5, 3..6)
+    Y = IntervalBox(2..4, 10..20)
+    @fact setdiff(X, Y) --> [X]
+
+    X = IntervalBox(2..5, 3..6)
+    Y = IntervalBox(-10..10, -10..10)
+    @fact setdiff(X, Y) --> typeof(X)[]
+
+
 
 
 end
