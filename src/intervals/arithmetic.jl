@@ -427,3 +427,5 @@ cancelplus(a::Interval, b::Interval) = cancelminus(a, -b)
 midpoint_radius(a::Interval) = (mid(a), radius(a))
 
 interval_from_midpoint_radius(midpoint, radius) = Interval(midpoint-radius, midpoint+radius)
+
+isinteger(a::Interval) = (a.lo == a.hi) && isinteger(a.lo)
