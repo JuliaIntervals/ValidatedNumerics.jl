@@ -8,4 +8,5 @@ facts("Complex interval operations") do
     @fact a + a --> Interval(2)*im
     @fact a - a --> 0
     @fact a / a --> 1
+    @fact a^2 --> -1
 end

@@ -429,3 +429,6 @@ midpoint_radius(a::Interval) = (mid(a), radius(a))
 interval_from_midpoint_radius(midpoint, radius) = Interval(midpoint-radius, midpoint+radius)
 
 isinteger(a::Interval) = (a.lo == a.hi) && isinteger(a.lo)
+
+convert(::Type{Integer}, a::Interval) = isinteger(a) ?
+        convert(Integer, a.lo) : throw(ArgumentError("Cannot convert $a to integer"))
