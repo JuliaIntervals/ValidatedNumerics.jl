@@ -19,16 +19,6 @@ function labelled_setdiff{T}(x::Interval{T}, y::Interval{T})
 
 end
 
-# doc"""
-#     setdiff(A::IntervalBox{N,T}, B::IntervalBox{N,T})
-#
-# Returns a vector of `IntervalBox`es that are in the set difference `A \ B`,
-# i.e. the set of `x` that are in `A` but not in `B`.
-#
-# Algorithm: Iterate x direction, looking for the sub-interval in that direction
-# that is non-trivial, i.e. that has an overlap. For that one, iterate down a "level"
-# to the next variable and repeat.
-# """
 # function setdiff{N,T}(A::IntervalBox{N,T}, B::IntervalBox{N,T})
 #     X = [labelled_setdiff(a,b) for (a, b) in zip(A, B)]
 #     lengths = map(length, X)
@@ -43,6 +33,15 @@ end
 #
 #     end
 # end
+doc"""
+    setdiff(A::IntervalBox{N,T}, B::IntervalBox{N,T})
+
+Returns a vector of `IntervalBox`es that are in the set difference `A \ B`,
+i.e. the set of `x` that are in `A` but not in `B`.
+
+Algorithm: Start from the total overlap (in all directions);
+expand each direction in turn.
+"""
 function setdiff{N,T}(A::IntervalBox{N,T}, B::IntervalBox{N,T})
     X = [labelled_setdiff(a,b) for (a, b) in zip(A, B)]
     # ordered such that the first in each is the excluded interval
@@ -50,18 +49,13 @@ function setdiff{N,T}(A::IntervalBox{N,T}, B::IntervalBox{N,T})
     first = [ i[1] for i in X ]
     labels = [i[2] for i in first]
 
-    any(labels .== -1) && return A  # no overlap
+    any(labels .== -1) && return [A]  # no overlap
 
-    @assert all(labels .== 1)
+    # @assert all(labels .== 1)
 
     excluded = [i[1] for i in first]
 
     result_list = IntervalBox{N,T}[]
-
-    @show first
-    @show labels
-    @show excluded
-
 
     for dimension in N:-1:1
         for which in X[dimension][2:end]
