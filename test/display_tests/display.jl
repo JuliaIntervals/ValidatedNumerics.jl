@@ -92,9 +92,6 @@ facts("displaymode tests") do
         displaymode(format=:standard, decorations=false)
         @fact string(a) --> "[2, 3]₁₂₈"
 
-        @fact showall(a) --> "DecoratedInterval(Interval(2.000000000000000000000000000000000000000000000000000000000000000000000000000000, 3.000000000000000000000000000000000000000000000000000000000000000000000000000000), com)"
-        
-
         displaymode(format=:standard, decorations=true)
         @fact string(a) --> "[2, 3]₁₂₈_com"
 
