@@ -27,10 +27,14 @@ isempty(X::IntervalBox) = any(isempty, X)
 
 diam(X::IntervalBox) = maximum([diam(x) for x in X])
 
+<<<<<<< 005b38c0425c4ffebae1850d7627a7f154d71adc
 emptyinterval(X::IntervalBox) = IntervalBox(map(emptyinterval, X))
 
 
 ## printing
+=======
+emptyinterval(x::IntervalBox) = IntervalBox([emptyinterval(i) for i in x]...)
+>>>>>>> Add emptyinterval(x::IntervalBox)
 
 function show(io::IO, X::IntervalBox)
     for (i, x) in enumerate(X)
