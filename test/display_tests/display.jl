@@ -83,5 +83,11 @@ facts("displaymode tests") do
         X = IntervalBox(1.1..1.2, 2.1..2.2)
         @fact string(X) --> "[1.09999, 1.20001] × [2.09999, 2.20001]"
 
+        X = IntervalBox(-Inf..Inf, -Inf..Inf)
+        @fact string(X) --> "[-∞, ∞] × [-∞, ∞]"
+
+        displaymode(format=:full)
+        @fact string(X) --> "IntervalBox(Interval(-Inf, Inf), Interval(-Inf, Inf))"
+
     end
 end
