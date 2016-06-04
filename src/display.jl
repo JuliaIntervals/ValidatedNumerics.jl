@@ -177,5 +177,5 @@ end
 
 for T in (Interval, DecoratedInterval, IntervalBox)
     @eval show(io::IO, a::$T) = print(io, representation(a))
-    @eval showall(io::IO, a::Interval) = print(io, representation(a, :full))
+    @eval showall(io::IO, a::$T) = print(io, representation(a, :full))
 end
