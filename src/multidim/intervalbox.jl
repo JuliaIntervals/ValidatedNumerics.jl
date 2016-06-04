@@ -14,9 +14,6 @@ IntervalBox(x::Interval) = IntervalBox( (x,) )  # single interval treated as tup
 ## arithmetic operations
 # Note that standard arithmetic operations are implemented automatically by FixedSizeArrays.jl
 
-## arithmetic operations
-# Note that standard arithmetic operations are implemented automatically by FixedSizeArrays.jl
-
 mid(X::IntervalBox) = [mid(x) for x in X]
 
 
@@ -30,26 +27,4 @@ isempty(X::IntervalBox) = any(isempty, X)
 
 diam(X::IntervalBox) = maximum([diam(x) for x in X])
 
-<<<<<<< 86fd9400d143f051860cbe7e9b054e45e73a76e1
-<<<<<<< 005b38c0425c4ffebae1850d7627a7f154d71adc
-=======
->>>>>>> Rewrite a couple of IntervalBox functions; better structure for intervalbox.jl
 emptyinterval(X::IntervalBox) = IntervalBox(map(emptyinterval, X))
-
-
-## printing
-<<<<<<< 86fd9400d143f051860cbe7e9b054e45e73a76e1
-=======
-emptyinterval(x::IntervalBox) = IntervalBox([emptyinterval(i) for i in x]...)
->>>>>>> Add emptyinterval(x::IntervalBox)
-=======
->>>>>>> Rewrite a couple of IntervalBox functions; better structure for intervalbox.jl
-
-function show(io::IO, X::IntervalBox)
-    for (i, x) in enumerate(X)
-        print(io, x)
-        if i != length(X)
-            print(io, " × ")
-        end
-    end
-end
