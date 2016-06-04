@@ -10,9 +10,9 @@ end
 
 IntervalBox(x::Interval) = IntervalBox( (x,) )  # single interval treated as tuple with one element
 
-## arithmetic operations
 
-# standard arithmetic operations are implemented by FixedSizeArrays.jl
+## arithmetic operations
+# Note that standard arithmetic operations are implemented automatically by FixedSizeArrays.jl
 
 ## arithmetic operations
 # Note that standard arithmetic operations are implemented automatically by FixedSizeArrays.jl
