@@ -119,7 +119,7 @@ function representation(a::Interval{BigFloat}, format=nothing)
                     subscriptify(precision(a.lo)) )
 
     elseif format == :full
-        invoke(representation, (Interval,), a)
+        invoke(representation, (Interval, Symbol), a, format)
     end
 end
 
@@ -131,10 +131,10 @@ function representation(a::DecoratedInterval, format=nothing)
     end
 
     if format==:full
-        return "DecoratedInterval($(interval_part(a)), $(decoration(a)))"
+        return "DecoratedInterval( $(representation(interval_part(a), format)), $(decoration(a)) )"
     end
 
-    interval = representation(interval_part(a))
+    interval = representation(interval_part(a), format)
 
     if display_params.decorations
         string(interval, "_", decoration(a))
