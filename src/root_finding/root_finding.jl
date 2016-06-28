@@ -13,6 +13,7 @@ export
     find_roots,
     find_roots_midpoint
 
+import Base: ⊆
 
 const derivative = ForwardDiff.derivative
 const D = derivative
