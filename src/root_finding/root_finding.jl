@@ -1,5 +1,19 @@
 # This file is part of the ValidatedNumerics.jl package; MIT licensed
 
+module RootFinding
+
+using ValidatedNumerics
+using ForwardDiff
+
+## Root finding
+export
+    newton, krawczyk,
+    derivative, jacobian,  # reexport derivative from ForwardDiff
+    Root, is_unique,
+    find_roots,
+    find_roots_midpoint
+
+
 const derivative = ForwardDiff.derivative
 const D = derivative
 
@@ -95,3 +109,5 @@ function Base.lexcmp{T}(a::Interval{T}, b::Interval{T})
 end
 
 Base.lexcmp{T}(a::Root{T}, b::Root{T}) = lexcmp(a.interval, b.interval)
+
+end
