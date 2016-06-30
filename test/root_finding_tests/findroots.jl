@@ -1,4 +1,5 @@
 using ValidatedNumerics, ValidatedNumerics.RootFinding
+using ForwardDiff
 
 using FactCheck
 
