@@ -5,8 +5,6 @@
 ## Promotion rules
 
 # Avoid ambiguity with ForwardDiff:
-promote_rule{T<:AbstractInterval, N, R<:Real}(::Type{DecoratedInterval{T}},
-    ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, DecoratedInterval{promote_type(T,R)}}
 
 promote_rule{T<:Real, N, R<:Real}(::Type{Interval{T}},
     ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, Interval{promote_type(T,R)}}
