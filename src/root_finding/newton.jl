@@ -93,7 +93,7 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
         roots = vcat(
             newton(f, f_prime, Interval(x.lo, m), level+1,
                    tolerance=tolerance, debug=debug, maxlevel=maxlevel),
-            newton(f, f_prime, Interval(nextfloat(m), x.hi), level+1,
+            newton(f, f_prime, Interval(m, x.hi), level+1,
                    tolerance=tolerance, debug=debug, maxlevel=maxlevel)
             # note the nextfloat here to prevent repetition
             )
@@ -127,9 +127,13 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
 
     end
 
-
+    # order, remove duplicates, and include intervals X only if f(X) contains 0
     sort!(roots, lt=lexless)
-    roots
+    roots = unique(roots)
+    #
+    roots = filter(x -> 0 ∈ f(x.interval), roots)
+
+    
 end
 
 
