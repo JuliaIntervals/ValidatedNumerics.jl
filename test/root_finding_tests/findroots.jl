@@ -1,7 +1,8 @@
-using ValidatedNumerics
+using ValidatedNumerics, ValidatedNumerics.RootFinding
+
 using FactCheck
 
-const D = ValidatedNumerics.derivative
+const D = RootFinding.derivative
 
 include("wilkinson.jl")
 

@@ -3,8 +3,6 @@
 ## Promotion
 
 ## Promotion rules
-promote_rule{T<:Real, N, R<:Real}(::Type{Interval{T}},
-    ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, Interval{promote_type(T,R)}}
 
 promote_rule{T<:Real, S<:Real}(::Type{Interval{T}}, ::Type{Interval{S}}) =
     Interval{promote_type(T, S)}

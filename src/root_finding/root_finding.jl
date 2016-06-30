@@ -31,6 +31,12 @@ is_unique{T}(root::Root{T}) = root.root_type == :unique
 ⊆(a::Root, b::Root) = a.interval ⊆ b.interval
 
 
+promote_rule{T<:AbstractInterval, N, R<:Real}(::Type{DecoratedInterval{T}},
+    ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, DecoratedInterval{promote_type(T,R)}}
+
+promote_rule{T<:Real, N, R<:Real}(::Type{Interval{T}},
+    ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, Interval{promote_type(T,R)}}
+
 # include("automatic_differentiation.jl")
 include("newton.jl")
 include("krawczyk.jl")
