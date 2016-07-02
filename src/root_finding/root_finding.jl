@@ -20,12 +20,12 @@ const D = derivative
 
 immutable Root{T<:Real}
     interval::Interval{T}
-    root_type::Symbol
+    status::Symbol
 end
 
-show(io::IO, root::Root) = print(io, "Root($(root.interval), :$(root.root_type))")
+show(io::IO, root::Root) = print(io, "Root($(root.interval), :$(root.status))")
 
-is_unique{T}(root::Root{T}) = root.root_type == :unique
+is_unique{T}(root::Root{T}) = root.status == :unique
 
 ⊆(a::Interval, b::Root) = a ⊆ b.interval   # the Root object has the interval in the first entry
 ⊆(a::Root, b::Root) = a.interval ⊆ b.interval
@@ -86,7 +86,7 @@ function find_roots_midpoint(f::Function, a::Real, b::Real, method::Function=new
         push!(midpoints, midpoint)
         push!(radii, radius)
 
-        push!(root_symbols, root.root_type)
+        push!(root_symbols, root.status)
 
     end
 
@@ -134,12 +134,12 @@ function clean_roots(f, roots)
         current_root = roots[i]
 
         if isempty(base_root.interval ∩ current_root.interval) ||
-                (base_root.root_type != current_root.root_type)
+                (base_root.status != current_root.status)
 
             push!(new_roots, base_root)
             base_root = current_root
         else
-            base_root = Root(hull(base_root.interval, current_root.interval), base_root.root_type)
+            base_root = Root(hull(base_root.interval, current_root.interval), base_root.status)
         end
     end
 
