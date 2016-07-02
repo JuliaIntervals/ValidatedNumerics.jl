@@ -31,12 +31,6 @@ is_unique{T}(root::Root{T}) = root.root_type == :unique
 ⊆(a::Root, b::Root) = a.interval ⊆ b.interval
 
 
-promote_rule{T<:AbstractInterval, N, R<:Real}(::Type{DecoratedInterval{T}},
-    ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, DecoratedInterval{promote_type(T,R)}}
-
-promote_rule{T<:Real, N, R<:Real}(::Type{Interval{T}},
-    ::Type{ForwardDiff.Dual{N,R}}) = ForwardDiff.Dual{N, Interval{promote_type(T,R)}}
-
 # include("automatic_differentiation.jl")
 include("newton.jl")
 include("krawczyk.jl")
@@ -116,5 +110,43 @@ function Base.lexcmp{T}(a::Interval{T}, b::Interval{T})
 end
 
 Base.lexcmp{T}(a::Root{T}, b::Root{T}) = lexcmp(a.interval, b.interval)
+
+
+function clean_roots(f, roots)
+
+    # order, remove duplicates, and include intervals X only if f(X) contains 0
+    sort!(roots, lt=lexless)
+    roots = unique(roots)
+    roots = filter(x -> 0 ∈ f(x.interval), roots)
+
+    # merge neighbouring roots if they touch:
+
+    if length(roots) < 2
+        return roots
+    end
+
+
+    new_roots = eltype(roots)[]
+
+    base_root = roots[1]
+
+    for i in 2:length(roots)
+        current_root = roots[i]
+
+        if isempty(base_root.interval ∩ current_root.interval) ||
+                (base_root.root_type != current_root.root_type)
+
+            push!(new_roots, base_root)
+            base_root = current_root
+        else
+            base_root = Root(hull(base_root.interval, current_root.interval), base_root.root_type)
+        end
+    end
+
+    push!(new_roots, base_root)
+
+    return new_roots
+
+end
 
 end

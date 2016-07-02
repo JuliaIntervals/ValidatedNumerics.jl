@@ -127,39 +127,11 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
 
     end
 
-    # order, remove duplicates, and include intervals X only if f(X) contains 0
-    sort!(roots, lt=lexless)
-    roots = unique(roots)
-    roots = filter(x -> 0 ∈ f(x.interval), roots)
 
+    roots = clean_roots(f, roots)
 
-    # merge neighbouring roots if they touch:
+    return roots
 
-    if length(roots) < 2
-        return roots
-    end
-
-
-    new_roots = eltype(roots)[]
-
-    base_root = roots[1]
-
-    for i in 2:length(roots)
-        current_root = roots[i]
-
-        if isempty(base_root.interval ∩ current_root.interval) ||
-                (base_root.root_type != current_root.root_type)
-
-            push!(new_roots, base_root)
-            base_root = current_root
-        else
-            base_root = Root(hull(base_root.interval, current_root.interval), base_root.root_type)
-        end
-    end
-
-    push!(new_roots, base_root)
-
-    return new_roots
 end
 
 
