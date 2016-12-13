@@ -91,6 +91,7 @@ include("display.jl")
 
 include("root_finding/root_finding.jl")
 
+include("plot_recipes/plot_recipes.jl")
 
 
 end # module ValidatedNumerics
