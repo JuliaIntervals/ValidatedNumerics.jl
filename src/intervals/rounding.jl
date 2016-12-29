@@ -31,7 +31,11 @@ macro round_up(ex::Expr)
     end
 end
 
+
+round(ex, rounding_mode) = ex  # generic fallback
+
 function round(ex::Expr, rounding_mode)
+
     if ex.head == :call
         op = ex.args[1]
 
@@ -41,14 +45,16 @@ function round(ex::Expr, rounding_mode)
         else  # unary operator
             return :( $op($(ex.args[2]), $rounding_mode ) )
         end
+    else
+        return ex
     end
 end
 
-macro ↑(ex::Expr)
+macro ↑(ex)
     round(ex, RoundUp)
 end
 
-macro ↓(ex::Expr)
+macro ↓(ex)
     round(ex, RoundDown)
 end
 
