@@ -31,6 +31,28 @@ macro round_up(ex::Expr)
     end
 end
 
+function round(ex::Expr, rounding_mode)
+    if ex.head == :call
+        op = ex.args[1]
+
+        if length(ex.args) == 3  # binary operator
+            return :( $op($(ex.args[2]), $(ex.args[3]), $rounding_mode) )
+
+        else  # unary operator
+            return :( $op($(ex.args[2]), $rounding_mode ) )
+        end
+    end
+end
+
+macro ↑(ex::Expr)
+    round(ex, RoundUp)
+end
+
+macro ↓(ex::Expr)
+    round(ex, RoundDown)
+end
+
+
 macro rounding(ex1::Expr, ex2::Expr)
     :(Interval(@round_down($ex1), @round_up($ex2)))
 end
