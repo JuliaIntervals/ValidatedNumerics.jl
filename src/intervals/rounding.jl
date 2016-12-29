@@ -60,7 +60,7 @@ end
 
 
 macro rounding(ex1::Expr, ex2::Expr)
-    :(Interval(@round_down($ex1), @round_up($ex2)))
+    :(Interval(@↓($ex1), @↑($ex2)))
 end
 
 
