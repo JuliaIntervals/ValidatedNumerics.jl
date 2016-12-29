@@ -1,36 +1,5 @@
 ## Optimally tight rounding by changing rounding mode:
 
-"""
-Transforms
-`@round_down(a + b)` to `+(a, b, RoundDown)`
-and `@round_down(sin(a))` to `sin(a, RoundDown)`.
-"""
-macro round_down(ex::Expr)
-    if ex.head == :call
-        op = ex.args[1]
-
-        if length(ex.args) == 3  # binary operator
-            return :( $op($(ex.args[2]), $(ex.args[3]), RoundDown) )
-
-        else  # unary operator
-            return :( $op($(ex.args[2]), RoundDown ) )
-        end
-    end
-end
-
-macro round_up(ex::Expr)
-    if ex.head == :call
-        op = ex.args[1]
-
-        if length(ex.args) == 3  # binary operator
-            return :( $op($(ex.args[2]), $(ex.args[3]), RoundUp) )
-
-        else  # unary operator
-            return :( $op($(ex.args[2]), RoundUp ) )
-        end
-    end
-end
-
 
 round(ex, rounding_mode) = ex  # generic fallback
 
@@ -59,7 +28,7 @@ macro ↓(ex)
 end
 
 
-macro rounding(ex1::Expr, ex2::Expr)
+macro round(ex1::Expr, ex2::Expr)
     :(Interval(@↓($ex1), @↑($ex2)))
 end
 
