@@ -1,5 +1,10 @@
 ## Optimally tight rounding by changing rounding mode:
 
+"""
+Transforms
+`@round_down(a + b)` to `+(a, b, RoundDown)`
+and `@round_down(sin(a))` to `sin(a, RoundDown)`.
+"""
 macro round_down(ex::Expr)
     if ex.head == :call
         op = ex.args[1]
@@ -32,17 +37,18 @@ end
 
 
 
-import Base: +, -, *, /, sin
+import Base: +, -, *, /, sin, sqrt
 
 
-for f in (:+, :-, :*, :/)
-    for mode in (:Down, :Up)
+for mode in (:Down, :Up)
 
-        mode1 = Expr(:quote, mode)
-        mode1 = :(::RoundingMode{$mode1})
+    mode1 = Expr(:quote, mode)
+    mode1 = :(::RoundingMode{$mode1})
 
-        mode2 = Symbol("Round", mode)
+    mode2 = Symbol("Round", mode)
 
+
+    for f in (:+, :-, :*, :/)
 
         @eval begin
             function $f{T<:AbstractFloat}(a::T, b::T, $mode1)
@@ -52,6 +58,17 @@ for f in (:+, :-, :*, :/)
             end
         end
     end
+
+    for f in (:sqrt,)
+        @eval begin
+            function $f{T<:AbstractFloat}(a::T, $mode1)
+                setrounding(T, $mode2) do
+                    $f(a)
+                end
+            end
+        end
+    end
+
 end
 ## Fast but not maximally tight rounding: just use prevfloat and nextfloat:
 
