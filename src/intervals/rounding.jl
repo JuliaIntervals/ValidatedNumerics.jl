@@ -28,13 +28,13 @@ macro ↓(ex)
 end
 
 
-macro round(ex1::Expr, ex2::Expr)
+macro round(ex1, ex2)
     :(Interval(@↓($ex1), @↑($ex2)))
 end
 
 
 
-import Base: +, -, *, /, sin, sqrt
+import Base: +, -, *, /, sin, sqrt, inv
 
 
 for mode in (:Down, :Up)
@@ -56,7 +56,7 @@ for mode in (:Down, :Up)
         end
     end
 
-    for f in (:sqrt,)
+    for f in (:sqrt, :inv)
         @eval begin
             function $f{T<:AbstractFloat}(a::T, $mode1)
                 setrounding(T, $mode2) do
