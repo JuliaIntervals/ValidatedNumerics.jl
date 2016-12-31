@@ -161,7 +161,7 @@ function sqrt{T}(a::Interval{T})
 
     isempty(a) && return a
 
-    @round(T, sqrt(a.lo), sqrt(a.hi))  # `sqrt` is correctly-rounded
+    @round(sqrt(a.lo), sqrt(a.hi))  # `sqrt` is correctly-rounded
 end
 
 
@@ -169,7 +169,7 @@ for f in (:exp, :expm1)
     @eval begin
         function ($f){T}(a::Interval{T})
             isempty(a) && return a
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            @round( ($f)(a.lo), ($f)(a.hi) )
         end
     end
 end
@@ -186,7 +186,8 @@ for f in (:exp2, :exp10)
 
     @eval function ($f)(a::Interval{BigFloat})
             isempty(a) && return a
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            @round( ($f)(a.lo), ($f)(a.hi) )
+
         end
 end
 
@@ -199,6 +200,7 @@ for f in (:log, :log2, :log10, :log1p)
 
             (isempty(a) || a.hi ≤ zero(T)) && return emptyinterval(a)
 
-            Interval( ($f)(a.lo, RoundDown), ($f)(a.hi, RoundUp) )
+            @round( ($f)(a.lo), ($f)(a.hi) )
+
         end
 end
