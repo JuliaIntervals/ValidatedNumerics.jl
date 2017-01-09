@@ -9,10 +9,10 @@ function round(ex::Expr, rounding_mode)
         op = ex.args[1]
 
         if length(ex.args) == 3  # binary operator
-            return :( $op($(ex.args[2]), $(ex.args[3]), $rounding_mode) )
+            return :( $op( $(esc(ex.args[2])), $(esc(ex.args[3])), $rounding_mode) )
 
         else  # unary operator
-            return :( $op($(ex.args[2]), $rounding_mode ) )
+            return :( $op($(esc(ex.args[2])), $rounding_mode ) )
         end
     else
         return ex
@@ -27,9 +27,15 @@ macro ↓(ex)
     round(ex, RoundDown)
 end
 
+↑(ex) = round(ex, RoundUp)
+↓(ex) = round(ex, RoundDown)
+
 
 macro round(ex1, ex2)
-    :(Interval(@↓($ex1), @↑($ex2)))
+     :(Interval($(round(ex1, RoundDown)), $(round(ex2, RoundUp))))
+    # :(Interval($(↓(ex1)), $(↑(ex2))))
+    #:(Interval(↓($ex1), ↑($ex2)))
+
 end
 
 
