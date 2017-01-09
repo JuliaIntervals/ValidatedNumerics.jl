@@ -6,7 +6,9 @@ module ValidatedNumerics
 
 using CRlibm
 using Compat
-using FixedSizeArrays
+#using FixedSizeArrays
+using StaticArrays
+using StaticArrays.FixedSizeArrays
 using ForwardDiff
 
 import Base:
