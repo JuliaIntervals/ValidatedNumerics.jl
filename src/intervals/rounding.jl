@@ -1,5 +1,6 @@
 ## Optimally tight rounding by changing rounding mode:
 
+import Base.round
 
 round(ex, rounding_mode) = ex  # generic fallback
 
@@ -75,13 +76,15 @@ for mode in (:Down, :Up)
 end
 ## Fast but not maximally tight rounding: just use prevfloat and nextfloat:
 
-        # function +{T}(a::T, b::T, ::RoundingMode{:Down})
-        #     prevfloat(a + b)
-        # end
-        #
-        # function +{T}(a::T, b::T, ::RoundingMode{:Down})
-        #     prevfloat(a + b)
-        # end
+        #=
+        function +{T}(a::T, b::T, ::RoundingMode{:Down})
+            prevfloat(a + b)
+        end
+
+        function +{T}(a::T, b::T, ::RoundingMode{:Up})
+            nextfloat(a + b)
+        end
+        =#
 
 
         # function sin(a, ::RoundingMode{:Down})
