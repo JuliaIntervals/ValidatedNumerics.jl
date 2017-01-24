@@ -141,11 +141,11 @@ function representation(a::Interval{BigFloat}, format=nothing)
 
 
     if format == :standard
-        string( invoke(representation, (Interval, Symbol), a, format),
+        @compat string( invoke(representation, Tuple{Interval,Symbol}), a, format),
                     subscriptify(precision(a.lo)) )
 
     elseif format == :full
-        invoke(representation, (Interval, Symbol), a, format)
+        @compat invoke(representation, Tuple{Interval, Symbol}), a, format)
     end
 end
 
