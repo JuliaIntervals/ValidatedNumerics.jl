@@ -50,6 +50,12 @@ end
 
 import Base: +, -, *, /, sin, sqrt, inv, ^
 
+# unary minus:
+-{T<:AbstractFloat}(a::T, ::RoundingMode) = -a  # ignore rounding
+
+# zero:
+zero{T<:AbstractFloat}(a::Interval{T}, ::RoundingMode) = zero(T)
+zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
 
 for mode in (:Down, :Up)
 
@@ -57,13 +63,6 @@ for mode in (:Down, :Up)
     mode1 = :(::RoundingMode{$mode1})
 
     mode2 = Symbol("Round", mode)
-
-    # unary minus:
-    @eval begin
-        function -{T<:AbstractFloat}(a::T, $mode1)
-            -a
-        end
-    end
 
 
     for f in (:+, :-, :*, :/)
@@ -97,19 +96,23 @@ for mode in (:Down, :Up)
     end
 
 end
-## Fast but not maximally tight rounding: just use prevfloat and nextfloat:
-
-        #=
-        function +{T}(a::T, b::T, ::RoundingMode{:Down})
-            prevfloat(a + b)
-        end
-
-        function +{T}(a::T, b::T, ::RoundingMode{:Up})
-            nextfloat(a + b)
-        end
-        =#
 
 
-        # function sin(a, ::RoundingMode{:Down})
-        #     prevfloat(sin(a))
-        # end
+## Fast, but *not* maximally tight rounding: just use prevfloat and nextfloat:
+
+#=
+function +{T}(a::T, b::T, ::RoundingMode{:Down})
+    prevfloat(a + b)
+end
+
+function +{T}(a::T, b::T, ::RoundingMode{:Up})
+    nextfloat(a + b)
+end
+=#
+
+
+# function sin(a, ::RoundingMode{:Down})
+#     prevfloat(sin(a))
+# end
+
+## Alternative: Fix rounding, e.g. down
