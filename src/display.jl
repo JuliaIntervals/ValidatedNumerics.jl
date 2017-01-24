@@ -197,7 +197,7 @@ function representation(X::IntervalBox, format=nothing)
 
     end
 
-    return takebuf_string(buffer)
+    return String(take!(buffer))
 end
 
 
