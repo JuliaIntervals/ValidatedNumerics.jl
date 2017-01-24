@@ -58,6 +58,13 @@ for mode in (:Down, :Up)
 
     mode2 = Symbol("Round", mode)
 
+    # unary minus:
+    @eval begin
+        function -{T<:AbstractFloat}(a::T, $mode1)
+            -a
+        end
+    end
+
 
     for f in (:+, :-, :*, :/)
 
