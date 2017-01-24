@@ -7,7 +7,14 @@ round(ex, rounding_mode) = ex  # generic fallback
 function round(ex::Expr, rounding_mode)
 
     if ex.head == :call
+
         op = ex.args[1]
+
+        if op ∈ (:min, :max)
+            mapped_args = round.(ex.args[2:end], [rounding_mode])
+            return :($op($(mapped_args...)))
+        end
+
 
         if length(ex.args) == 3  # binary operator
             return :( $op( $(esc(ex.args[2])), $(esc(ex.args[3])), $rounding_mode) )
