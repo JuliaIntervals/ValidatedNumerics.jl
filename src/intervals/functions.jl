@@ -26,17 +26,17 @@ function ^(a::Interval{BigFloat}, n::Integer)
     if isodd(n) # odd power
         isentire(a) && return a
         if n > 0
-            a.lo == zero(T) && return @round(T, zero(T), a.hi^n)
-            a.hi == zero(T) && return @round(T, a.lo^n, zero(T))
-            return @round(T, a.lo^n, a.hi^n)
+            a.lo == zero(T) && return @round(zero(T), a.hi^n)
+            a.hi == zero(T) && return @round(a.lo^n, zero(T))
+            return @round(a.lo^n, a.hi^n)
         else
             if a.lo ≥ zero(T)
-                a.lo == zero(T) && return @round(T, a.hi^n, convert(T, Inf))
-                return @round(T, a.hi^n, a.lo^n)
+                a.lo == zero(T) && return @round(a.hi^n, convert(T, Inf))
+                return @round(a.hi^n, a.lo^n)
 
             elseif a.hi ≤ zero(T)
-                a.hi == zero(T) && return @round(T, convert(T, -Inf), a.lo^n)
-                return @round(T, a.hi^n, a.lo^n)
+                a.hi == zero(T) && return @round(convert(T, -Inf), a.lo^n)
+                return @round(a.hi^n, a.lo^n)
             else
                 return entireinterval(a)
             end
@@ -45,20 +45,20 @@ function ^(a::Interval{BigFloat}, n::Integer)
     else # even power
         if n > 0
             if a.lo ≥ zero(T)
-                return @round(T, a.lo^n, a.hi^n)
+                return @round(a.lo^n, a.hi^n)
             elseif a.hi ≤ zero(T)
-                return @round(T, a.hi^n, a.lo^n)
+                return @round(a.hi^n, a.lo^n)
             else
-                return @round(T, mig(a)^n, mag(a)^n)
+                return @round(mig(a)^n, mag(a)^n)
             end
 
         else
             if a.lo ≥ zero(T)
-                return @round(T, a.hi^n, a.lo^n)
+                return @round(a.hi^n, a.lo^n)
             elseif a.hi ≤ zero(T)
-                return @round(T, a.lo^n, a.hi^n)
+                return @round(a.lo^n, a.hi^n)
             else
-                return @round(T, mag(a)^n, mig(a)^n)
+                return @round(mag(a)^n, mig(a)^n)
             end
         end
     end
@@ -67,13 +67,13 @@ end
 function sqr{T<:Real}(a::Interval{T})
     isempty(a) && return a
     if a.lo ≥ zero(T)
-        return @round(T, a.lo^2, a.hi^2)
+        return @round(a.lo^2, a.hi^2)
 
     elseif a.hi ≤ zero(T)
-        return @round(T, a.hi^2, a.lo^2)
+        return @round(a.hi^2, a.lo^2)
     end
 
-    return @round(T, mig(a)^2, mag(a)^2)
+    return @round(mig(a)^2, mag(a)^2)
 end
 
 # Floating-point power of a BigFloat interval:
@@ -95,10 +95,10 @@ function ^(a::Interval{BigFloat}, x::AbstractFloat)
 
     xx = convert(Interval{BigFloat}, x)
 
-    lo = @round(T, a.lo^xx.lo, a.lo^xx.lo)
-    lo1 = @round(T, a.lo^xx.hi, a.lo^xx.hi)
-    hi = @round(T, a.hi^xx.lo, a.hi^xx.lo)
-    hi1 = @round(T, a.hi^xx.hi, a.hi^xx.hi)
+    lo = @round(a.lo^xx.lo, a.lo^xx.lo)
+    lo1 = @round(a.lo^xx.hi, a.lo^xx.hi)
+    hi = @round(a.hi^xx.lo, a.hi^xx.lo)
+    hi1 = @round(a.hi^xx.hi, a.hi^xx.hi)
 
     lo = hull(lo, lo1)
     hi = hull(hi, hi1)
