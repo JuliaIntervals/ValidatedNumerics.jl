@@ -57,6 +57,10 @@ import Base: +, -, *, /, sin, sqrt, inv, ^
 zero{T<:AbstractFloat}(a::Interval{T}, ::RoundingMode) = zero(T)
 zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
 
+convert(::Type{BigFloat}, x, rounding_mode) = setrounding(BigFloat, rounding_mode) do
+    convert(BigFloat, x)
+end
+
 for mode in (:Down, :Up)
 
     mode1 = Expr(:quote, mode)
@@ -77,7 +81,7 @@ for mode in (:Down, :Up)
     end
 
     @eval begin
-        function ^{T<:AbstractFloat}(a::T, b, $mode1)
+        function ^{T<:AbstractFloat,S}(a::T, b::S, $mode1)
             setrounding(T, $mode2) do
                 ^(a, b)
             end
