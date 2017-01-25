@@ -65,6 +65,18 @@ parse{T}(::Type{T}, x, rounding_mode::RoundingMode) = setrounding(T, rounding_mo
     parse(T, x)
 end
 
+
+# no-ops for rational rounding:
+for f in (:+, :-, :*, :/)
+    @eval $f{T<:Rational}(a::T, b::T, ::RoundingMode) = $f(a, b)
+end
+
+sqrt{T<:Rational}(a::T, rounding_mode::RoundingMode) = setrounding(float(T), rounding_mode) do
+    sqrt(float(a))
+end
+
+
+
 for mode in (:Down, :Up)
 
     mode1 = Expr(:quote, mode)

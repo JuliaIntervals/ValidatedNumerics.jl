@@ -80,7 +80,7 @@ end
 # Floating-point power of a BigFloat interval:
 function ^(a::Interval{BigFloat}, x::AbstractFloat)
     T = BigFloat
-    domain = Interval{BigFloat(0, Inf)
+    domain = Interval{T}(0, Inf)
 
     if a == zero(a)
         a = a ∩ domain
