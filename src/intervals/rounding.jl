@@ -61,7 +61,7 @@ convert(::Type{BigFloat}, x, rounding_mode) = setrounding(BigFloat, rounding_mod
     convert(BigFloat, x)
 end
 
-parse{T}(::Type{T}, x, rounding_mode) = setrounding(T, rounding_mode) do
+parse{T}(::Type{T}, x, rounding_mode::RoundingMode) = setrounding(T, rounding_mode) do
     parse(T, x)
 end
 
