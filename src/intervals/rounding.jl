@@ -48,7 +48,7 @@ end
 
 
 
-import Base: +, -, *, /, sin, sqrt, inv, ^
+import Base: +, -, *, /, sin, sqrt, inv, ^, zero, convert, parse
 
 # unary minus:
 -{T<:AbstractFloat}(a::T, ::RoundingMode) = -a  # ignore rounding
@@ -59,6 +59,10 @@ zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
 
 convert(::Type{BigFloat}, x, rounding_mode) = setrounding(BigFloat, rounding_mode) do
     convert(BigFloat, x)
+end
+
+parse{T}(::Type{T}, x, rounding_mode) = setrounding(T, rounding_mode) do
+    parse(T, x)
 end
 
 for mode in (:Down, :Up)
