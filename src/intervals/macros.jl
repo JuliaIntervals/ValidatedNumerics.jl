@@ -80,7 +80,7 @@ transform(x, f, T) = :($f($(esc(T)), $(esc(x))))   # use if x is not an expressi
 function transform(expr::Expr, f::Symbol, T)
 
     if expr.head in ( :(.), :ref )   # of form  a.lo  or  a[i]
-        return :($f($(esc(T)), $(esc(expr))))
+        return :($f(esc(T)), $(esc(expr)))
     end
 
     new_expr = copy(expr)
@@ -118,7 +118,7 @@ and making each literal (0.1, 1, etc.) into a corresponding interval constructio
 by calling `transform`."""
 
 function make_interval(T, expr1, expr2)
-    expr1 = transform(expr1, :convert, :(Interval{$T}))
+    expr1 = transform(expr1, :convert, :(Interval{$ T}))
 
     if isempty(expr2)  # only one argument
         return expr1
