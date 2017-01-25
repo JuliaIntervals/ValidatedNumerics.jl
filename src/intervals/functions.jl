@@ -12,9 +12,6 @@ for T in (:Integer, :Rational, :Float64, :BigFloat, :Interval)
 end
 
 
-const nonnegative_reals = Interval{BigFloat}(0, Inf)
-
-
 # Integer power:
 
 function ^(a::Interval{BigFloat}, n::Integer)
@@ -83,7 +80,7 @@ end
 # Floating-point power of a BigFloat interval:
 function ^(a::Interval{BigFloat}, x::AbstractFloat)
     T = BigFloat
-    domain = nonnegative_reals
+    domain = Interval{BigFloat(0, Inf)
 
     if a == zero(a)
         a = a ∩ domain
@@ -119,7 +116,7 @@ end
 # Rational power
 function ^{S<:Integer}(a::Interval{BigFloat}, r::Rational{S})
     T = BigFloat
-    domain = nonnegative_reals
+    domain = Interval{T}(0, Inf)
 
     if a == zero(a)
         a = a ∩ domain
@@ -141,7 +138,7 @@ end
 # Interval power of an interval:
 function ^(a::Interval{BigFloat}, x::Interval)
     T = BigFloat
-    domain = nonnegative_reals
+    domain = Interval{T}(0, Inf)
 
     a = a ∩ domain
 
@@ -160,7 +157,7 @@ end
 
 
 function sqrt{T}(a::Interval{T})
-    domain = nonnegative_reals
+    domain = Interval{T}(0, Inf)
     a = a ∩ domain
 
     isempty(a) && return a
@@ -199,7 +196,7 @@ end
 for f in (:log, :log2, :log10, :log1p)
 
     @eval function ($f){T}(a::Interval{T})
-            domain = nonnegative_reals
+            domain = Interval{T}(0, Inf)
             a = a ∩ domain
 
             (isempty(a) || a.hi ≤ zero(T)) && return emptyinterval(a)

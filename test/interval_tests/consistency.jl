@@ -278,6 +278,9 @@ facts("Interval rounding tests") do
 end
 
 facts("Interval power of an interval") do
+
+    setprecision(Interval, Float64)
+    
     a = @interval(1, 2)
     b = @interval(3, 4)
 
