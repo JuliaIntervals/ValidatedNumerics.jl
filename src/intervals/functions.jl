@@ -21,7 +21,7 @@ function ^(a::Interval{BigFloat}, n::Integer)
     isempty(a) && return a
     n == 0 && return one(a)
     n == 1 && return a
-    n == 2 && return sqr(a)
+    # n == 2 && return sqr(a)
     n < 0 && a == zero(a) && return emptyinterval(a)
 
     T = BigFloat
@@ -56,9 +56,9 @@ function ^(a::Interval{BigFloat}, n::Integer)
             end
 
         else
-            if a.lo ≥ zero(T)
+            if a.lo ≥ 0
                 return @round(a.hi^n, a.lo^n)
-            elseif a.hi ≤ zero(T)
+            elseif a.hi ≤ 0
                 return @round(a.lo^n, a.hi^n)
             else
                 return @round(mag(a)^n, mig(a)^n)
@@ -68,15 +68,16 @@ function ^(a::Interval{BigFloat}, n::Integer)
 end
 
 function sqr{T<:Real}(a::Interval{T})
-    isempty(a) && return a
-    if a.lo ≥ zero(T)
-        return @round(a.lo^2, a.hi^2)
-
-    elseif a.hi ≤ zero(T)
-        return @round(a.hi^2, a.lo^2)
-    end
-
-    return @round(mig(a)^2, mag(a)^2)
+    return a^2
+    # isempty(a) && return a
+    # if a.lo ≥ zero(T)
+    #     return @round(a.lo^2, a.hi^2)
+    #
+    # elseif a.hi ≤ zero(T)
+    #     return @round(a.hi^2, a.lo^2)
+    # end
+    #
+    # return @round(mig(a)^2, mag(a)^2)
 end
 
 # Floating-point power of a BigFloat interval:
