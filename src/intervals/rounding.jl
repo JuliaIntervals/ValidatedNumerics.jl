@@ -46,11 +46,11 @@ end
 end
 
 macro round_down(ex1)
-    :(round(ex1, RoundDown))
+    :(round($(esc(ex1)), RoundDown))
 end
 
 macro round_up(ex1)
-    :(round(ex1, RoundUp))
+    :(round($(esc(ex1)), RoundUp))
 end
 
 
