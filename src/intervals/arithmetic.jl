@@ -159,6 +159,12 @@ if VERSION >= v"0.6.0-dev"
     const filter = Iterators.filter
 end
 
+if VERSION < v"0.5"
+    min(x) = x
+    max(x) = x
+end
+
+
 function min_ignore_nans(args...)
     min(filter(x->!isnan(x), args)...)
 end
@@ -166,6 +172,8 @@ end
 function max_ignore_nans(args...)
     max(filter(x->!isnan(x), args)...)
 end
+
+
 
 ## fma: fused multiply-add
 function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
