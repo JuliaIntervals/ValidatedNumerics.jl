@@ -85,7 +85,8 @@ for mode in (:Down, :Up)
     mode2 = Symbol("Round", mode)
 
 
-    for f in (:+, :-, :*, :/)
+    for f in (:+, :-, :*, :/,
+                :atan2)
 
         @eval begin
             function $f{T<:AbstractFloat}(a::T, b::T, $mode1)
@@ -105,7 +106,8 @@ for mode in (:Down, :Up)
     end
 
 
-    for f in (:sqrt, :inv)
+    for f in (:sqrt, :inv,
+            :tanh, :asinh, :acosh, :atanh)   # these functions not in CRlibm
         @eval begin
             function $f{T<:AbstractFloat}(a::T, $mode1)
                 setrounding(T, $mode2) do

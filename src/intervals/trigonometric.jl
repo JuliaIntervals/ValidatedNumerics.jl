@@ -27,7 +27,7 @@ end
 function sin{T}(a::Interval{T})
     isempty(a) && return a
 
-    whole_range = Interval(-one(T), one(T))
+    whole_range = Interval{T}(-1, 1)
 
     diam(a) > two_pi(T).lo && return whole_range
 
@@ -35,7 +35,7 @@ function sin{T}(a::Interval{T})
     hi_quadrant = maximum(find_quadrants(a.hi))
 
     if hi_quadrant - lo_quadrant > 4  # close to limits
-        return Interval(-one(T), one(T))
+        return whole_range
     end
 
     lo_quadrant = mod(lo_quadrant, 4)
@@ -44,23 +44,25 @@ function sin{T}(a::Interval{T})
     # Different cases depending on the two quadrants:
     if lo_quadrant == hi_quadrant
         a.hi - a.lo > pi_interval(T).lo && return whole_range  # in same quadrant but separated by almost 2pi
-        lo = Interval(sin(a.lo, RoundDown), sin(a.lo, RoundUp))
-        hi = Interval(sin(a.hi, RoundDown), sin(a.hi, RoundUp))
+        lo = @round(sin(a.lo), sin(a.lo)) # Interval(sin(a.lo, RoundDown), sin(a.lo, RoundUp))
+        hi = @round(sin(a.hi), sin(a.hi)) # Interval(sin(a.hi, RoundDown), sin(a.hi, RoundUp))
         return hull(lo, hi)
 
     elseif lo_quadrant==3 && hi_quadrant==0
-        return Interval(sin(a.lo, RoundDown), sin(a.hi, RoundUp))
+        return @round(sin(a.lo), sin(a.hi)) # Interval(sin(a.lo, RoundDown), sin(a.hi, RoundUp))
 
     elseif lo_quadrant==1 && hi_quadrant==2
-        return Interval(sin(a.hi, RoundDown), sin(a.lo, RoundUp))
+        return @round(sin(a.hi), sin(a.lo)) # Interval(sin(a.hi, RoundDown), sin(a.lo, RoundUp))
 
     elseif ( lo_quadrant == 0 || lo_quadrant==3 ) && ( hi_quadrant==1 || hi_quadrant==2 )
-        return Interval(min(sin(a.lo, RoundDown), sin(a.hi, RoundDown)), one(T))
+        return @round(min(sin(a.lo), sin(a.hi)), 1)
+        # Interval(min(sin(a.lo, RoundDown), sin(a.hi, RoundDown)), one(T))
 
     elseif ( lo_quadrant == 1 || lo_quadrant==2 ) && ( hi_quadrant==3 || hi_quadrant==0 )
-        return Interval(-one(T), max(sin(a.lo, RoundUp), sin(a.hi, RoundUp)))
+        return @round(-1, max(sin(a.lo), sin(a.hi)))
+        # Interval(-one(T), max(sin(a.lo, RoundUp), sin(a.hi, RoundUp)))
 
-    else#if( lo_quadrant == 0 && hi_quadrant==3 ) || ( lo_quadrant == 2 && hi_quadrant==1 )
+    else #if( lo_quadrant == 0 && hi_quadrant==3 ) || ( lo_quadrant == 2 && hi_quadrant==1 )
         return whole_range
     end
 end
