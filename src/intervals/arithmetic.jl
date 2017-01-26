@@ -165,9 +165,11 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
     if isentire(a)
         b == zero(b) && return c
         return entireinterval(T)
+
     elseif isentire(b)
         a == zero(a) && return c
         return entireinterval(T)
+
     end
 
     lo = setrounding(T, RoundDown) do
@@ -177,6 +179,7 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         lo4 = fma(a.hi, b.hi, c.lo)
         min(lo1, lo2, lo3, lo4)
     end
+
     hi = setrounding(T, RoundUp) do
         hi1 = fma(a.lo, b.lo, c.hi)
         hi2 = fma(a.lo, b.hi, c.hi)
@@ -184,6 +187,7 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         hi4 = fma(a.hi, b.hi, c.hi)
         max(hi1, hi2, hi3, hi4)
     end
+    
     Interval(lo, hi)
 end
 
@@ -304,7 +308,7 @@ end
 
 function diam{T<:Real}(a::Interval{T})
     isempty(a) && return convert(T, NaN)
-    @round_up(a.hi - a.lo) #cf page 64 of IEEE1788
+    @round_up(a.hi - a.lo) # cf page 64 of IEEE1788
 end
 
 # Should `radius` this yield diam(a)/2? This affects other functions!
