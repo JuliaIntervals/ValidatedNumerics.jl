@@ -81,11 +81,10 @@ function make_interval(T, expr1, expr2)
     expr1 = transform(expr1, :convert, :(Interval{$T}))
 
     if isempty(expr2)  # only one argument
-        return expr1
+        return :(Interval($expr1))
     end
 
     expr2 = transform(expr2[1], :convert, :(Interval{$T}))
 
-    # :(hull($expr1, $expr2))
     :(Interval(($expr1).lo, ($expr2).hi))
 end
