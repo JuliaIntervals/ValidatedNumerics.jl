@@ -197,7 +197,7 @@ function representation(X::IntervalBox, format=nothing)
 
     end
 
-    return String(take!(buffer))
+    @compat return String(take!(buffer))
 end
 
 
