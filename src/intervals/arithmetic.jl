@@ -155,6 +155,13 @@ end
 
 //(a::Interval, b::Interval) = a / b    # to deal with rationals
 
+function min_ignore_nans(args...)
+    @compat min(Iterators.filter(x->!isnan(x), args)...)
+end
+
+function max_ignore_nans(args...)
+    @compat max(Iterators.filter(x->!isnan(x), args)...)
+end
 
 ## fma: fused multiply-add
 function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
@@ -177,7 +184,7 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         lo2 = fma(a.lo, b.hi, c.lo)
         lo3 = fma(a.hi, b.lo, c.lo)
         lo4 = fma(a.hi, b.hi, c.lo)
-        min(lo1, lo2, lo3, lo4)
+        min_ignore_nans(lo1, lo2, lo3, lo4)
     end
 
     hi = setrounding(T, RoundUp) do
@@ -185,9 +192,9 @@ function fma{T}(a::Interval{T}, b::Interval{T}, c::Interval{T})
         hi2 = fma(a.lo, b.hi, c.hi)
         hi3 = fma(a.hi, b.lo, c.hi)
         hi4 = fma(a.hi, b.hi, c.hi)
-        max(hi1, hi2, hi3, hi4)
+        max_ignore_nans(hi1, hi2, hi3, hi4)
     end
-    
+
     Interval(lo, hi)
 end
 
