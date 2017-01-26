@@ -92,9 +92,7 @@ else
 end
 
 
-float(x::Interval) =
-    # @round(BigFloat, convert(Float64, x.lo), convert(Float64, x.hi))
-    convert(Interval{Float64}, x)
+float{T}(x::Interval{T}) = convert(Interval{float(T)}, x)  # https://github.com/dpsanders/ValidatedNumerics.jl/issues/174
 
 ## Change type of interval rounding:
 
