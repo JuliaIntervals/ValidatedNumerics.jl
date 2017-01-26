@@ -38,6 +38,7 @@ Interval{T<:Irrational}(a::T, b::T) = Interval(float(a), float(b))
 
 eltype{T<:Real}(x::Interval{T}) = T
 
+Interval(x::Interval) = x
 
 ## Include files
 include("special.jl")
