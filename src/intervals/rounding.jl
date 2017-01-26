@@ -43,7 +43,14 @@ macro round(ex1, ex2)
      :(Interval($(round(ex1, RoundDown)), $(round(ex2, RoundUp))))
     # :(Interval($(↓(ex1)), $(↑(ex2))))
     #:(Interval(↓($ex1), ↑($ex2)))
+end
 
+macro round_down(ex1)
+    :(round(ex1, RoundDown))
+end
+
+macro round_up(ex1)
+    :(round(ex1, RoundUp))
 end
 
 
