@@ -214,15 +214,15 @@ function atan2(y::Interval{BigFloat}, x::Interval{BigFloat})
         if x.lo == zero(T)
             y == zero(y) && return y
 
-            y.lo ≥ zero(T) && return @round(atan2(y.lo, x.hi), half_range_atan2(T).hi)
+            y.lo ≥ zero(T) && return @round(atan2(y.lo, x.hi), half_range_atan2(BigFloat).hi)
 
-            y.hi ≤ zero(T) && return @round(half_range_atan2(T).lo, atan2(y.hi, x.hi))
+            y.hi ≤ zero(T) && return @round(half_range_atan2(BigFloat).lo, atan2(y.hi, x.hi))
             return half_range_atan2(T)
 
         elseif x.hi == zero(T)
             y == zero(y) && return pi_interval(T)
-            y.lo ≥ zero(T) && return @round(half_pi(T).lo, atan2(y.lo, x.lo))
-            y.hi < zero(T) && return @round(atan2(y.hi, x.lo), -(half_pi(T).lo))
+            y.lo ≥ zero(T) && return @round(half_pi(BigFloat).lo, atan2(y.lo, x.lo))
+            y.hi < zero(T) && return @round(atan2(y.hi, x.lo), -(half_pi(BigFloat).lo))
             return range_atan2(T)
         else
             y.lo ≥ zero(T) &&
