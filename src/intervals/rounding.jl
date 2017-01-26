@@ -4,7 +4,10 @@ import Base.round
 
 round(ex, rounding_mode) = ex  # generic fallback
 
-function round(ex::Expr, rounding_mode)
+
+round_expr(ex, rounding_mode) = round(ex, rounding_mode)  # for numbers
+
+function round_expr(ex::Expr, rounding_mode)
 
     if ex.head == :call
 
@@ -28,29 +31,29 @@ function round(ex::Expr, rounding_mode)
 end
 
 macro ↑(ex)
-    round(ex, RoundUp)
+    round_expr(ex, RoundUp)
 end
 
 macro ↓(ex)
-    round(ex, RoundDown)
+    round_expr(ex, RoundDown)
 end
 
-↑(ex) = round(ex, RoundUp)
-↓(ex) = round(ex, RoundDown)
+↑(ex) = round_expr(ex, RoundUp)
+↓(ex) = round_expr(ex, RoundDown)
 
 
 @compat macro round(ex1, ex2)
-     :(Interval($(round(ex1, RoundDown)), $(round(ex2, RoundUp))))
+     :(Interval($(round_expr(ex1, RoundDown)), $(round_expr(ex2, RoundUp))))
     # :(Interval($(↓(ex1)), $(↑(ex2))))
     #:(Interval(↓($ex1), ↑($ex2)))
 end
 
 macro round_down(ex1)
-    :(round($(esc(ex1)), RoundDown))
+    round_expr(ex1, RoundDown)
 end
 
 macro round_up(ex1)
-    :(round($(esc(ex1)), RoundUp))
+    round_expr(ex1, RoundUp)
 end
 
 

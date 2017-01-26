@@ -183,12 +183,11 @@ for f in (:exp2, :exp10)
             end
         end
 
-    @eval ($f)(a::Interval{Float64}) = float($f(big53(a)))  # no CRlibm version
+    @eval ($f)(a::Interval{Float64}) = convert(Interval{Float64}, $f(big53(a)))  # no CRlibm version
 
     @eval function ($f)(a::Interval{BigFloat})
             isempty(a) && return a
             @round( ($f)(a.lo), ($f)(a.hi) )
-
         end
 end
 
