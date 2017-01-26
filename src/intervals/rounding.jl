@@ -1,20 +1,15 @@
 ## Optimally tight rounding by changing rounding mode:
 
-import Base.round
+round_expr(ex, rounding_mode) = ex  # generic fallback
 
-round(ex, rounding_mode) = ex  # generic fallback
-
-
-round_expr(ex, rounding_mode) = round(ex, rounding_mode)  # for numbers
-
-function round_expr(ex::Expr, rounding_mode)
+function round_expr(ex::Expr, rounding_mode::RoundingMode)
 
     if ex.head == :call
 
         op = ex.args[1]
 
         if op ∈ (:min, :max)
-            @compat mapped_args = round.(ex.args[2:end], [rounding_mode]) # only in 0.5 and 0.6; in 0.6, can remove [...] around rounding_mode
+            @compat mapped_args = round_expr.(ex.args[2:end], [rounding_mode]) # only in 0.5 and 0.6; in 0.6, can remove [...] around rounding_mode
             return :($op($(mapped_args...)))
         end
 
