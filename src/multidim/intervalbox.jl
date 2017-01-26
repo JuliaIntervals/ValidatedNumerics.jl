@@ -20,7 +20,8 @@ mid(X::IntervalBox) = [mid(x) for x in X]
 ## set operations
 
 # TODO: Update to use generator
-⊆(X::IntervalBox, Y::IntervalBox) = all([x ⊆ y for (x,y) in zip(X, Y)])
+⊆{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = all(i->(X[i] ⊆ Y[i]), 1:N)
+# all(X[i] ⊆ Y[i] for i in 1:N)  # on Julia 0.6
 
 ∩{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = IntervalBox(ntuple(i -> X[i] ∩ Y[i], Val{N}))
 ∪{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = IntervalBox(ntuple(i -> X[i] ∪ Y[i], Val{N}))
