@@ -110,7 +110,7 @@ function representation{T<:Integer}(a::Interval{Rational{T}},
     if format == nothing
         format = display_params.format  # default
     end
-    
+
     local output
 
     if format == :standard
@@ -189,5 +189,7 @@ end
 
 for T in (Interval, DecoratedInterval, IntervalBox)
     @eval show(io::IO, a::$T) = print(io, representation(a))
+    @eval show(io::IO, ::MIME"text/plain", a::$T) = print(io, representation(a))
+
     @eval showall(io::IO, a::$T) = print(io, representation(a, :full))
 end
