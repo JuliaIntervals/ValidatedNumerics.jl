@@ -155,12 +155,16 @@ end
 
 //(a::Interval, b::Interval) = a / b    # to deal with rationals
 
+if VERSION >= v"0.6.0-dev"
+    const filter = Iterators.filter
+end
+
 function min_ignore_nans(args...)
-    @compat min(Iterators.filter(x->!isnan(x), args)...)
+    min(filter(x->!isnan(x), args)...)
 end
 
 function max_ignore_nans(args...)
-    @compat max(Iterators.filter(x->!isnan(x), args)...)
+    max(filter(x->!isnan(x), args)...)
 end
 
 ## fma: fused multiply-add
