@@ -304,7 +304,7 @@ end
 
 function diam{T<:Real}(a::Interval{T})
     isempty(a) && return convert(T, NaN)
-    @setrounding(T, a.hi - a.lo, RoundUp) #cf page 64 of IEEE1788
+    @round_up(a.hi - a.lo) #cf page 64 of IEEE1788
 end
 
 # Should `radius` this yield diam(a)/2? This affects other functions!

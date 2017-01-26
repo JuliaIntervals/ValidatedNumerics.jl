@@ -11,7 +11,7 @@ function round(ex::Expr, rounding_mode)
         op = ex.args[1]
 
         if op ∈ (:min, :max)
-            mapped_args = round.(ex.args[2:end], [rounding_mode]) # only in 0.5 and 0.6; in 0.6, can remove [...] around rounding_mode
+            @compat mapped_args = round.(ex.args[2:end], [rounding_mode]) # only in 0.5 and 0.6; in 0.6, can remove [...] around rounding_mode
             return :($op($(mapped_args...)))
         end
 
@@ -39,7 +39,7 @@ end
 ↓(ex) = round(ex, RoundDown)
 
 
-macro round(ex1, ex2)
+@compat macro round(ex1, ex2)
      :(Interval($(round(ex1, RoundDown)), $(round(ex2, RoundUp))))
     # :(Interval($(↓(ex1)), $(↑(ex2))))
     #:(Interval(↓($ex1), ↑($ex2)))
