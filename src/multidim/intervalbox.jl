@@ -19,9 +19,14 @@ mid(X::IntervalBox) = [mid(x) for x in X]
 
 ## set operations
 
+# TODO: Update to use generator
 ⊆(X::IntervalBox, Y::IntervalBox) = all([x ⊆ y for (x,y) in zip(X, Y)])
 
-∩(X::IntervalBox, Y::IntervalBox) = IntervalBox([x ∩ y for (x,y) in zip(X, Y)]...)
+∩{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = IntervalBox(ntuple(i -> X[i] ∩ Y[i], Val{N}))
+∪{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = IntervalBox(ntuple(i -> X[i] ∪ Y[i], Val{N}))
+
+∪{T}(a::Interval{T}, b::Interval{T}) = hull(a, b)
+
 
 isempty(X::IntervalBox) = any(isempty, X)
 
