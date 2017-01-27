@@ -77,10 +77,12 @@ function sqr{T<:Real}(a::Interval{T})
     # return @round(mig(a)^2, mag(a)^2)
 end
 
+^(a::Interval{BigFloat}, x::AbstractFloat) = a^big(x)
+
 # Floating-point power of a BigFloat interval:
-function ^(a::Interval{BigFloat}, x::AbstractFloat)
-    T = BigFloat
-    domain = Interval{T}(0, Inf)
+function ^(a::Interval{BigFloat}, x::BigFloat)
+
+    domain = Interval{BigFloat}(0, Inf)
 
     if a == zero(a)
         a = a ∩ domain
@@ -89,7 +91,7 @@ function ^(a::Interval{BigFloat}, x::AbstractFloat)
     end
 
     isinteger(x) && return a^(round(Int, x))
-    x == one(T)/2 && return sqrt(a)
+    x == 0.5 && return sqrt(a)
 
     a = a ∩ domain
     (isempty(x) || isempty(a)) && return emptyinterval(a)
