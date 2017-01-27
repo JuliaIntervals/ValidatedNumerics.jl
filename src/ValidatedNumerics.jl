@@ -44,13 +44,11 @@ export
     RoundTiesToEven, RoundTiesToAway,
     cancelminus, cancelplus, isunbounded,
     .., @I_str, ±,
-    pow
-
-export
+    pow,
     setdisplay
 
 export
-    setindex
+    setindex   # re-export from StaticArrays for IntervalBox
 
 export RootFinding
 
