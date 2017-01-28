@@ -88,7 +88,7 @@ facts("Power tests") do
     @fact (0 < diam(y) < 1e-76) --> true
     y = x^(1/3)
     @fact (0 < diam(y) < 1e-76) --> true
-    @fact x^(1//3) --> x^(1/3)
+
 end
 
 setprecision(Interval, Float64)
