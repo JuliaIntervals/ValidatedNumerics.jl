@@ -1,56 +1,6 @@
-## Optimally tight rounding by changing rounding mode:
-
-round_expr(ex, rounding_mode) = ex  # generic fallback
-
-function round_expr(ex::Expr, rounding_mode::RoundingMode)
-
-    if ex.head == :call
-
-        op = ex.args[1]
-
-        if op ∈ (:min, :max)
-            @compat mapped_args = round_expr.(ex.args[2:end], [rounding_mode]) # only in 0.5 and 0.6; in 0.6, can remove [...] around rounding_mode
-            return :($op($(mapped_args...)))
-        end
-
-
-        if length(ex.args) == 3  # binary operator
-            return :( $op( $(esc(ex.args[2])), $(esc(ex.args[3])), $rounding_mode) )
-
-        else  # unary operator
-            return :( $op($(esc(ex.args[2])), $rounding_mode ) )
-        end
-    else
-        return ex
-    end
-end
-
-macro ↑(ex)
-    round_expr(ex, RoundUp)
-end
-
-macro ↓(ex)
-    round_expr(ex, RoundDown)
-end
-
-↑(ex) = round_expr(ex, RoundUp)
-↓(ex) = round_expr(ex, RoundDown)
-
-
-@compat macro round(ex1, ex2)
-     :(Interval($(round_expr(ex1, RoundDown)), $(round_expr(ex2, RoundUp))))
-    # :(Interval($(↓(ex1)), $(↑(ex2))))
-    #:(Interval(↓($ex1), ↑($ex2)))
-end
-
-macro round_down(ex1)
-    round_expr(ex1, RoundDown)
-end
-
-macro round_up(ex1)
-    round_expr(ex1, RoundUp)
-end
-
+# Define rounded versions of elementary functions
+# E.g.  +(a, b, RoundDown)
+# Some, like sin(a, RoundDown)  are already defined in CRlibm
 
 
 import Base: +, -, *, /, sin, sqrt, inv, ^, zero, convert, parse
@@ -62,7 +12,7 @@ import Base: +, -, *, /, sin, sqrt, inv, ^, zero, convert, parse
 zero{T<:AbstractFloat}(a::Interval{T}, ::RoundingMode) = zero(T)
 zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
 
-convert(::Type{BigFloat}, x, rounding_mode) = setrounding(BigFloat, rounding_mode) do
+convert(::Type{BigFloat}, x, rounding_mode::RoundingMode) = setrounding(BigFloat, rounding_mode) do
     convert(BigFloat, x)
 end
 
@@ -123,23 +73,3 @@ for mode in (:Down, :Up)
     end
 
 end
-
-
-## Fast, but *not* maximally tight rounding: just use prevfloat and nextfloat:
-
-#=
-function +{T}(a::T, b::T, ::RoundingMode{:Down})
-    prevfloat(a + b)
-end
-
-function +{T}(a::T, b::T, ::RoundingMode{:Up})
-    nextfloat(a + b)
-end
-=#
-
-
-# function sin(a, ::RoundingMode{:Down})
-#     prevfloat(sin(a))
-# end
-
-## Alternative: Fix rounding, e.g. down
