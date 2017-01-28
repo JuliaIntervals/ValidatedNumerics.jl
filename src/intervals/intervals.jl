@@ -44,6 +44,7 @@ Interval(x::Complex) = Interval(real(x)) + im*Interval(imag(x))
 ## Include files
 include("special.jl")
 include("macros.jl")
+include("rounding_macros.jl")
 include("rounding.jl")
 include("conversion.jl")
 include("precision.jl")
