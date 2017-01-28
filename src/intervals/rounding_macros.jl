@@ -49,3 +49,11 @@ The user-facing equivalent is `@interval`, which can handle much more general ca
 @compat macro round(ex1, ex2)
      :(Interval($(round_expr(ex1, RoundDown)), $(round_expr(ex2, RoundUp))))
 end
+
+@compat macro round_down(ex1)
+     round_expr(ex1, RoundDown)
+end
+
+@compat macro round_up(ex1)
+     round_expr(ex1, RoundUp)
+end
