@@ -69,6 +69,8 @@ all of `a` and `b`.
 """
 hull{T}(a::Interval{T}, b::Interval{T}) = Interval{T}(min(a.lo, b.lo), max(a.hi, b.hi))
 
+hull(a, b) = hull(promote(a, b)...)
+
 """
     union(a, b)
     ∪(a,b)

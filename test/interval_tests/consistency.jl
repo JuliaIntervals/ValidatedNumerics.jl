@@ -125,6 +125,11 @@ facts("Intersection tests") do
     @fact union(a,b) --> Interval(a.lo, b.hi)
 end
 
+facts("Hull tests") do
+    @fact hull(1..2, 3..4) --> Interval(1, 4)
+    @fact hull(Interval(1//3, 3//4), Interval(3, 4)) --> @interval(1/3, 4)
+end
+
 facts("Special interval tests") do
 
     @fact entireinterval(Float64) --> Interval(-Inf, Inf)
@@ -280,7 +285,7 @@ end
 facts("Interval power of an interval") do
 
     setprecision(Interval, Float64)
-    
+
     a = @interval(1, 2)
     b = @interval(3, 4)
 
