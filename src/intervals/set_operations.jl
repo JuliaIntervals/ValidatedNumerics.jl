@@ -80,7 +80,7 @@ to `hull(a,b)`.
 """
 union{T}(a::Interval{T}, b::Interval{T}) = hull(a, b)
 
-
+union(a, b) = union(promote(a, b)...)
 
 
 doc"""
