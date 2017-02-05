@@ -71,6 +71,26 @@ export
     com, dac, def, trv, ill
 
 
+function get_rounding_mode()
+    if !haskey(ENV, "VN_ROUNDING")
+        return :correct
+    else
+        mode_string = ENV["VN_ROUNDING"]
+
+        if mode_string == "CORRECT"
+            return :correct
+
+        elseif mode_string == "FAST"
+            return :fast
+
+        elseif mode_string == "NONE"
+            return :none
+
+        else
+            warn("Rounding mode $mode_string node defined. Falling back to `:correct`")
+        end
+    end
+end
 
 
 function __init__()
@@ -81,7 +101,9 @@ function __init__()
     setprecision(Interval, Float64)
 
     # CRlibm.setup()
-    setup_rounded_functions(:none)
+
+    rounding_mode = get_rounding_mode()
+    setup_rounded_functions(rounding_mode)
 end
 
 

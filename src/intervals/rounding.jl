@@ -7,8 +7,9 @@
 # - :fast     # fast rounding by prevfloat and nextfloat  (slightly wider than needed)
 # - :none     # no rounding at all for speed
 
+
 function setup_rounded_functions(ROUNDING)
-    
+
     if ROUNDING ∉ (:correct, :fast, :none)
         throw(ArgumentError("ROUNDING must be one of `:correct`, `:fast`, `:none`"))
     end
@@ -91,11 +92,11 @@ function setup_rounded_functions(ROUNDING)
         elseif ROUNDING == :fast
 
             @eval begin
-                function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Down})
+                function ^{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Down})
                     prevfloat(a^b)
                 end
 
-                function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Up})
+                function ^{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Up})
                     nextfloat(a^b)
                 end
             end
