@@ -92,18 +92,18 @@ function setup_rounded_functions(ROUNDING)
         elseif ROUNDING == :fast
 
             @eval begin
-                function ^{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Down})
+                function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Down})
                     prevfloat(a^b)
                 end
 
-                function ^{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Up})
+                function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Up})
                     nextfloat(a^b)
                 end
             end
 
         elseif ROUNDING == :none
 
-            @eval ^{T<:AbstractFloat}(a::T, b::T, $mode1) = a^b
+            @eval ^{T<:AbstractFloat,S}(a::T, b::S, $mode1) = a^b
 
         end
 
