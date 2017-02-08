@@ -26,8 +26,7 @@ import Base:
     precision,
     isfinite, isnan,
     show, showall,
-    isinteger, setdiff,
-    parse
+    isinteger, setdiff
 
 export
     Interval, AbstractInterval,
@@ -79,8 +78,6 @@ function __init__()
 
     setprecision(Interval, 256)  # set up pi
     setprecision(Interval, Float64)
-
-    CRlibm.setup()
 end
 
 
