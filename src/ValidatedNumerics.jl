@@ -26,7 +26,8 @@ import Base:
     precision,
     isfinite, isnan,
     show, showall,
-    isinteger, setdiff
+    isinteger, setdiff,
+    parse
 
 export
     Interval, AbstractInterval,
@@ -45,6 +46,9 @@ export
 
 export
     displaymode
+
+export
+    setindex
 
 export RootFinding
 
