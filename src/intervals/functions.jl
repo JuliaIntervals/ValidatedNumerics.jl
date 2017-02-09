@@ -168,6 +168,29 @@ function sqrt{T}(a::Interval{T})
 end
 
 
+function pow{T}(x::Interval{T}, n::Integer)  # fast integer power
+
+    isempty(x) && return x
+
+    if iseven(n) && zero(T) ∈ x
+
+        return hull(zero(x),
+                    hull(Base.power_by_squaring(Interval(mig(x)), n),
+                        Base.power_by_squaring(Interval(mag(x)), n))
+            )
+
+    else
+
+      return hull( Base.power_by_squaring(Interval(x.lo), n),
+                    Base.power_by_squaring(Interval(x.hi), n) )
+
+    end
+
+end
+
+
+
+
 for f in (:exp, :expm1)
     @eval begin
         function ($f){T}(a::Interval{T})
