@@ -2,6 +2,7 @@ using FactCheck
 using ValidatedNumerics
 
 facts("Operations on boxes") do
+    setprecision(Interval, Float64)
     A = IntervalBox(1..2, 3..4)
     B = IntervalBox(0..2, 3..6)
 
