@@ -321,11 +321,11 @@ function diam{T<:Real}(a::Interval{T})
     @round_up(a.hi - a.lo) # cf page 64 of IEEE1788
 end
 
-# Should `radius` this yield diam(a)/2? This affects other functions!
+# Should `radius` yield diam(a)/2? This affects other functions!
 function radius(a::Interval)
     isempty(a) && return convert(eltype(a), NaN)
     m = mid(a)
-    max(m - a.lo, a.hi - m)
+    max_ignore_nans(m - a.lo, a.hi - m)
 end
 
 # cancelplus and cancelminus
