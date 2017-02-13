@@ -298,3 +298,16 @@ c = @interval(0.25, 4.0)
     end
 
 end
+
+facts("Integer, odd, even") do
+    @fact isinteger(1..1) --> true
+    @fact !isinteger(1..2) --> true
+    @fact !isinteger(-1.5.. -1.5) --> true
+
+    @fact iseven(2..2) --> true
+    @fact !iseven(2..3) --> true
+    @fact !iseven(3..3) --> true
+    @fact isodd(3..3) --> true
+    @fact !isodd(16..16) --> true
+
+end
