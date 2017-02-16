@@ -25,6 +25,6 @@ include("root_finding_tests/root_finding.jl")
 
 include("ITF1788_tests/ITF1788_tests.jl")
 
-FactCheck.exitstatus()
+# FactCheck.exitstatus()
 
 #end
