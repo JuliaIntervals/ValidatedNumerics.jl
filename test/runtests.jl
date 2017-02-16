@@ -5,7 +5,6 @@ else
     const Test = BaseTestNext
 end
 using ValidatedNumerics
-using Compat
 
 
 # Interval tests:

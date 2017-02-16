@@ -109,18 +109,13 @@ end
 
 
 
-f(x) = x^2 - 2
-
-roots = newton(f, @interval(10, 11))
-
-@testset  begin
-    @test length(roots) == 0
-end
-
 setprecision(Interval, Float64)
 
 @testset "find_roots tests" begin
     f(x) = x^2 - 2
+
+    roots = newton(f, @interval(10, 11))
+    @test length(roots) == 0
 
 
     roots = find_roots_midpoint(f, -5, 5)
@@ -140,7 +135,6 @@ setprecision(Interval, Float64)
             @test root1 ⊆ root2
         end
     end
-
 end
 
 @testset "Multiple roots" begin
