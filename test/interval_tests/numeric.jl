@@ -1,6 +1,11 @@
 # This file is part of the ValidatedNumerics.jl package; MIT licensed
 
-using Base.Test
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 using ValidatedNumerics
 
 setprecision(Interval, Float64)
@@ -94,30 +99,29 @@ end
 
 setprecision(Interval, Float64)
 
-# TODO: Uncomment these tests
-# @testset "Exp and log tests" begin
-#     @test exp(@biginterval(1//2)) ⊆ exp(@interval(1//2))
-#     @test exp(@interval(1//2)) == Interval(1.648721270700128, 1.6487212707001282)
-#     @test exp(@biginterval(0.1)) ⊆ exp(@interval(0.1))
-#     @test exp(@interval(0.1)) == Interval(1.1051709180756475e+00, 1.1051709180756477e+00)
-#     @test diam(exp(@interval(0.1))) == eps(exp(0.1))
-#
-#     @test log(@biginterval(1//2)) ⊆ log(@interval(1//2))
-#     @test log(@interval(1//2)) == Interval(-6.931471805599454e-01, -6.9314718055994529e-01)
-#     @test log(@biginterval(0.1)) ⊆ log(@interval(0.1))
-#     @test log(@interval(0.1)) == Interval(-2.3025850929940459e+00, -2.3025850929940455e+00)
-#     @test diam(log(@interval(0.1))) == eps(log(0.1))
-#
-#     @test exp2(@biginterval(1//2)) ⊆ exp2(@interval(1//2))
-#     @test exp2(Interval(1024.0)) == Interval(1.7976931348623157e308, Inf)
-#     @test exp10(@biginterval(1//2)) ⊆ exp10(@interval(1//2))
-#     @test exp10(Interval(308.5)) == Interval(1.7976931348623157e308, Inf)
-#
-#     @test log2(@biginterval(1//2)) ⊆ log2(@interval(1//2))
-#     @test log2(@interval(0.25, 0.5)) == Interval(-2.0, -1.0)
-#     @test log10(@biginterval(1//10)) ⊆ log10(@interval(1//10))
-#     @test log10(@interval(0.01, 0.1)) == @interval(log10(0.01), log10(0.1))
-# end
+@testset "Exp and log tests" begin
+    @test exp(@biginterval(1//2)) ⊆ exp(@interval(1//2))
+    @test exp(@interval(1//2)) == Interval(1.648721270700128, 1.6487212707001282)
+    @test exp(@biginterval(0.1)) ⊆ exp(@interval(0.1))
+    @test exp(@interval(0.1)) == Interval(1.1051709180756475e+00, 1.1051709180756477e+00)
+    @test diam(exp(@interval(0.1))) == eps(exp(0.1))
+
+    @test log(@biginterval(1//2)) ⊆ log(@interval(1//2))
+    @test log(@interval(1//2)) == Interval(-6.931471805599454e-01, -6.9314718055994529e-01)
+    @test log(@biginterval(0.1)) ⊆ log(@interval(0.1))
+    @test log(@interval(0.1)) == Interval(-2.3025850929940459e+00, -2.3025850929940455e+00)
+    @test diam(log(@interval(0.1))) == eps(log(0.1))
+
+    @test exp2(@biginterval(1//2)) ⊆ exp2(@interval(1//2))
+    @test exp2(Interval(1024.0)) == Interval(1.7976931348623157e308, Inf)
+    @test exp10(@biginterval(1//2)) ⊆ exp10(@interval(1//2))
+    @test exp10(Interval(308.5)) == Interval(1.7976931348623157e308, Inf)
+
+    @test log2(@biginterval(1//2)) ⊆ log2(@interval(1//2))
+    @test log2(@interval(0.25, 0.5)) == Interval(-2.0, -1.0)
+    @test log10(@biginterval(1//10)) ⊆ log10(@interval(1//10))
+    @test log10(@interval(0.01, 0.1)) == @interval(log10(0.01), log10(0.1))
+end
 
 @testset "Comparison tests" begin
     d = @interval(0.1, 2)

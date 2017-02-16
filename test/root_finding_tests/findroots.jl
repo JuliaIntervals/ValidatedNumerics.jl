@@ -1,4 +1,9 @@
-using Base.Test
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 using ValidatedNumerics, ValidatedNumerics.RootFinding
 using ForwardDiff
 
@@ -42,13 +47,12 @@ three_halves_pi = 3*big_pi/2
 
 # Format:  (function, derivative, lower_bound, upper_bound, [true_roots])
 function_list = [
-                    # TOD: Uncomment the commented lines
-                    # (sin, cos,    -5,  5,    [ -big_pi, @interval(0), big_pi ] ) ,
-                    # (cos, x->D(cos, x), -7.5, 7.5, [ -three_halves_pi, -half_pi, half_pi, three_halves_pi ] ),
+                    (sin, cos,    -5,  5,    [ -big_pi, @interval(0), big_pi ] ) ,
+                    (cos, x->D(cos, x), -7.5, 7.5, [ -three_halves_pi, -half_pi, half_pi, three_halves_pi ] ),
                     (W₃, x->D(W₃, x),   -10, 10,   [ @interval(1), @interval(2), @interval(3) ] ),
                     (W₇, x->D(W₇, x),   -10, 10,   [ @interval(i) for i in 1:7 ] ),
-                    # (x->exp(x)-2, y->D(x->exp(x),y),  -20, 20,  [log(@biginterval(2))] ),
-                    # (x->asin(sin(x)) - 0.1, y->D(x->asin(sin(x)),y), 0, 1, [@biginterval(0.1)])
+                    (x->exp(x)-2, y->D(x->exp(x),y),  -20, 20,  [log(@biginterval(2))] ),
+                    (x->asin(sin(x)) - 0.1, y->D(x->asin(sin(x)),y), 0, 1, [@biginterval(0.1)])
                 ]
 
 
@@ -139,21 +143,20 @@ setprecision(Interval, Float64)
 
 end
 
-# TODO: Uncomment these tests
-# @testset "Multiple roots" begin
-#     setprecision(Interval, Float64)
-#     let
-#         f(x) = (x-1) * (x^2 - 2)^3 * (x^3 - 2)^4
-#
-#         roots = newton(f, -5..5.1, maxlevel=1000)
-#
-#         @test length(roots) == 4
-#         @test roots[1].status == :unknown
-#         @test roots[1].interval == Interval(-1.4142135623730954, -1.414213562373095)
-#         @test roots[3].interval == Interval(1.259921049894873, 1.2599210498948734)
-#
-#     end
-# end
+@testset "Multiple roots" begin
+    setprecision(Interval, Float64)
+    let
+        f(x) = (x-1) * (x^2 - 2)^3 * (x^3 - 2)^4
+
+        roots = newton(f, -5..5.1, maxlevel=1000)
+
+        @test length(roots) == 4
+        @test roots[1].status == :unknown
+        @test roots[1].interval == Interval(-1.4142135623730954, -1.414213562373095)
+        @test roots[3].interval == Interval(1.259921049894873, 1.2599210498948734)
+
+    end
+end
 
 
 

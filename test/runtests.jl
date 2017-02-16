@@ -1,6 +1,9 @@
-#module ValidatedNumericsTests
-
-using Base.Test
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 using ValidatedNumerics
 using Compat
 
@@ -24,7 +27,3 @@ include("root_finding_tests/root_finding.jl")
 # ITF1788 tests
 
 include("ITF1788_tests/ITF1788_tests.jl")
-
-# FactCheck.exitstatus()
-
-#end

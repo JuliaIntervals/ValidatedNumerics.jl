@@ -1,4 +1,9 @@
-using Base.Test
+if VERSION >= v"0.5.0-dev+7720"
+    using Base.Test
+else
+    using BaseTestNext
+    const Test = BaseTestNext
+end
 using ValidatedNumerics
 
 
@@ -17,7 +22,7 @@ b =
 
 @testset "Linear algebra with intervals tests" begin
 
-    @test A * b == 
+    @test A * b ==
         [
             @interval(-12, 12),
             @interval(-12, 12)
@@ -25,7 +30,7 @@ b =
 
     # Example from Moore et al., Introduction to Interval Analysis (2009), pg. 88:
 
-    @test A \ b == 
+    @test A \ b ==
         [
             @interval(-5, 5),
             @interval(-4, 4)
