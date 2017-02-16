@@ -1,12 +1,13 @@
 using ValidatedNumerics
-using FactCheck
+using Base.Test
 
-facts("Complex interval operations") do
+@testset "Complex interval operations" begin
     a = @interval 1im
-    @fact a -->  Interval(0) + Interval(1)*im
-    @fact a * a --> Interval(-1)
-    @fact a + a --> Interval(2)*im
-    @fact a - a --> 0
-    @fact a / a --> 1
-    @fact a^2 --> -1
+    @inferred a == Complex{ValidatedNumerics.Interval{Float64}}
+    @test a ==  Interval(0) + Interval(1)*im
+    @test a * a == Interval(-1)
+    @test a + a == Interval(2)*im
+    @test a - a == 0
+    @test a / a == 1
+    @test a^2 == -1
 end

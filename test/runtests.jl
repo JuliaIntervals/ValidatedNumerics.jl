@@ -1,12 +1,9 @@
 #module ValidatedNumericsTests
 
+using Base.Test
 using ValidatedNumerics
-using FactCheck
 using Compat
 
-
-FactCheck.roughly(a::Interval) = b -> (dist(a, b) < 2*max(eps(a), eps(b)))
-roughly = FactCheck.roughly
 
 # Interval tests:
 
