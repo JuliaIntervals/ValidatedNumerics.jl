@@ -65,7 +65,7 @@ setprecision(Interval, Float64)
 
     @testset "Interval{Rational{T}}" begin
         a = Interval(1//3, 5//4)
-        @inferred a == Interval{Rational{Int}}
+        @test typeof(a)== Interval{Rational{Int}}
         displaymode(format=:standard)
         @test string(a) == "[1//3, 5//4]"
 
@@ -78,7 +78,7 @@ setprecision(Interval, Float64)
 
     @testset "DecoratedInterval" begin
         a = @decorated(1, 2)
-        @inferred a == DecoratedInterval{Float64}
+        @test typeof(a)== DecoratedInterval{Float64}
 
         displaymode(format=:standard, decorations=false)
 
@@ -96,7 +96,7 @@ setprecision(Interval, Float64)
         displaymode(format=:standard, decorations=false)
 
         a = @interval big(1)
-        @inferred a == Interval{BigFloat}
+        @test typeof(a)== Interval{BigFloat}
         @test string(a) == "[1, 1]₁₂₈"
 
         displaymode(format=:full)
@@ -104,7 +104,7 @@ setprecision(Interval, Float64)
 
 
         a = DecoratedInterval(big(2), big(3), com)
-        @inferred a == DecoratedInterval{BigFloat}
+        @test typeof(a)== DecoratedInterval{BigFloat}
 
         displaymode(format=:standard, decorations=false)
         @test string(a) == "[2, 3]₁₂₈"
@@ -124,7 +124,7 @@ setprecision(Interval, Float64)
         displaymode(format=:standard, sigfigs=6)
 
         X = IntervalBox(1..2, 3..4)
-        @inferred X == IntervalBox{2,Float64}
+        @test typeof(X) == IntervalBox{2,Float64}
         @test string(X) == "[1, 2] × [3, 4]"
 
         X = IntervalBox(1.1..1.2, 2.1..2.2)

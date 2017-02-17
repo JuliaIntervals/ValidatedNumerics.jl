@@ -165,7 +165,7 @@ end
 
 @testset "Big intervals" begin
     a = @floatinterval(3)
-    @inferred a == Interval{Float64}
+    @test typeof(a)== Interval{Float64}
     @test typeof(big(a)) == Interval{BigFloat}
 
     @test @floatinterval(123412341234123412341241234) == Interval(1.234123412341234e26, 1.2341234123412342e26)
@@ -180,7 +180,7 @@ end
 
 @testset "Complex intervals" begin
     a = @floatinterval(3 + 4im)
-    @inferred a == Complex{Interval{Float64}}
+    @test typeof(a)== Complex{Interval{Float64}}
     @test a == Interval(3) + im*Interval(4)
 
     # TODO; Uncomment these tests
