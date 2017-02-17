@@ -111,3 +111,5 @@ end
     @test pi2 == pi3
 
 end
+
+setprecision(Interval, Float64)
