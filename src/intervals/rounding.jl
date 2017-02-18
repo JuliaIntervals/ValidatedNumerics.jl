@@ -67,11 +67,18 @@ for mode in (:Down, :Up) #, T in (:Float64)
 
     mode2 = Symbol("Round", mode)
 
+    if mode == :Down
+        directed = :prevfloat
+    else
+        directed = :nextfloat
+    end
+
 
     # arithmetic:
     for f in (:+, :-, :*, :/, :atan2)
 
         @static if ROUNDING == :correct
+
             @eval function $f{T<:AbstractFloat}(a::T, b::T, $mode1)
                     setrounding(T, $mode2) do
                         $f(a, b)
@@ -79,17 +86,11 @@ for mode in (:Down, :Up) #, T in (:Float64)
                   end
 
         elseif ROUNDING == :fast
-            @eval begin
-                function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Down})
-                    prevfloat($f(a, b))
-                end
 
-                function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Up})
-                    nextfloat($f(a, b))
-                end
-            end
+            @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $directed($f(a, b))
 
         elseif ROUNDING == :none
+
             @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $f(a, b)  # no rounding
 
         end
@@ -107,15 +108,7 @@ for mode in (:Down, :Up) #, T in (:Float64)
 
     elseif ROUNDING == :fast
 
-        @eval begin
-            function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Down})
-                prevfloat(a^b)
-            end
-
-            function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Up})
-                nextfloat(a^b)
-            end
-        end
+        @eval ^{T<:AbstractFloat,S}(a::T, b::S, $mode1) = $directed(a^b)
 
     elseif ROUNDING == :none
 
@@ -136,15 +129,8 @@ for mode in (:Down, :Up) #, T in (:Float64)
                   end
 
         elseif ROUNDING == :fast
-            @eval begin
-                      function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Down})
-                          prevfloat($f(a))
-                      end
 
-                      function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Up})
-                          nextfloat($f(a))
-                      end
-                  end
+            @eval $f{T<:AbstractFloat}(a::T, $mode1) = $directed($f(a))
 
         elseif ROUNDING == :none
 
