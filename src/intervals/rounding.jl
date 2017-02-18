@@ -8,163 +8,185 @@
 # - :none     # no rounding at all for speed
 
 
-function setup_rounded_functions(ROUNDING)
+doc"""Choose rounding mode based on environment variable"""
 
-    if ROUNDING ∉ (:correct, :fast, :none)
-        throw(ArgumentError("ROUNDING must be one of `:correct`, `:fast`, `:none`"))
-    end
+function setup_rounding_mode()
+    if haskey(ENV, "VN_ROUNDING")
+        rounding_mode = Symbol(ENV["VN_ROUNDING"])
 
-    @eval begin
-        # unary minus:
-        -{T<:AbstractFloat}(a::T, ::RoundingMode) = -a  # ignore rounding
-
-        # zero:
-        zero{T<:AbstractFloat}(a::Interval{T}, ::RoundingMode) = zero(T)
-        zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
-
-        convert(::Type{BigFloat}, x, rounding_mode::RoundingMode) = setrounding(BigFloat, rounding_mode) do
-            convert(BigFloat, x)
+        if rounding_mode ∉ (:correct, :fast, :none)
+            throw(ArgumentError("""VN_ROUNDING must be one of `"correct"`, `"fast"`, `"none"`"""))
         end
 
-        parse{T}(::Type{T}, x, rounding_mode::RoundingMode) = setrounding(T, rounding_mode) do
-            parse(T, x)
-        end
-
-
-        sqrt{T<:Rational}(a::T, rounding_mode::RoundingMode) = setrounding(float(T), rounding_mode) do
-            sqrt(float(a))
-        end
+    else
+        rounding_mode = :correct
 
     end
 
-    # no-ops for rational rounding:
-    for f in (:+, :-, :*, :/)
-        @eval $f{T<:Rational}(a::T, b::T, ::RoundingMode) = $f(a, b)
+    global const ROUNDING = rounding_mode
+end
+
+setup_rounding_mode()
+
+# CRlibm.setup()
+
+@eval begin
+    # unary minus:
+    -{T<:AbstractFloat}(a::T, ::RoundingMode) = -a  # ignore rounding
+
+    # zero:
+    zero{T<:AbstractFloat}(a::Interval{T}, ::RoundingMode) = zero(T)
+    zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
+
+    convert(::Type{BigFloat}, x, rounding_mode::RoundingMode) = setrounding(BigFloat, rounding_mode) do
+        convert(BigFloat, x)
+    end
+
+    parse{T}(::Type{T}, x, rounding_mode::RoundingMode) = setrounding(T, rounding_mode) do
+        parse(T, x)
     end
 
 
+    sqrt{T<:Rational}(a::T, rounding_mode::RoundingMode) = setrounding(float(T), rounding_mode) do
+        sqrt(float(a))
+    end
 
-    for mode in (:Down, :Up) #, T in (:Float64)
+end
 
-        mode1 = Expr(:quote, mode)
-        mode1 = :(::RoundingMode{$mode1})
+# no-ops for rational rounding:
+for f in (:+, :-, :*, :/)
+    @eval $f{T<:Rational}(a::T, b::T, ::RoundingMode) = $f(a, b)
+end
 
-        mode2 = Symbol("Round", mode)
 
 
-        # arithmetic:
-        for f in (:+, :-, :*, :/, :atan2)
+for mode in (:Down, :Up) #, T in (:Float64)
 
-            if ROUNDING == :correct
-                @eval function $f{T<:AbstractFloat}(a::T, b::T, $mode1)
-                        setrounding(T, $mode2) do
-                            $f(a, b)
-                        end
-                      end
+    mode1 = Expr(:quote, mode)
+    mode1 = :(::RoundingMode{$mode1})
 
-            elseif ROUNDING == :fast
-                @eval begin
-                    function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Down})
-                        prevfloat($f(a, b))
+    mode2 = Symbol("Round", mode)
+
+
+    # arithmetic:
+    for f in (:+, :-, :*, :/, :atan2)
+
+        @static if ROUNDING == :correct
+            @eval function $f{T<:AbstractFloat}(a::T, b::T, $mode1)
+                    setrounding(T, $mode2) do
+                        $f(a, b)
                     end
-
-                    function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Up})
-                        nextfloat($f(a, b))
-                    end
-                end
-
-            elseif ROUNDING == :none
-                @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $f(a, b)  # no rounding
-
-            end
-        end
-
-
-        # power:
-        if ROUNDING == :correct
-
-            @eval function ^{T<:AbstractFloat,S}(a::T, b::S, $mode1)
-                      setrounding(T, $mode2) do
-                          ^(a, b)
-                      end
                   end
 
         elseif ROUNDING == :fast
-
             @eval begin
-                function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Down})
-                    prevfloat(a^b)
+                function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Down})
+                    prevfloat($f(a, b))
                 end
 
-                function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Up})
-                    nextfloat(a^b)
+                function $f{T<:AbstractFloat}(a::T, b::T, ::RoundingMode{:Up})
+                    nextfloat($f(a, b))
                 end
             end
 
         elseif ROUNDING == :none
+            @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $f(a, b)  # no rounding
 
-            @eval ^{T<:AbstractFloat,S}(a::T, b::S, $mode1) = a^b
+        end
+    end
+
+
+    # power:
+    @static if ROUNDING == :correct
+
+        @eval function ^{T<:AbstractFloat,S}(a::T, b::S, $mode1)
+                  setrounding(T, $mode2) do
+                      ^(a, b)
+                  end
+              end
+
+    elseif ROUNDING == :fast
+
+        @eval begin
+            function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Down})
+                prevfloat(a^b)
+            end
+
+            function ^{T<:AbstractFloat,S}(a::T, b::S, ::RoundingMode{:Up})
+                nextfloat(a^b)
+            end
+        end
+
+    elseif ROUNDING == :none
+
+        @eval ^{T<:AbstractFloat,S}(a::T, b::S, $mode1) = a^b
+
+    end
+
+
+    # non-CRlibm
+    for f in (:sqrt, :inv,
+            :tanh, :asinh, :acosh, :atanh)   # these functions not in CRlibm
+
+        @static if ROUNDING == :correct
+            @eval function $f{T<:AbstractFloat}(a::T, $mode1)
+                      setrounding(T, $mode2) do
+                          $f(a)
+                      end
+                  end
+
+        elseif ROUNDING == :fast
+            @eval begin
+                      function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Down})
+                          prevfloat($f(a))
+                      end
+
+                      function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Up})
+                          nextfloat($f(a))
+                      end
+                  end
+
+        elseif ROUNDING == :none
+
+            @eval $f{T<:AbstractFloat}(a::T, ::RoundingMode) = $f(a)
 
         end
 
+    end
+end
 
-        # non-CRlibm
-        for f in (:sqrt, :inv,
-                :tanh, :asinh, :acosh, :atanh)   # these functions not in CRlibm
+# Functions defined in CRlibm
 
-            if ROUNDING == :correct
-                @eval function $f{T<:AbstractFloat}(a::T, $mode1)
-                          setrounding(T, $mode2) do
-                              $f(a)
-                          end
-                      end
+@static if ROUNDING == :correct
+    CRlibm.setup()
 
-            elseif ROUNDING == :fast
-                @eval begin
-                          function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Down})
-                              prevfloat($f(a))
-                          end
+else
 
-                          function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Up})
-                              nextfloat($f(a))
-                          end
-                      end
+    for f in CRlibm.functions
 
-            elseif ROUNDING == :none
+        @static if ROUNDING == :fast
 
-                @eval $f{T<:AbstractFloat}(a::T, ::RoundingMode) = $f(a)
+            @eval begin
 
+                # the Float64 definitions are necessary to overwrite the CRlibm ones
+                $f(a::Float64, ::RoundingMode{:Down}) = prevfloat($f(a))
+                $f(a::Float64, ::RoundingMode{:Up}) = nextfloat($f(a))
+
+                $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Down}) = prevfloat($f(a))
+                $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Up}) = nextfloat($f(a))
+
+            end
+
+        elseif ROUNDING == :none
+
+            @eval begin
+                $f(a::Float64, ::RoundingMode{:Down}) = $f(a)
+                $f(a::Float64, ::RoundingMode{:Up}) = $f(a)
+
+                $f{T<:AbstractFloat}(a::T, ::RoundingMode) = $f(a)
             end
 
         end
     end
 
-    # Functions defined in CRlibm
-    if ROUNDING == :correct
-        CRlibm.setup()
-
-    else
-
-        for f in CRlibm.functions
-
-            if ROUNDING == :fast
-
-                @eval begin
-                    function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Down})
-                        prevfloat($f(a))
-                    end
-
-                    function $f{T<:AbstractFloat}(a::T, ::RoundingMode{:Up})
-                        nextfloat($f(a))
-                    end
-                end
-
-            elseif ROUNDING == :none
-
-                @eval $f{T<:AbstractFloat}(a::T, ::RoundingMode) = $f(a)
-
-            end
-        end
-
-    end
 end

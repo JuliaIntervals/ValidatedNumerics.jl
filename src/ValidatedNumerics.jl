@@ -102,8 +102,6 @@ function __init__()
 
     # CRlibm.setup()
 
-    rounding_mode = get_rounding_mode()
-    setup_rounded_functions(rounding_mode)
 end
 
 
