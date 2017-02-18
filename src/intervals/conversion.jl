@@ -93,3 +93,10 @@ convert{T<:Integer, S<:Float64}(::Type{Interval{Rational{T}}}, x::S) =
 
 convert{T<:Integer, S<:BigFloat}(::Type{Interval{Rational{T}}}, x::S) =
     Interval(rationalize(T, x))
+
+
+function convert(::Type{Interval}, x::Real)
+    T = typeof(float(x))
+
+    return convert(Interval{T}, x)
+end
