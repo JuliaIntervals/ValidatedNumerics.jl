@@ -158,7 +158,7 @@ end
 # Functions defined in CRlibm
 
 @static if ROUNDING == :correct
-    CRlibm.setup()
+    # CRlibm.setup()
 
 else
 
