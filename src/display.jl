@@ -23,8 +23,13 @@ The following options are available:
 - `sigfigs`: number of significant figures to show in `standard` mode
 
 - `decorations` (boolean):  show decorations or not
+
+Example:
+```
+julia> displaymode(:full, decorations=true)
+```
 """
-function displaymode(;decorations=nothing, format=nothing, sigfigs=-1)
+function displaymode(format=nothing; decorations=nothing, sigfigs::Integer=-1)
     if format != nothing
 
         if format in display_options
@@ -36,7 +41,13 @@ function displaymode(;decorations=nothing, format=nothing, sigfigs=-1)
     end
 
     if decorations != nothing
-        display_params.decorations = decorations
+
+        if decorations ∈ (true, false)
+            display_params.decorations = decorations
+
+        else
+            throw(ArgumentError("`decorations` must be `true` or `false`"))
+        end
     end
 
     if sigfigs >= 0
@@ -66,7 +77,7 @@ end
 round_string(x::Real, digits::Int, r::RoundingMode) = round_string(big(x), digits, r)
 
 
-function representation(a::Interval, format=nothing)
+function basic_representation(a::Interval, format=nothing)
     if isempty(a)
         return "∅"
     end
@@ -100,7 +111,7 @@ function representation(a::Interval, format=nothing)
     output
 end
 
-function representation{T<:Integer}(a::Interval{Rational{T}},
+function basic_representation{T<:Integer}(a::Interval{Rational{T}},
     format=nothing)
 
     if isempty(a)
@@ -110,13 +121,15 @@ function representation{T<:Integer}(a::Interval{Rational{T}},
     if format == nothing
         format = display_params.format  # default
     end
-    
+
     local output
 
     if format == :standard
         output = "[$(a.lo), $(a.hi)]"
+
     elseif format == :full
         output = "Interval($(a.lo), $(a.hi))"
+
     elseif format == :midpoint
         m = mid(a)
         r = radius(a)
@@ -133,6 +146,8 @@ function subscriptify(n::Int)
 end
 
 
+representation(a::Interval, format=nothing) = basic_representation(a, format)
+
 function representation(a::Interval{BigFloat}, format=nothing)
 
     if format == nothing
@@ -141,11 +156,13 @@ function representation(a::Interval{BigFloat}, format=nothing)
 
 
     if format == :standard
-        @compat string( invoke(representation, Tuple{Interval,Symbol}, a, format),
-                    subscriptify(precision(a.lo)) )
 
-    elseif format == :full
-        @compat invoke(representation, Tuple{Interval, Symbol}, a, format)
+        string(basic_representation(a, format), subscriptify(precision(a.lo)))
+
+    else
+
+        basic_representation(a, format)
+
     end
 end
 
@@ -157,10 +174,10 @@ function representation(a::DecoratedInterval, format=nothing)
     end
 
     if format==:full
-        return "DecoratedInterval($(representation(interval_part(a), format)), $(decoration(a)))"
+        return "DecoratedInterval($(basic_representation(interval_part(a), format)), $(decoration(a)))"
     end
 
-    interval = representation(interval_part(a), format)
+    interval = basic_representation(interval_part(a), format)
 
     if display_params.decorations
         string(interval, "_", decoration(a))
