@@ -11,7 +11,8 @@ export
     derivative, jacobian,  # reexport derivative from ForwardDiff
     Root, is_unique,
     find_roots,
-    find_roots_midpoint
+    find_roots_midpoint,
+    bisect
 
 import Base: ⊆
 
