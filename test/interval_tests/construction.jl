@@ -15,7 +15,6 @@ using ValidatedNumerics
     setprecision(Interval, Float64)
     @test ValidatedNumerics.parameters.precision == 53
 
-    # There is an inexplicable error on 0.5 with the following:
     @test precision(BigFloat) == 53
     @test precision(Interval) == (Float64, 53)
 
@@ -36,6 +35,7 @@ using ValidatedNumerics
     @test Interval{Rational{Int}}(1) == Interval(1//1)
     #@test Interval{Rational{Int}}(pi) == Interval(rationalize(1.0*pi))
 
+    @test Interval{Float64}(pi) == Interval(float(pi)
     @test Interval{BigFloat}(1) == Interval{BigFloat}(big(1.0), big(1.0))
     @test Interval{BigFloat}(pi) ==
         Interval{BigFloat}(big(pi), big(pi))
@@ -53,6 +53,7 @@ using ValidatedNumerics
     @test_throws ArgumentError @interval(big(1), 1//10)
     @test_throws ArgumentError @interval(1, 0.1)
     @test_throws ArgumentError @interval(big(1), big(0.1))
+
 
     # Conversions; may involve rounding
     # @test convert(Interval, 1) == Interval(1.0)
