@@ -189,10 +189,27 @@ end
     # @test imag(b) == Interval(-15.200784463067956, -15.20078446306795)
 end
 
+@testset ".. tests" begin
+
+    # part of issue #172:
+    a = big(0.0)..1
+    @test typeof(a) == Interval{BigFloat}
+end
+
 @testset "± tests" begin
     setprecision(Interval, Float64)
 
     @test 3 ± 0.5 == Interval(2.5, 3.5)
     @test 3 ± 0.1 == Interval(2.9, 3.1)
     @test 0.5 ± 1 == Interval(-0.5, 1.5)
+
+    # issue 172:
+    a = @interval(1) ± 1
+    @test a == Interval(-0.0, 2.0)
+    @test typeof(a) == Interval{Float64}
+
+    a =  @biginterval(1) ± 1
+    @test a == Interval(big(-0.0), big(2.0))
+    @test typeof(a) == Interval{BigFloat}
+
 end
