@@ -1,7 +1,5 @@
 # This file is part of the ValidatedNumerics.jl package; MIT licensed
 
-## Promotion
-
 ## Promotion rules
 
 # Avoid ambiguity with ForwardDiff:
@@ -20,27 +18,47 @@ promote_rule{T<:Real}(::Type{BigFloat}, ::Type{Interval{T}}) =
     Interval{promote_type(T, BigFloat)}
 
 
-## Conversion rules
+function parse_decorated_string(T, s::AbstractString)
+    m = match(r"(\[.*\])(\_.*)?", s)
 
-# convert{T<:Real}(::Type{Interval}, x::T) = convert(Interval{Float64}, x)
+    if m == nothing  # matched
+        throw(ArgumentError("Unable to process string $x as decorated interval"))
+
+    end
+
+    interval_string, decoration = m.captures
+    interval = parse_interval_string(T, interval_string)
+
+    if decoration == nothing
+        decoration = "_com"
+    end
+
+    return DecoratedInterval(interval, decorations[decoration[2:end]])
+
+end
 
 doc"""
 `parse_interval_string` deals with strings of the form `"[3.5, 7.2]"`
 """
 function parse_interval_string(T, s::AbstractString)
     if !(contains(s, "["))  # string like "3.1"
+
         expr = parse(s)
 
         # after removing support for Julia 0.4, can simplify
         # make_interval to just accept two expressions
-        
+
         val = make_interval(T, expr, [expr])   # use tryparse?
         return eval(val)
     end
 
-    m = match(r"\[(.*),(.*)\]", s)  # string like "[1, 2]"
+    # match string of form [a, b]_dec:
+    m = match(r"\[(.*),(.*)\]", s)
 
-    if m == nothing
+    if m != nothing  # matched
+        lo, hi = m.captures
+
+    else
 
         m = match(r"\[(.*)\]", s)  # string like "[1]"
 
@@ -48,15 +66,18 @@ function parse_interval_string(T, s::AbstractString)
             throw(ArgumentError("Unable to process string $x as interval"))
         end
 
-        expr = parse(m.captures[1])
-        return eval(make_interval(T, expr, [expr]))
+        lo = m.captures[1]
+        hi = lo
 
     end
 
-    expr1 = eval(parse(m.captures[1]))
-    expr2 = eval(parse(m.captures[2]))
+    expr1 = parse(lo)
+    expr2 = parse(hi)
 
-    return eval(make_interval(T, expr1, [expr2]))
+    interval = eval(make_interval(T, expr1, [expr2]))
+
+    return interval
+
 end
 
 
