@@ -111,7 +111,7 @@ end
     @test mid(X) == [1, 4]
 
     Y = X × (4..8)
-    @test typeof(Y) == IntervalBox
+    @test isa(Y, IntervalBox)
     @test length(Y) == 3
     @test Y == IntervalBox(Interval(0, 2), Interval(3, 5), Interval(4, 8))
     @test diam(Y) == 4
