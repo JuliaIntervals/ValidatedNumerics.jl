@@ -60,6 +60,9 @@ setprecision(Interval, Float64)
             @test string(b) == "0.1 ± 1.20001"
             @test string(c) == "3.14159 ± 0"
             @test string(d) == "3.14159 ± 4.4409e-16"
+
+            # issue 175:
+            @test string(@biginterval(1, 2)) == "1.5 ± 0.5"
         end
     end
 
@@ -81,12 +84,29 @@ setprecision(Interval, Float64)
         @test typeof(a)== DecoratedInterval{Float64}
 
         setdisplay(:standard, decorations=false)
-
         @test string(a) == "[1, 2]"
 
         setdisplay(:standard, decorations=true)
-
         @test string(a) == "[1, 2]_com"
+
+        # issue 131:
+        a = DecoratedInterval(big(2), big(3), com)
+
+        setdisplay(:standard, decorations=false)
+        @test string(a) == "[2, 3]₂₅₆"
+
+        setdisplay(decorations=true)
+        @test string(a) == "[2, 3]₂₅₆_com"
+
+        setdisplay(:full)
+        @test string(a) == "DecoratedInterval(Interval(2.000000000000000000000000000000000000000000000000000000000000000000000000000000, 3.000000000000000000000000000000000000000000000000000000000000000000000000000000), com)"
+
+        setdisplay(:midpoint)
+        @test string(a) == "2.5 ± 0.5_com"
+
+        setdisplay(decorations=false)
+        @test string(a) == "2.5 ± 0.5"
+
     end
 
 
@@ -137,4 +157,6 @@ setprecision(Interval, Float64)
         @test string(X) == "IntervalBox(Interval(-Inf, Inf), Interval(-Inf, Inf))"
 
     end
+
+
 end
