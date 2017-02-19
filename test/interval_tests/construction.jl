@@ -245,3 +245,9 @@ end
     @test Interval{BigFloat}(1) == @biginterval(1, 1)
     @test Interval{BigFloat}(big"1.1") == Interval(big"1.1", big"1.1")
 end
+
+# issue 192:
+@testset "Disallow a single NaN in an interval" begin
+    @test Interval(NaN, 2) == Interval(NaN, NaN)
+    @test Interval(Inf, NaN) == Interval(NaN, NaN)
+end
