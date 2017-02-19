@@ -18,11 +18,11 @@ The nomenclature of the follows the IEEE-1788 (2015) standard
 @enum DECORATION ill=0 trv=1 def=2 dac=3 com=4
 # Note that `isless`, and hence ``<` and `min`, are automatically defined for enums
 
-const decorations = Dict("ill" => ill,
-                         "trv" => trv,
-                         "def" => def,
-                         "dac" => dac,
-                         "com" => com)
+# const decorations = Dict("ill" => ill,
+#                          "trv" => trv,
+#                          "def" => def,
+#                          "dac" => dac,
+#                          "com" => com)
 
 """
     DecoratedInterval

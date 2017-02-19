@@ -26,14 +26,18 @@ function parse_decorated_string(T, s::AbstractString)
 
     end
 
-    interval_string, decoration = m.captures
+    interval_string, decoration_string = m.captures
     interval = parse_interval_string(T, interval_string)
 
-    if decoration == nothing
-        decoration = "_com"
+    # type unstable:
+    if decoration_string == nothing
+        decoration_string = "_com"
     end
 
-    return DecoratedInterval(interval, decorations[decoration[2:end]])
+    decoration_symbol = Symbol(decoration_string[2:end])
+    decoration = getfield(ValidatedNumerics, decoration_symbol)
+
+    return DecoratedInterval(interval, decoration)
 
 end
 
