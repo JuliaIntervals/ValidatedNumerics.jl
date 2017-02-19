@@ -6,7 +6,7 @@ Split the interval `X` at position α; α=0.5 corresponds to the midpoint.
 Returns a tuple of the new intervals.
 """
 function bisect(X::Interval, α=0.5)
-    m = α * X.lo + (1-α) * X.hi
+    m = (1-α) * X.lo + α * X.hi
     return ( Interval(X.lo, m), Interval(m, X.hi) )
 end
 
