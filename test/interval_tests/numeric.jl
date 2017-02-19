@@ -197,3 +197,13 @@ end
 
     setrounding(Interval, :narrow)
 end
+
+@testset "Fast power" begin
+    x = 1..2
+    @test pow(x, 2) == pow(-x, 2) == Interval(1, 4)
+    @test pow(-x, 3) == Interval(-8.0, -1.0)
+
+    x = @interval(pi)
+    @test x^100 ⊆ pow(x, 100)
+
+end
