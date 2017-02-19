@@ -175,10 +175,10 @@ function representation{T}(a::DecoratedInterval{T}, format=nothing)
     end
 
     if format==:full
-        return "DecoratedInterval($(basic_representation(interval_part(a), format)), $(decoration(a)))"
+        return "DecoratedInterval($(representation(interval_part(a), format)), $(decoration(a)))"
     end
 
-    interval = basic_representation(interval_part(a), format)
+    interval = representation(interval_part(a), format)
 
     if display_params.decorations
         string(interval, "_", decoration(a))
