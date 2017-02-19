@@ -191,8 +191,14 @@ end
 
 @testset ".. tests" begin
 
+
+    a = 0.1..0.3
+    @test big"0.1" ∈ a
+    @test big"0.3" ∈ a
+
     # part of issue #172:
-    a = big(0.0)..1
+
+    a = big(0.1)..2
     @test typeof(a) == Interval{BigFloat}
 end
 
