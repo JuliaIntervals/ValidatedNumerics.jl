@@ -62,6 +62,3 @@ end
                         DecoratedInterval(Interval(1, 2), dac)
 
 end
-
-
-end
