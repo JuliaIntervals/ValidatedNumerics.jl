@@ -9,9 +9,9 @@ const display_params = DisplayParameters(:standard, false, 6)
 const display_options = [:standard, :full, :midpoint]
 
 doc"""
-    displaymode(;kw)
+    setdisplay(;kw)
 
-`displaymode` changes how intervals are displayed using keyword arguments.
+`setdisplay` changes how intervals are displayed using keyword arguments.
 The following options are available:
 
 - `format`: interval output format
@@ -26,10 +26,10 @@ The following options are available:
 
 Example:
 ```
-julia> displaymode(:full, decorations=true)
+julia> setdisplay(:full, decorations=true)
 ```
 """
-function displaymode(format=nothing; decorations=nothing, sigfigs::Integer=-1)
+function setdisplay(format=nothing; decorations=nothing, sigfigs::Integer=-1)
     if format != nothing
 
         if format in display_options
@@ -157,11 +157,11 @@ function representation(a::Interval{BigFloat}, format=nothing)
 
     if format == :standard
 
-        string(basic_representation(a, format), subscriptify(precision(a.lo)))
+        return string(basic_representation(a, format), subscriptify(precision(a.lo)))
 
     else
 
-        basic_representation(a, format)
+        return basic_representation(a, format)
 
     end
 end

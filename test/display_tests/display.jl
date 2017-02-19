@@ -8,7 +8,7 @@ using ValidatedNumerics
 
 setprecision(Interval, Float64)
 
-@testset "displaymode tests" begin
+@testset "setdisplay tests" begin
 
     @testset "Interval" begin
 
@@ -18,7 +18,7 @@ setprecision(Interval, Float64)
         d = @interval(π)
 
         @testset "6 sig figs" begin
-            displaymode(:standard, sigfigs=6)
+            setdisplay(:standard, sigfigs=6)
 
             @test string(a) == "[1, 2]"
             @test string(b) == "[-1.10001, 1.30001]"
@@ -27,7 +27,7 @@ setprecision(Interval, Float64)
         end
 
         @testset "10 sig figs" begin
-            displaymode(sigfigs=10)
+            setdisplay(sigfigs=10)
 
             @test string(a) == "[1, 2]"
             @test string(b) == "[-1.100000001, 1.300000001]"
@@ -36,7 +36,7 @@ setprecision(Interval, Float64)
         end
 
         @testset "20 sig figs" begin
-            displaymode(sigfigs=20)
+            setdisplay(sigfigs=20)
 
             @test string(a) == "[1, 2]"
             @test string(b) == "[-1.1000000000000000889, 1.3000000000000000445]"
@@ -45,7 +45,7 @@ setprecision(Interval, Float64)
         end
 
         @testset "Full" begin
-            displaymode(:full)
+            setdisplay(:full)
 
             @test string(a) == "Interval(1.0, 2.0)"
             @test string(b) == "Interval(-1.1, 1.3)"
@@ -54,7 +54,7 @@ setprecision(Interval, Float64)
         end
 
         @testset "Midpoint" begin
-            displaymode(:midpoint, sigfigs=6)
+            setdisplay(:midpoint, sigfigs=6)
 
             @test string(a) == "1.5 ± 0.5"
             @test string(b) == "0.1 ± 1.20001"
@@ -66,13 +66,13 @@ setprecision(Interval, Float64)
     @testset "Interval{Rational{T}}" begin
         a = Interval(1//3, 5//4)
         @test typeof(a)== Interval{Rational{Int}}
-        displaymode(:standard)
+        setdisplay(:standard)
         @test string(a) == "[1//3, 5//4]"
 
-        displaymode(:full)
+        setdisplay(:full)
         @test string(a) == "Interval(1//3, 5//4)"
 
-        displaymode(:midpoint)
+        setdisplay(:midpoint)
         @test string(a) == "19//24 ± 11//24"
     end
 
@@ -80,11 +80,11 @@ setprecision(Interval, Float64)
         a = @decorated(1, 2)
         @test typeof(a)== DecoratedInterval{Float64}
 
-        displaymode(:standard, decorations=false)
+        setdisplay(:standard, decorations=false)
 
         @test string(a) == "[1, 2]"
 
-        displaymode(:standard, decorations=true)
+        setdisplay(:standard, decorations=true)
 
         @test string(a) == "[1, 2]_com"
     end
@@ -93,26 +93,26 @@ setprecision(Interval, Float64)
     setprecision(Interval, 128)
 
     @testset "BigFloat intervals" begin
-        displaymode(:standard, decorations=false)
+        setdisplay(:standard, decorations=false)
 
         a = @interval big(1)
         @test typeof(a)== Interval{BigFloat}
         @test string(a) == "[1, 1]₁₂₈"
 
-        displaymode(:full)
+        setdisplay(:full)
         @test string(a) == "Interval(1.000000000000000000000000000000000000000, 1.000000000000000000000000000000000000000)"
 
 
         a = DecoratedInterval(big(2), big(3), com)
         @test typeof(a)== DecoratedInterval{BigFloat}
 
-        displaymode(:standard, decorations=false)
+        setdisplay(:standard, decorations=false)
         @test string(a) == "[2, 3]₁₂₈"
 
-        displaymode(:standard, decorations=true)
+        setdisplay(:standard, decorations=true)
         @test string(a) == "[2, 3]₁₂₈_com"
 
-        displaymode(:full)
+        setdisplay(:full)
         @test string(a) == "DecoratedInterval(Interval(2.000000000000000000000000000000000000000, 3.000000000000000000000000000000000000000), com)"
     end
 
@@ -121,7 +121,7 @@ setprecision(Interval, Float64)
 
     @testset "IntervalBox" begin
 
-        displaymode(:standard, sigfigs=6)
+        setdisplay(:standard, sigfigs=6)
 
         X = IntervalBox(1..2, 3..4)
         @test typeof(X) == IntervalBox{2,Float64}
@@ -133,7 +133,7 @@ setprecision(Interval, Float64)
         X = IntervalBox(-Inf..Inf, -Inf..Inf)
         @test string(X) == "[-∞, ∞] × [-∞, ∞]"
 
-        displaymode(:full)
+        setdisplay(:full)
         @test string(X) == "IntervalBox(Interval(-Inf, Inf), Interval(-Inf, Inf))"
 
     end
