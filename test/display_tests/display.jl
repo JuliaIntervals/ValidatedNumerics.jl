@@ -79,6 +79,9 @@ setprecision(Interval, Float64)
         @test string(a) == "19//24 ± 11//24"
     end
 
+
+    setprecision(Interval, 256)
+    
     @testset "DecoratedInterval" begin
         a = @decorated(1, 2)
         @test typeof(a)== DecoratedInterval{Float64}
