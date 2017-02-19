@@ -297,17 +297,17 @@ c = @interval(0.25, 4.0)
         @test b^@interval(0.3) == Interval(1.3903891703159093, 1.5157165665103982)
     end
 
-end
+    @testset "Integer, isodd, iseven" begin
+        @test isinteger(1..1) == true
+        @test !isinteger(1..2) == true
+        @test !isinteger(-1.5.. -1.5) == true
 
-facts("Integer, odd, even") do
-    @fact isinteger(1..1) --> true
-    @fact !isinteger(1..2) --> true
-    @fact !isinteger(-1.5.. -1.5) --> true
+        @test iseven(2..2) == true
+        @test !iseven(2..3) == true
+        @test !iseven(3..3) == true
+        @test isodd(3..3) == true
+        @test !isodd(16..16) == true
 
-    @fact iseven(2..2) --> true
-    @fact !iseven(2..3) --> true
-    @fact !iseven(3..3) --> true
-    @fact isodd(3..3) --> true
-    @fact !isodd(16..16) --> true
+    end
 
 end
