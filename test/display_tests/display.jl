@@ -18,7 +18,7 @@ setprecision(Interval, Float64)
         d = @interval(π)
 
         @testset "6 sig figs" begin
-            displaymode(format=:standard, sigfigs=6)
+            displaymode(:standard, sigfigs=6)
 
             @test string(a) == "[1, 2]"
             @test string(b) == "[-1.10001, 1.30001]"
@@ -45,7 +45,7 @@ setprecision(Interval, Float64)
         end
 
         @testset "Full" begin
-            displaymode(format=:full)
+            displaymode(:full)
 
             @test string(a) == "Interval(1.0, 2.0)"
             @test string(b) == "Interval(-1.1, 1.3)"
@@ -54,7 +54,7 @@ setprecision(Interval, Float64)
         end
 
         @testset "Midpoint" begin
-            displaymode(format=:midpoint, sigfigs=6)
+            displaymode(:midpoint, sigfigs=6)
 
             @test string(a) == "1.5 ± 0.5"
             @test string(b) == "0.1 ± 1.20001"
@@ -66,13 +66,13 @@ setprecision(Interval, Float64)
     @testset "Interval{Rational{T}}" begin
         a = Interval(1//3, 5//4)
         @test typeof(a)== Interval{Rational{Int}}
-        displaymode(format=:standard)
+        displaymode(:standard)
         @test string(a) == "[1//3, 5//4]"
 
-        displaymode(format=:full)
+        displaymode(:full)
         @test string(a) == "Interval(1//3, 5//4)"
 
-        displaymode(format=:midpoint)
+        displaymode(:midpoint)
         @test string(a) == "19//24 ± 11//24"
     end
 
@@ -80,11 +80,11 @@ setprecision(Interval, Float64)
         a = @decorated(1, 2)
         @test typeof(a)== DecoratedInterval{Float64}
 
-        displaymode(format=:standard, decorations=false)
+        displaymode(:standard, decorations=false)
 
         @test string(a) == "[1, 2]"
 
-        displaymode(format=:standard, decorations=true)
+        displaymode(:standard, decorations=true)
 
         @test string(a) == "[1, 2]_com"
     end
@@ -93,26 +93,26 @@ setprecision(Interval, Float64)
     setprecision(Interval, 128)
 
     @testset "BigFloat intervals" begin
-        displaymode(format=:standard, decorations=false)
+        displaymode(:standard, decorations=false)
 
         a = @interval big(1)
         @test typeof(a)== Interval{BigFloat}
         @test string(a) == "[1, 1]₁₂₈"
 
-        displaymode(format=:full)
+        displaymode(:full)
         @test string(a) == "Interval(1.000000000000000000000000000000000000000, 1.000000000000000000000000000000000000000)"
 
 
         a = DecoratedInterval(big(2), big(3), com)
         @test typeof(a)== DecoratedInterval{BigFloat}
 
-        displaymode(format=:standard, decorations=false)
+        displaymode(:standard, decorations=false)
         @test string(a) == "[2, 3]₁₂₈"
 
-        displaymode(format=:standard, decorations=true)
+        displaymode(:standard, decorations=true)
         @test string(a) == "[2, 3]₁₂₈_com"
 
-        displaymode(format=:full)
+        displaymode(:full)
         @test string(a) == "DecoratedInterval(Interval(2.000000000000000000000000000000000000000, 3.000000000000000000000000000000000000000), com)"
     end
 
@@ -121,7 +121,7 @@ setprecision(Interval, Float64)
 
     @testset "IntervalBox" begin
 
-        displaymode(format=:standard, sigfigs=6)
+        displaymode(:standard, sigfigs=6)
 
         X = IntervalBox(1..2, 3..4)
         @test typeof(X) == IntervalBox{2,Float64}
@@ -133,7 +133,7 @@ setprecision(Interval, Float64)
         X = IntervalBox(-Inf..Inf, -Inf..Inf)
         @test string(X) == "[-∞, ∞] × [-∞, ∞]"
 
-        displaymode(format=:full)
+        displaymode(:full)
         @test string(X) == "IntervalBox(Interval(-Inf, Inf), Interval(-Inf, Inf))"
 
     end

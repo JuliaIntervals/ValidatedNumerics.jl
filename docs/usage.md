@@ -383,23 +383,23 @@ julia> displaymode(sigfigs=10)
 julia> a
 [1.099999999, 3.141592654]
 
-julia> displaymode(format=:full)
+julia> displaymode(:full)
 
 julia> a
 Interval(1.0999999999999999, 3.1415926535897936)
 
-julia> displaymode(format=:midpoint)
+julia> displaymode(:midpoint)
 
 julia> a
 2.120796327 ± 1.020796327
 
-julia> displaymode(format=:midpoint, sigfigs=4)
+julia> displaymode(:midpoint, sigfigs=4)
 4
 
 julia> a
 2.121 ± 1.021
 
-julia> displaymode(format=:standard)
+julia> displaymode(:standard)
 
 julia> a
 [1.099, 3.142]
