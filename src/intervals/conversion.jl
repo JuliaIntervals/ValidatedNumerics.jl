@@ -25,27 +25,42 @@ promote_rule{T<:Real}(::Type{BigFloat}, ::Type{Interval{T}}) =
 # convert{T<:Real}(::Type{Interval}, x::T) = convert(Interval{Float64}, x)
 
 doc"""
-`split_interval_string` deals with strings of the form `"[3.5, 7.2]"`
+`parse_interval_string` deals with strings of the form `"[3.5, 7.2]"`
 """
-function split_interval_string(T, x::AbstractString)
-    if !(contains(x, "["))  # string like "3.1"
-        return @round(parse(T, x), parse(T, x))
+function parse_interval_string(T, s::AbstractString)
+    if !(contains(s, "["))  # string like "3.1"
+
+        val = eval(parse(s))   # use tryparse?
+        return convert(Interval{T}, val)
     end
 
-    m = match(r"\[(.*),(.*)\]", x)  # string like "[1, 2]"
+    m = match(r"\[(.*),(.*)\]", s)  # string like "[1, 2]"
 
     if m == nothing
-        throw(ArgumentError("Unable to process string $x as interval"))
+
+        m = match(r"\[(.*)\]", s)  # string like "[1]"
+
+        if m == nothing
+            throw(ArgumentError("Unable to process string $x as interval"))
+        end
+
+        val = eval(parse(m.captures[1]))
+        return convert(Interval{T}, val)
+
     end
 
-    @round(parse(T, m.captures[1]), parse(T, m.captures[2]))
+    val1 = eval(parse(m.captures[1]))
+    val2 = eval(parse(m.captures[2]))
+
+    return Interval(convert(Interval{T}, val1).lo,
+                    convert(Interval{T}, val2).hi)
 end
 
 
 # Floating point intervals:
 
 convert{T<:AbstractFloat}(::Type{Interval{T}}, x::AbstractString) =
-    split_interval_string(T, x)
+    parse_interval_string(T, x)
 
 function convert{T<:AbstractFloat, S<:Real}(::Type{Interval{T}}, x::S)
     Interval{T}( T(x, RoundDown), T(x, RoundUp) )
