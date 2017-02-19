@@ -146,7 +146,8 @@ function subscriptify(n::Int)
 end
 
 
-representation(a::Interval, format=nothing) = basic_representation(a, format)
+# fall-back:
+representation{T}(a::Interval{T}, format=nothing) = basic_representation(a, format)
 
 function representation(a::Interval{BigFloat}, format=nothing)
 
@@ -167,7 +168,7 @@ function representation(a::Interval{BigFloat}, format=nothing)
 end
 
 
-function representation(a::DecoratedInterval, format=nothing)
+function representation{T}(a::DecoratedInterval{T}, format=nothing)
 
     if format == nothing
         format = display_params.format  # default
@@ -204,7 +205,11 @@ function representation(X::IntervalBox, format=nothing)
 end
 
 
-for T in (Interval, DecoratedInterval, IntervalBox)
-    @eval show(io::IO, a::$T) = print(io, representation(a))
-    @eval showall(io::IO, a::$T) = print(io, representation(a, :full))
+for T in (Interval, DecoratedInterval)
+    @eval show{S}(io::IO, a::$T{S}) = print(io, representation(a))
+    @eval showall{S}(io::IO, a::$T{S}) = print(io, representation(a, :full))
 end
+
+T = IntervalBox
+@eval show(io::IO, a::$T) = print(io, representation(a))
+@eval showall(io::IO, a::$T) = print(io, representation(a, :full))
