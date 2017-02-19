@@ -29,9 +29,13 @@ doc"""
 """
 function parse_interval_string(T, s::AbstractString)
     if !(contains(s, "["))  # string like "3.1"
+        expr = parse(s)
 
-        val = eval(parse(s))   # use tryparse?
-        return convert(Interval{T}, val)
+        # after removing support for Julia 0.4, can simplify
+        # make_interval to just accept two expressions
+        
+        val = make_interval(T, expr, [expr])   # use tryparse?
+        return eval(val)
     end
 
     m = match(r"\[(.*),(.*)\]", s)  # string like "[1, 2]"
@@ -44,16 +48,15 @@ function parse_interval_string(T, s::AbstractString)
             throw(ArgumentError("Unable to process string $x as interval"))
         end
 
-        val = eval(parse(m.captures[1]))
-        return convert(Interval{T}, val)
+        expr = parse(m.captures[1])
+        return eval(make_interval(T, expr, [expr]))
 
     end
 
-    val1 = eval(parse(m.captures[1]))
-    val2 = eval(parse(m.captures[2]))
+    expr1 = eval(parse(m.captures[1]))
+    expr2 = eval(parse(m.captures[2]))
 
-    return Interval(convert(Interval{T}, val1).lo,
-                    convert(Interval{T}, val2).hi)
+    return eval(make_interval(T, expr1, [expr2]))
 end
 
 

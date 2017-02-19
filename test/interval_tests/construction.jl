@@ -255,3 +255,16 @@ end
     @test isnan(a.lo) && isnan(a.hi)
 
 end
+
+# issue 206:
+
+setprecision(Interval, Float64)
+
+@testset "Interval strings" begin
+    @test I"[1, 2]" == @interval("[1, 2]")
+    @test I"[2/3, 1.1]" == @interval("[2/3, 1.1]") == Interval(0.6666666666666666, 1.1)
+    @test I"[1]" == @interval("[1]") == Interval(1.0, 1.0)
+    @test I"[-0x1.3p-1, 2/3]") == @interval("[-0x1.3p-1, 2/3]") == Interval(-0.59375, 0.6666666666666667)]
+    
+
+end
