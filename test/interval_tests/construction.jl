@@ -220,7 +220,7 @@ end
 
 end
 
-@testet "Conversions between different types of interval" begin
+@testset "Conversions between different types of interval" begin
     a = convert(Interval{BigFloat}, 3..4)
     @test typeof(a) == Interval{BigFloat}
 
