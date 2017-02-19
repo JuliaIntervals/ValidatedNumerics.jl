@@ -67,7 +67,7 @@ function parse_interval_string(T, s::AbstractString)
         m = match(r"\[(.*)\]", s)  # string like "[1]"
 
         if m == nothing
-            throw(ArgumentError("Unable to process string $x as interval"))
+            throw(ArgumentError("Unable to process string $s as interval"))
         end
 
         lo = m.captures[1]
