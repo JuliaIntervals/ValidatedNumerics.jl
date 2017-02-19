@@ -101,3 +101,16 @@ end
 
 
 end
+
+@testset "mid and × for IntervalBox" begin
+    X = (0..2) × (3..5)
+    @test length(X) == 2
+    @test X == IntervalBox(Interval(0, 2), Interval(3, 5))
+
+    @test mid(X) == [1, 4]
+
+    Y = X × (4..6)
+    @test typeof(Y) == IntervalBox
+    @test length(Y) == 3
+    @test Y == IntervalBox(Interval(0, 2), Interval(3, 5), Interval(4, 6))
+end
