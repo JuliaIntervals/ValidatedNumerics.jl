@@ -219,3 +219,21 @@ end
     @test typeof(a) == Interval{BigFloat}
 
 end
+
+@testet "Conversions between different types of interval" begin
+    a = convert(Interval{BigFloat}, 3..4)
+    @test typeof(a) == Interval{BigFloat}
+
+    a = convert(Interval{Float64}, @biginterval(3, 4))
+    @test typeof(a) == Interval{Float64}
+end
+
+@testset "Conversion to Interval" begin
+    a = convert(Interval, 3)
+    @test a == Interval(3.0)
+    @test typeof(a) == Interval{Float64}
+
+    a = convert(Interval, big(3))
+    @test typeof(a) == Interval{BigFloat}
+
+end
