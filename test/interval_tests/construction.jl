@@ -36,9 +36,9 @@ using ValidatedNumerics
     @test Interval{Rational{Int}}(1) == Interval(1//1)
     #@test Interval{Rational{Int}}(pi) == Interval(rationalize(1.0*pi))
 
-    @test Interval{BigFloat}(1) == Interval{BigFloat}(big(1.0),big(1.0))
+    @test Interval{BigFloat}(1) == Interval{BigFloat}(big(1.0), big(1.0))
     @test Interval{BigFloat}(pi) ==
-        Interval{BigFloat}(big(3.1415926535897931), big(3.1415926535897936))
+        Interval{BigFloat}(big(pi), big(pi))
 
     # Disallowed conversions with a > b
 
