@@ -179,7 +179,7 @@ end
     @test sprint(showall, x) == "DecoratedInterval(Interval(0.0, 1.0), dac)"
 
     x = DecoratedInterval(big(0), big(1), def)
-    @test string(x) == [0, 1]₁₂₈
+    @test string(x) == "[0, 1]₁₂₈"
     @test sprint(showall, x) == "DecoratedInterval(Interval(0.000000000000000000000000000000000000000, 1.000000000000000000000000000000000000000), def)"
 
     setdisplay(decorations=true)
