@@ -6,7 +6,6 @@ end
 
 const display_params = DisplayParameters(:standard, false, 6)
 
-const display_options = [:standard, :full, :midpoint]
 
 doc"""
     setdisplay(;kw)
@@ -20,7 +19,7 @@ The following options are available:
     - `:full`: `Interval(1, 2)`
     - `:midpoint`: 1.5 ± 0.5
 
-- `sigfigs`: number of significant figures to show in `standard` mode
+- `sigfigs`: number of significant figures to show in `standard` mode; the default is 6
 
 - `decorations` (boolean):  show decorations or not
 
@@ -29,30 +28,25 @@ Example:
 julia> setdisplay(:full, decorations=true)
 ```
 """
-function setdisplay(format=nothing; decorations=nothing, sigfigs::Integer=-1)
-    if format != nothing
+function setdisplay(format = display_params.format;
+                    decorations = display_params.decorations, sigfigs::Integer = display_params.sigfigs)
 
-        if format in display_options
-            display_params.format = format
-        else
-            throw(ArgumentError("Allowed format option is one of  $display_options."))
-        end
-
+    if format ∉ (:standard, :full, :midpoint)
+        throw(ArgumentError("Allowed format option is one of  $display_options."))
     end
 
-    if decorations != nothing
-
-        if decorations ∈ (true, false)
-            display_params.decorations = decorations
-
-        else
-            throw(ArgumentError("`decorations` must be `true` or `false`"))
-        end
+    if decorations ∉ (true, false)
+        throw(ArgumentError("`decorations` must be `true` or `false`"))
     end
 
-    if sigfigs >= 0
-        display_params.sigfigs = sigfigs
+    if sigfigs < 1
+        throw(ArgumentError("`sigfigs` must be `>= 1`"))
     end
+
+    # update values in display_params:
+    display_params.format = format
+    display_params.decorations = decorations
+    display_params.sigfigs = sigfigs
 end
 
 
