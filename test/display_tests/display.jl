@@ -81,7 +81,7 @@ setprecision(Interval, Float64)
 
 
     setprecision(Interval, 256)
-    
+
     @testset "DecoratedInterval" begin
         a = @decorated(1, 2)
         @test typeof(a)== DecoratedInterval{Float64}
@@ -160,6 +160,29 @@ setprecision(Interval, Float64)
         @test string(X) == "IntervalBox(Interval(-Inf, Inf), Interval(-Inf, Inf))"
 
     end
+end
 
+@testset "showall" begin
+    setdisplay(:standard, decorations=false, sigfigs=6)
+    setprecision(128)
+
+    x = 0..1
+    @test string(x) == [0, 1]
+    @test sprint(showall, x) == "Interval(0.0, 1.0)"
+
+    x = @biginterval(0, 1)
+    @test string(x) == "[0, 1]₁₂₈"
+    @test sprint(showall, x) == "Interval(0.000000000000000000000000000000000000000, 1.000000000000000000000000000000000000000)"
+
+    x = DecoratedInterval(0, 1, dac)
+    @test string(x) == "[0, 1]"
+    @test sprint(showall, x) == "DecoratedInterval(Interval(0.0, 1.0), dac)"
+
+    x = DecoratedInterval(big(0), big(1), def)
+    @test string(x) == [0, 1]₁₂₈
+    @test sprint(showall, x) == "DecoratedInterval(Interval(0.000000000000000000000000000000000000000, 1.000000000000000000000000000000000000000), def)"
+
+    setdisplay(decorations=true)
+    @test string(x) == "[0, 1]₁₂₈_def"
 
 end
