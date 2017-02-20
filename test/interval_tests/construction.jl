@@ -201,6 +201,6 @@ end
     @test Interval{Float64}(1) == 1..1
     @test Interval{Float64}(1.1) == Interval(1.1, 1.1)  # no rounding
 
-    @test Interval{BigFloat}(1) == @biginteral(1, 1)
+    @test Interval{BigFloat}(1) == @biginterval(1, 1)
     @test Interval{BigFloat}(big"1.1") == Interval(big"1.1", big"1.1")
 end
