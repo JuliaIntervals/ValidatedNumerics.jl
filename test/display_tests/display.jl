@@ -167,7 +167,7 @@ end
     setprecision(128)
 
     x = 0..1
-    @test string(x) == [0, 1]
+    @test string(x) == "[0, 1]"
     @test sprint(showall, x) == "Interval(0.0, 1.0)"
 
     x = @biginterval(0, 1)
