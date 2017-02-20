@@ -203,6 +203,10 @@ end
     @test pow(x, 2) == pow(-x, 2) == Interval(1, 4)
     @test pow(-x, 3) == Interval(-8.0, -1.0)
 
+    @test pow(-1..2, 2) == 0..4
+    @test pow(-1..2, 3) == -1..8
+    @test pow(-1..2, 4) == 0..16
+
     x = @interval(pi)
     @test x^100 ⊆ pow(x, 100)
 
