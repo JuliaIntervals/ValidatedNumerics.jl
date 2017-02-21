@@ -207,7 +207,15 @@ end
     @test pow(-1..2, 3) == -1..8
     @test pow(-1..2, 4) == 0..16
 
+    @test pow(@biginterval(-1, 2), 2) == 0..4
+    @test pow(@biginterval(-1, 2), 3) == -1..8
+    @test pow(@biginterval(1, 2), 2) == 1..4
+
+
     x = @interval(pi)
     @test x^100 ⊆ pow(x, 100)
+    @test x^50 ⊆ pow(x, 50)
+    @test interior(x^50, pow(x, 50))
+
 
 end
