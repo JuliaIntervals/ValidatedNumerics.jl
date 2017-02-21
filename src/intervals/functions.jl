@@ -167,7 +167,11 @@ function sqrt{T}(a::Interval{T})
     @round(sqrt(a.lo), sqrt(a.hi))  # `sqrt` is correctly-rounded
 end
 
+doc"""
+    pow(x::Interval, n::Integer)
 
+A faster implementation of `x^n` using `power_by_squaring`.
+"""    
 function pow{T}(x::Interval{T}, n::Integer)  # fast integer power
 
     isempty(x) && return x
