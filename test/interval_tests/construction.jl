@@ -249,8 +249,9 @@ end
 # issue 192:
 @testset "Disallow a single NaN in an interval" begin
     a = Interval(NaN, 2)
-    @test isnai(a)
+    @test isnan(a.lo) && isnan(a.hi)
 
     a = Interval(Inf, NaN)
-    @test isnai(a)
+    @test isnan(a.lo) && isnan(a.hi)
+
 end
