@@ -117,7 +117,7 @@ for mode in (:Down, :Up) #, T in (:Float64)
                                     a::T, $mode1) = $directed($f(a))
 
         @eval $f{T<:AbstractFloat}(::RoundingType{:none},
-                                    a::T, ::RoundingMode) = $f(a)
+                                    a::T, $mode1) = $f(a)
 
 
     end
@@ -133,7 +133,7 @@ for mode in (:Down, :Up) #, T in (:Float64)
                                     a::T, $mode1) = $directed($f(a))
 
         @eval $f{T<:AbstractFloat}(::RoundingType{:none},
-                                    a::T, ::RoundingMode) = $f(a)
+                                    a::T, $mode1) = $f(a)
 
     end
 end
