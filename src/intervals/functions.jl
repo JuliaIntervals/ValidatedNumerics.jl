@@ -171,7 +171,9 @@ doc"""
     pow(x::Interval, n::Integer)
 
 A faster implementation of `x^n` using `power_by_squaring`.
-"""    
+`pow(x, n) will usually return an interval that is slightly larger than that calculated by `x^n`, but is guaranteed to be a correct
+enclosure when using multiplication with correct rounding.
+"""
 function pow{T}(x::Interval{T}, n::Integer)  # fast integer power
 
     isempty(x) && return x
