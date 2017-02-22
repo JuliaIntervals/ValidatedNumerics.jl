@@ -21,7 +21,6 @@ doc"""Choose rounding mode based on environment variable"""
 
 immutable RoundingType{T} end
 
-
 # Functions that are the same for all rounding types:
 @eval begin
     # unary minus:
@@ -52,8 +51,8 @@ for f in (:+, :-, :*, :/)
 end
 
 
-
-for mode in (:Down, :Up) #, T in (:Float64)
+# Define functions with different rounding types:
+for mode in (:Down, :Up)
 
     mode1 = Expr(:quote, mode)
     mode1 = :(::RoundingMode{$mode1})
@@ -138,8 +137,15 @@ for mode in (:Down, :Up) #, T in (:Float64)
     end
 end
 
-
+doc"""
+Set the rounding type used for all interval calculations on Julia v0.6 and above.
+"""
 function setrounding(::Type{Interval}, mode1::Symbol)
+
+    if mode1 == current_rounding_type[]
+        return  # no need to redefine anything
+    end
+
     mode2 = Meta.quot(mode1)
     # binary:
 
@@ -154,7 +160,10 @@ function setrounding(::Type{Interval}, mode1::Symbol)
     for f in CRlibm.functions
         @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
     end
+
+    current_rounding_type[] = mode1
 end
 
-
+# default: correct rounding
+const current_rounding_type = [:correct]
 setrounding(Interval, :correct)
