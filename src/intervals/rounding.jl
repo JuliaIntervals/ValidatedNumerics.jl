@@ -136,23 +136,25 @@ for mode in (:Down, :Up) #, T in (:Float64)
                                     a::T, ::RoundingMode) = $f(a)
 
     end
+end
 
 
-function setrounding(::Type{Interval}, mode::Symbol)
-    mode2 = Meta.quot(mode)
+function setrounding(::Type{Interval}, mode1::Symbol)
+    mode2 = Meta.quot(mode1)
     # binary:
 
     for f in (:+, :-, :*, :/, :^, :atan2)
-        @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $f(RoundingType{$mode2}, a, b, $mode1)
+        @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $f(RoundingType{$mode2}(), a, b, $mode1)
     end
 
     for f in (:sqrt, :inv, :tanh, :asinh, :acosh, :atanh)
-        @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}, a, $mode1)
+        @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
     end
 
     for f in CRlibm.functions
-        @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}, a, $mode1)
+        @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
     end
 end
+
 
 setrounding(Interval, :correct)
