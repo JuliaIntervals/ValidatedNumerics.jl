@@ -140,30 +140,38 @@ end
 doc"""
 Set the rounding type used for all interval calculations on Julia v0.6 and above.
 """
-function setrounding(::Type{Interval}, mode1::Symbol)
+function setrounding(::Type{Interval}, rounding_type::Symbol)
 
-    if mode1 == current_rounding_type[]
+    if rounding_type == current_rounding_type[]
         return  # no need to redefine anything
     end
 
-    mode2 = Meta.quot(mode1)
+    if rounding_type ∉ (:correct, :fast, :none)
+        throw(ArgumentError("Rounding type must be one of `:correct`, `:fast`, `:none`"))
+    end
+
+    #rounding_type = :(RoundingType{$(Meta.quot(rounding_type))})
+    rounding_object = RoundingType{rounding_type}()
     # binary:
 
     for f in (:+, :-, :*, :/, :^, :atan2)
-        @eval $f{T<:AbstractFloat}(a::T, b::T, $mode1) = $f(RoundingType{$mode2}(), a, b, $mode1)
+        @eval $f{T<:AbstractFloat}(a::T, b::T, r::RoundingMode) = $f($rounding_object, a, b, r)
+        #@eval $f(a::Float64, b::Float64, $mode1) = $f(RoundingType{$mode2}(), a, b, $mode1)
     end
 
     for f in (:sqrt, :inv, :tanh, :asinh, :acosh, :atanh)
-        @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
+        @eval $f{T<:AbstractFloat}(a::T, r::RoundingMode) = $f($rounding_object, a, r)
+        #@eval $f(a::Float64, r::RoundingMode) = $f(RoundingType{$mode2}(), a, $mode1)
     end
 
     for f in CRlibm.functions
-        @eval $f{T<:AbstractFloat}(a::T, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
+        @eval $f{T<:AbstractFloat}(a::T, r::RoundingMode) = $f($rounding_object, a, r)
+        #@eval $f(a::Float64, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
     end
 
-    current_rounding_type[] = mode1
+    current_rounding_type[] = rounding_type
 end
 
 # default: correct rounding
-const current_rounding_type = [:correct]
+const current_rounding_type = Symbol[:undefined]
 setrounding(Interval, :correct)
