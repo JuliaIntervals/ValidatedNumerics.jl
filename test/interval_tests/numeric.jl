@@ -4,7 +4,7 @@ using ValidatedNumerics
 using Base.Test
 
 setprecision(Interval, Float64)
-setrounding(Interval, :narrow)
+# setrounding(Interval, :narrow)
 
 
 @testset "Numeric tests" begin
