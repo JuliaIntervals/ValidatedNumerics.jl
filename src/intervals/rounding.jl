@@ -152,21 +152,26 @@ function setrounding(::Type{Interval}, rounding_type::Symbol)
 
     #rounding_type = :(RoundingType{$(Meta.quot(rounding_type))})
     rounding_object = RoundingType{rounding_type}()
-    # binary:
 
+
+    # binary functions:
     for f in (:+, :-, :*, :/, :^, :atan2)
+
         @eval $f{T<:AbstractFloat}(a::T, b::T, r::RoundingMode) = $f($rounding_object, a, b, r)
-        #@eval $f(a::Float64, b::Float64, $mode1) = $f(RoundingType{$mode2}(), a, b, $mode1)
+
+        @eval $f(x::Real, y::Real, r::RoundingMode) = $f(float(x), float(y), r)
     end
 
-    for f in (:sqrt, :inv, :tanh, :asinh, :acosh, :atanh)
-        @eval $f{T<:AbstractFloat}(a::T, r::RoundingMode) = $f($rounding_object, a, r)
-        #@eval $f(a::Float64, r::RoundingMode) = $f(RoundingType{$mode2}(), a, $mode1)
-    end
+    @eval ^{T<:AbstractFloat,S}(a::T, b::S, r::RoundingMode) = ^($rounding_object, a, b, r)
 
-    for f in CRlibm.functions
+    # unary functions:
+    for f in vcat(CRlibm.functions,
+                [:sqrt, :inv, :tanh, :asinh, :acosh, :atanh])
+
         @eval $f{T<:AbstractFloat}(a::T, r::RoundingMode) = $f($rounding_object, a, r)
-        #@eval $f(a::Float64, $mode1) = $f(RoundingType{$mode2}(), a, $mode1)
+
+        @eval $f(x::Real, r::RoundingMode) = $f(float(x), r)
+
     end
 
     current_rounding_type[] = rounding_type
