@@ -22,6 +22,14 @@ function big53(a::Interval{Float64})
     end
 end
 
+function big53(x::Float64)
+    # BigFloat(x, 53)  # in Julia v0.6
+
+    setprecision(53) do
+        BigFloat(x)
+    end
+end
+
 
 setprecision(::Type{Interval}, ::Type{Float64}) = parameters.precision_type = Float64
 # does not change the BigFloat precision

@@ -87,17 +87,24 @@ for mode in (:Down, :Up)
 
     # power:
 
-    @eval function ^{T<:AbstractFloat,S}(::RoundingType{:correct},
-                                        a::T, b::S, $mode1)
-                  setrounding(T, $mode2) do
+    @eval function ^{S<:Real}(::RoundingType{:correct},
+                                        a::BigFloat, b::S, $mode1)
+                  setrounding(BigFloat, $mode2) do
                       ^(a, b)
                   end
            end
 
-    @eval ^{T<:AbstractFloat,S}(::RoundingType{:fast},
+    # for correct rounding for Float64, must pass through BigFloat:
+    @eval function ^{S<:Real}(::RoundingType{:correct}, a::Float64, b::S, $mode1)
+        setprecision(BigFloat, 53) do
+            Float64(^(RoundingType{:correct}(), BigFloat(a), b, $mode2))
+        end
+    end
+
+    @eval ^{T<:AbstractFloat,S<:Real}(::RoundingType{:fast},
                                 a::T, b::S, $mode1) = $directed(a^b)
 
-    @eval ^{T<:AbstractFloat,S}(::RoundingType{:none},
+    @eval ^{T<:AbstractFloat,S<:Real}(::RoundingType{:none},
                                 a::T, b::S, $mode1) = a^b
 
 
@@ -159,10 +166,10 @@ function setrounding(::Type{Interval}, rounding_type::Symbol)
 
         @eval $f{T<:AbstractFloat}(a::T, b::T, r::RoundingMode) = $f($rounding_object, a, b, r)
 
-        @eval $f(x::Real, y::Real, r::RoundingMode) = $f(float(x), float(y), r)
+        @eval $f(x::AbstractFloat, y::Real, r::RoundingMode) = $f(float(x), float(y), r)
     end
 
-    @eval ^{T<:AbstractFloat,S}(a::T, b::S, r::RoundingMode) = ^($rounding_object, a, b, r)
+    @eval ^{T<:AbstractFloat, S<:Real}(a::T, b::S, r::RoundingMode) = ^($rounding_object, a, b, r)
 
     # unary functions:
     for f in vcat(CRlibm.functions,
