@@ -45,6 +45,9 @@ immutable RoundingType{T} end
 
 end
 
+# overwrite behaviour for small integer powers:
+^{p}(x::ValidatedNumerics.Interval, ::Type{Val{p}}) = x^p
+
 # no-ops for rational rounding:
 for f in (:+, :-, :*, :/)
     @eval $f{T<:Rational}(a::T, b::T, ::RoundingMode) = $f(a, b)
