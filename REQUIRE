@@ -1,4 +1,8 @@
+<<<<<<< 640cbad0fc93195d13d257496fd1d4f4b185ceeb
 julia 0.5
+=======
+julia 0.4
+>>>>>>> Update CRlibm in REQUIRE
 CRlibm 0.5
 Compat 0.7.11
 StaticArrays 0.3
