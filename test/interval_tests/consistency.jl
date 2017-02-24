@@ -284,12 +284,12 @@ c = @interval(0.25, 4.0)
     end
 
     # @testset "Interval rounding tests" begin
-    #     setrounding(Interval, :wide)
+    #     # setrounding(Interval, :wide)
     #     @test rounding(Interval) == :wide
     #
-    #     @test_throws ArgumentError setrounding(Interval, :hello)
+    #     @test_throws ArgumentError # setrounding(Interval, :hello)
     #
-    #     setrounding(Interval, :narrow)
+    #     # setrounding(Interval, :narrow)
     #     @test rounding(Interval) == :narrow
     # end
 
