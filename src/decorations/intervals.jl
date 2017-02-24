@@ -102,7 +102,7 @@ function convert{T<:Real}(::Type{DecoratedInterval{T}}, xx::DecoratedInterval)
 end
 
 convert{T<:AbstractFloat}(::Type{DecoratedInterval{T}}, x::AbstractString) =
-    parse_decorated_string(T, x)
+    parse(DecoratedInterval{T}, x)
 
 big(x::DecoratedInterval) = DecoratedInterval(big(interval_part(x)),
                                                 decoration(x))
