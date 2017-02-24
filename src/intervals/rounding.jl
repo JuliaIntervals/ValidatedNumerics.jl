@@ -30,9 +30,10 @@ immutable RoundingType{T} end
     zero{T<:AbstractFloat}(a::Interval{T}, ::RoundingMode) = zero(T)
     zero{T<:AbstractFloat}(::Type{T}, ::RoundingMode) = zero(T)
 
-    convert(::Type{BigFloat}, x, rounding_mode::RoundingMode) = (BigFloat, rounding_mode) do
-        convert(BigFloat, x)
-    end
+    convert(::Type{BigFloat}, x, rounding_mode::RoundingMode) =
+        setrounding(BigFloat, rounding_mode) do
+            convert(BigFloat, x)
+        end
 
     parse{T}(::Type{T}, x, rounding_mode::RoundingMode) = setrounding(T, rounding_mode) do
         parse(T, x)
