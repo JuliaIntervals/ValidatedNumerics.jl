@@ -1,5 +1,5 @@
 
-function parse{T}(::Type{DecoratedInterval{T}, s::AbstractString)
+function parse{T}(::Type{DecoratedInterval{T}}, s::AbstractString)
     m = match(r"(\[.*\])(\_.*)?", s)
 
     if m == nothing  # matched
