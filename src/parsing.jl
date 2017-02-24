@@ -1,4 +1,11 @@
+# Functions to parse strings to intervals
 
+doc"""
+    parse{T}(DecoratedInterval{T}, s::AbstractString)
+
+Parse a string of the form `"[a, b]_dec"` as a `DecoratedInterval`
+with decoration `dec`.
+"""
 function parse{T}(::Type{DecoratedInterval{T}}, s::AbstractString)
     m = match(r"(\[.*\])(\_.*)?", s)
 
@@ -29,6 +36,7 @@ Parse a string as an interval. Formats allowed include:
 - "1"
 - "[1]"
 - "[3.5, 7.2]"
+- "[-0x1.3p-1, 2/3]"  # use numerical expressions
 """
 function parse{T}(::Type{Interval{T}}, s::AbstractString)
     if !(contains(s, "["))  # string like "3.1"
