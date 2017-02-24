@@ -1,5 +1,21 @@
 # What's new in ValidatedNumerics.jl
 
+## v0.7
+### Breaking API changes
+- Rename `displaymode` to `setdisplay` and simplify syntax #210:
+```
+setdisplay(:full)
+```
+
+### Added features
+- `parse(Interval, string)` #215
+- `bisect` function in `ValidatedNumerics.RootFinding` #217
+- Fast integer power function `pow` #208
+
+### Other
+- Miscellaneous bugfixes
+- Tests use `Base.Test` instead of `FactCheck` #205
+
 ## v0.6
 - Add a plot recipe for (only) 2D `IntervalBox`es using `RecipesBase.jl`.
 This enables plotting using `Plots.jl`: an individual `IntervalBox` `X` using `plot(X)`,
