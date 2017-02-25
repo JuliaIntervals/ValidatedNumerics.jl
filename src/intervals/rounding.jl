@@ -1,25 +1,32 @@
-# Define rounded versions of elementary functions
-# E.g.  +(a, b, RoundDown)
-# Some, like sin(a, RoundDown)  are already defined in CRlibm
+#= Design summary:
 
-# Rounding types:
-# - :correct  # correct rounding
-# - :fast     # fast rounding by prevfloat and nextfloat  (slightly wider than needed)
-# - :none     # no rounding at all for speed
+This is a so-called "traits-based" design, as follows.
 
-# "Traits-based" design:
-# Define functions like
-# sin(::RoundingType{:correct}, x, ::RoundingMode)
-# sin(::RoundingType{:fast}, x, ::RoundingMode)
-# sin(::RoundingType{:none}, x, ::RoundingMode)
+The main body of the file defines versions of elementary functions with all allowed
+interval rounding types, e.g.
++(IntervalRounding{:correct}, a, b, RoundDown)
++(IntervalRounding{:fast}, a, b, RoundDown)
++(IntervalRounding{:none}, a, b, RoundDown)
 
-# Then define e.g.
-# sin(x, r::RoundingMode) = sin(RoundingType{:correct}, x, r)
+The current allowed rounding types are
+- :correct  # correct rounding (rounding to the nearest floating-point number)
+- :fast     # fast rounding by prevfloat and nextfloat  (slightly wider than needed)
+- :none     # no rounding at all (for speed, but forgoes any pretense at being rigorous)
+
+The function `setrounding(Interval, rounding_type)` then defines rounded functions
+*without* an explicit rounding type, e.g.
+
+sin(x, r::RoundingMode) = sin(IntervalRounding{:correct}, x, r)
+
+These are overwritten when  `setrounding(Interval, rounding_type)` is called again.
+
+In Julia v0.6, but *not* in Julia v0.5, this will automatically redefine all relevant functions, in particular those used in +(a::Interval, b::Interval) etc., so that all interval functions will automatically work with the correct interval rounding type.
+=#
 
 
 doc"""Choose rounding mode based on environment variable"""
 
-immutable RoundingType{T} end
+immutable IntervalRounding{T<:Symbol} end
 
 # Functions that are the same for all rounding types:
 @eval begin
@@ -46,8 +53,7 @@ immutable RoundingType{T} end
 
 end
 
-# overwrite behaviour for small integer powers:
-^{p}(x::ValidatedNumerics.Interval, ::Type{Val{p}}) = x^p
+
 
 # no-ops for rational rounding:
 for f in (:+, :-, :*, :/)
@@ -73,17 +79,17 @@ for mode in (:Down, :Up)
     # binary functions:
     for f in (:+, :-, :*, :/, :atan2)
 
-        @eval function $f{T<:AbstractFloat}(::RoundingType{:correct},
+        @eval function $f{T<:AbstractFloat}(::IntervalRounding{:correct},
                                             a::T, b::T, $mode1)
                     setrounding(T, $mode2) do
                         $f(a, b)
                     end
                 end
 
-        @eval $f{T<:AbstractFloat}(::RoundingType{:fast},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:fast},
                                     a::T, b::T, $mode1) = $directed($f(a, b))
 
-        @eval $f{T<:AbstractFloat}(::RoundingType{:none},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:none},
                                     a::T, b::T, $mode1) = $f(a, b)
 
     end
@@ -91,7 +97,7 @@ for mode in (:Down, :Up)
 
     # power:
 
-    @eval function ^{S<:Real}(::RoundingType{:correct},
+    @eval function ^{S<:Real}(::IntervalRounding{:correct},
                                         a::BigFloat, b::S, $mode1)
                   setrounding(BigFloat, $mode2) do
                       ^(a, b)
@@ -99,23 +105,23 @@ for mode in (:Down, :Up)
            end
 
     # for correct rounding for Float64, must pass through BigFloat:
-    @eval function ^{S<:Real}(::RoundingType{:correct}, a::Float64, b::S, $mode1)
+    @eval function ^{S<:Real}(::IntervalRounding{:correct}, a::Float64, b::S, $mode1)
         setprecision(BigFloat, 53) do
-            Float64(^(RoundingType{:correct}(), BigFloat(a), b, $mode2))
+            Float64(^(IntervalRounding{:correct}(), BigFloat(a), b, $mode2))
         end
     end
 
-    @eval ^{T<:AbstractFloat,S<:Real}(::RoundingType{:fast},
+    @eval ^{T<:AbstractFloat,S<:Real}(::IntervalRounding{:fast},
                                 a::T, b::S, $mode1) = $directed(a^b)
 
-    @eval ^{T<:AbstractFloat,S<:Real}(::RoundingType{:none},
+    @eval ^{T<:AbstractFloat,S<:Real}(::IntervalRounding{:none},
                                 a::T, b::S, $mode1) = a^b
 
 
     # functions not in CRlibm:
     for f in (:sqrt, :inv, :tanh, :asinh, :acosh, :atanh)
 
-        @eval function $f{T<:AbstractFloat}(::RoundingType{:correct},
+        @eval function $f{T<:AbstractFloat}(::IntervalRounding{:correct},
                                             a::T, $mode1)
                             setrounding(T, $mode2) do
                                 $f(a)
@@ -123,10 +129,10 @@ for mode in (:Down, :Up)
                end
 
 
-        @eval $f{T<:AbstractFloat}(::RoundingType{:fast},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:fast},
                                     a::T, $mode1) = $directed($f(a))
 
-        @eval $f{T<:AbstractFloat}(::RoundingType{:none},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:none},
                                     a::T, $mode1) = $f(a)
 
 
@@ -136,13 +142,13 @@ for mode in (:Down, :Up)
     # Functions defined in CRlibm
 
     for f in CRlibm.functions
-        @eval $f{T<:AbstractFloat}(::RoundingType{:correct},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:correct},
                                 a::T, $mode1) = CRlibm.$f(a, $mode2)
 
-        @eval $f{T<:AbstractFloat}(::RoundingType{:fast},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:fast},
                                     a::T, $mode1) = $directed($f(a))
 
-        @eval $f{T<:AbstractFloat}(::RoundingType{:none},
+        @eval $f{T<:AbstractFloat}(::IntervalRounding{:none},
                                     a::T, $mode1) = $f(a)
 
     end
@@ -161,8 +167,8 @@ function setrounding(::Type{Interval}, rounding_type::Symbol)
         throw(ArgumentError("Rounding type must be one of `:correct`, `:fast`, `:none`"))
     end
 
-    #rounding_type = :(RoundingType{$(Meta.quot(rounding_type))})
-    rounding_object = RoundingType{rounding_type}()
+    #rounding_type = :(IntervalRounding{$(Meta.quot(rounding_type))})
+    rounding_object = IntervalRounding{rounding_type}()
 
 
     # binary functions:
