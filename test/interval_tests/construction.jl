@@ -54,14 +54,14 @@ using ValidatedNumerics
     @test_throws ArgumentError @interval(big(1), big(0.1))
 
 
-    # Conversions; may involve rounding
-    # @test convert(Interval, 1) == Interval(1.0)
-    # @test convert(Interval, pi) == @interval(pi)
-    # @test convert(Interval, eu) == @interval(eu)
-    # @test convert(Interval, BigInt(1)) == Interval(BigInt(1))
-    # @test convert(Interval, 1//10) == @interval(1//10)
-    # @test convert(Interval, 0.1) == Interval(0.09999999999999999, 0.1)
-    # @test convert(Interval, BigFloat(0.1)) == Interval(big(0.1))
+    # Conversion to Interval without type
+    @test convert(Interval, 1) == Interval(1.0)
+    @test convert(Interval, pi) == @interval(pi)
+    @test convert(Interval, eu) == @interval(eu)
+    @test convert(Interval, BigInt(1)) == Interval(BigInt(1))
+    @test convert(Interval, 1//10) == @interval(1//10)
+    @test convert(Interval, 0.1) == Interval(0.09999999999999999, 0.1)
+    @test convert(Interval, BigFloat(0.1)) == Interval(big(0.1))
 
 
     @test convert(Interval{Rational{Int}}, 0.1) == Interval(1//10)
