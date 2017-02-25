@@ -26,7 +26,7 @@ In Julia v0.6, but *not* in Julia v0.5, this will automatically redefine all rel
 
 doc"""Choose rounding mode based on environment variable"""
 
-immutable IntervalRounding{T<:Symbol} end
+immutable IntervalRounding{T} end
 
 # Functions that are the same for all rounding types:
 @eval begin
