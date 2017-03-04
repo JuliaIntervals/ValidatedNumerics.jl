@@ -9,6 +9,14 @@ setdisplay(:standard, decorations=true, sigfigs=6)
 
     @test parse(Interval{BigFloat}, "1") == @biginterval(1)
     @test parse(Interval{BigFloat}, "[-0x1.3p-1, 2/3]") == @biginterval(-0x1.3p-1, 2/3)
+
+    @test parse(Interval{Float64}, "[Empty]") == emptyinterval(Float64)
+    @test parse(Interval{BigFloat}, "[Empty]") == emptyinterval(BigFloat)
+
+    @test parse(Interval{Float64}, "3 ±  4") == -1..7
+    @test parse(Interval{Float64}, "0.2 ± 0.1") == Interval(0.09999999999999999, 0.30000000000000004)
+    @test parse(Interval{BigFloat}, "3 ±  4") == -1..7
+    @test parse(Interval{BigFloat}, "0.2 ± 0.1") == Interval(big"1.000000000000000000000000000000000000000000000000000000000000000000000000000002e-01", big"3.000000000000000000000000000000000000000000000000000000000000000000000000000017e-01")
 end
 
 @testset "Parse string to DecoratedInterval" begin
