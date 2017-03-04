@@ -26,5 +26,5 @@ end
 
     @test parse(DecoratedInterval{Float64}, "[3, 4]") == DecoratedInterval(3, 4)
 
-    @test parse(DecoratedInterval{Float64}, "[3, 4]_dac" == DecoratedInterval(3, 4, dac))
+    @test parse(DecoratedInterval{Float64}, "[3, 4]_dac") == DecoratedInterval(3, 4, dac)
 end
