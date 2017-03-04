@@ -280,3 +280,8 @@ end
     @test setdiff(x, z) == Interval{Float64}[]
     @test setdiff(z, x) == [0..1, 3..5]
 end
+
+@testset "Interval{T}(x::Interval)" begin
+    @test Interval{Float64}(3..4) == Interval(3.0, 4.0)
+    @test Interval{BigFloat}(3..4) == Interval{BigFloat}(3, 4)
+end
