@@ -1,10 +1,20 @@
 
-include("libieeep1788_tests_bool.jl")
-include("libieeep1788_tests_cancel.jl")
-include("libieeep1788_tests_elem.jl")
-include("libieeep1788_tests_mul_rev.jl")
-include("libieeep1788_tests_num.jl")
-include("libieeep1788_tests_overlap.jl")
-include("libieeep1788_tests_rec_bool.jl")
-include("libieeep1788_tests_rev.jl")
-include("libieeep1788_tests_set.jl")
+#=
+NOTE: The file `ieee1788-constructors.jl`, while it is
+included in this directory, is not tested, due to some
+lack of functionality
+=#
+
+testfiles = (
+    "libieeep1788_tests_bool.jl", "libieeep1788_tests_cancel.jl",
+    "libieeep1788_tests_elem.jl", "libieeep1788_tests_mul_rev.jl",
+    "libieeep1788_tests_num.jl", "libieeep1788_tests_overlap.jl",
+    "libieeep1788_tests_rec_bool.jl", "libieeep1788_tests_rev.jl",
+    "libieeep1788_tests_set.jl"
+)
+
+addprocs()
+@sync @parallel for tf in testfiles
+    include(tf)
+end
+rmprocs()
