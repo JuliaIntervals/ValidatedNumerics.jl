@@ -219,6 +219,14 @@ end
 
 end
 
+@testset "Conversion to interval of same type" begin
+    x = 3..4
+    @test convert(Interval{Float64}, x) === x
+
+    x = big(3)..big(4)
+    @test convert(Interval{BigFloat}, x) === x
+end
+
 @testset "Conversions between different types of interval" begin
     a = convert(Interval{BigFloat}, 3..4)
     @test typeof(a) == Interval{BigFloat}
