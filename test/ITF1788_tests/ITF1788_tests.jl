@@ -15,6 +15,6 @@ testfiles = (
 
 addprocs()
 @sync @parallel for tf in testfiles
-    include("test/ITF1788_tests/" * tf)
+    include("ITF1788_tests/" * tf)
 end
 rmprocs()
