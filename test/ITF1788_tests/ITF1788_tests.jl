@@ -13,8 +13,6 @@ testfiles = (
     "libieeep1788_tests_set.jl"
 )
 
-addprocs()
 @sync @parallel for tf in testfiles
     include("ITF1788_tests/" * tf)
 end
-rmprocs()
