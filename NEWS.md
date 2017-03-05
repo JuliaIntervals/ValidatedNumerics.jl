@@ -1,6 +1,10 @@
 # What's new in ValidatedNumerics.jl
 
 ## v0.7
+
+### End of support for Julia v0.4
+- v0.7 is the last version to include support for Julia v0.4
+
 ### Breaking API changes
 - Deprecate `displaymode`, replacing it with `setdisplay`, with simplified syntax #210:
 ```
