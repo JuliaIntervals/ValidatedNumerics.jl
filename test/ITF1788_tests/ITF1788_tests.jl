@@ -20,6 +20,7 @@ tests = (   "bool",
 # @sync @parallel for test in tests
 for test in tests
     filename = "libieeep1788_tests_$test.jl"
-    include(joinpath("ITF1788_tests", filename))
+    #include(joinpath("ITF1788_tests", filename))
+    include(filename)
 end
 # rmprocs()
