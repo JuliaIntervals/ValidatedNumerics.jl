@@ -5,16 +5,20 @@ included in this directory, is not tested, due to some
 lack of functionality
 =#
 
-testfiles = (
-    "libieeep1788_tests_bool.jl", "libieeep1788_tests_cancel.jl",
-    "libieeep1788_tests_elem.jl", "libieeep1788_tests_mul_rev.jl",
-    "libieeep1788_tests_num.jl", "libieeep1788_tests_overlap.jl",
-    "libieeep1788_tests_rec_bool.jl", "libieeep1788_tests_rev.jl",
-    "libieeep1788_tests_set.jl"
-)
+tests = (   "bool",
+            "cancel",
+            "elem",
+            "mul_rev",
+            "num",
+            "overlap",
+            "rec_bool",
+            "rev",
+            "set"
+        )
 
 addprocs()
-@sync @parallel for tf in testfiles
-    include("ITF1788_tests/" * tf)
+@sync @parallel for test in tests
+    filename = "libieeep1788_tests_$test.jl"
+    include(joinpath("ITF1788_tests", filename))
 end
 rmprocs()
