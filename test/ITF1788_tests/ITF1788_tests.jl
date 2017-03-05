@@ -16,9 +16,10 @@ tests = (   "bool",
             "set"
         )
 
-addprocs()
-@sync @parallel for test in tests
+# addprocs()
+# @sync @parallel for test in tests
+for test in tests
     filename = "libieeep1788_tests_$test.jl"
     include(joinpath("ITF1788_tests", filename))
 end
-rmprocs()
+# rmprocs()
