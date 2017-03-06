@@ -25,8 +25,6 @@ mid(X::IntervalBox) = [mid(x) for x in X]
 ⊆{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = all(i->(X[i] ⊆ Y[i]), 1:N)
 # all(X[i] ⊆ Y[i] for i in 1:N)  # on Julia 0.6
 
-∪{T}(a::Interval{T}, b::Interval{T}) = hull(a, b)
-
 ∩{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = IntervalBox(ntuple(i -> X[i] ∩ Y[i], Val{N}))
 ∪{N,T}(X::IntervalBox{N,T}, Y::IntervalBox{N,T}) = IntervalBox(ntuple(i -> X[i] ∪ Y[i], Val{N}))
 
