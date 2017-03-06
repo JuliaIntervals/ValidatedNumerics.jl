@@ -8,7 +8,7 @@ by a Cartesian product of $N$ `Interval`s.
 #     _ :: NTuple{N, Interval{T}}
 # end
 
-typealias IntervalBox{N,T} SVector{N,T}
+typealias IntervalBox{N,T} SVector{N,Interval{T}}
 
 IntervalBox(x::Interval) = IntervalBox( (x,) )  # single interval treated as tuple with one element
 
