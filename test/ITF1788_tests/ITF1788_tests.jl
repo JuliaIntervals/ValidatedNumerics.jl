@@ -7,7 +7,7 @@ lack of functionality
 
 tests = (   "bool",
             "cancel",
-            "elem",
+            # "elem",
             "mul_rev",
             "num",
             "overlap",
