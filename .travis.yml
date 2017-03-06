@@ -15,7 +15,7 @@ julia:
 
 script:
   - julia -e 'Pkg.clone(pwd())'
-  - julia -e 'Pkg.build("ValidatedNumerics")
+  - julia -e 'Pkg.build("ValidatedNumerics")'
   - if [ -f test/runtests.jl ]; then
       travis_wait 30 julia --check-bounds=yes -e 'Pkg.test("ValidatedNumerics", coverage=true)'
     fi
