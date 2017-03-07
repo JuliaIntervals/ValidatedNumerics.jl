@@ -4,11 +4,15 @@ doc"""An `IntervalBox` is an $N$-dimensional rectangular box, given
 by a Cartesian product of $N$ `Interval`s.
 """
 
-# immutable IntervalBox{N, T} <: FixedVector{N, Interval{T}}  # uses FixedSizeArrays.jl package
-#     _ :: NTuple{N, Interval{T}}
-# end
 
-typealias IntervalBox{N,T} SVector{N,Interval{T}}
+# typealias IntervalBox{N,T} SVector{N,Interval{T}}
+
+immutable IntervalBox{N,T} <: StaticVector{N}
+    data::NTuple{N,T}
+end
+
+
+(::Type{IntervalBox}){N,T}(x::NTuple{N, Interval{T}}) = SVector{N,Interval{T}}(x)
 
 IntervalBox(x::Interval) = IntervalBox( (x,) )  # single interval treated as tuple with one element
 
