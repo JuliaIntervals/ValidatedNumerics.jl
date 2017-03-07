@@ -5,14 +5,15 @@ by a Cartesian product of $N$ `Interval`s.
 """
 
 
-# typealias IntervalBox{N,T} SVector{N,Interval{T}}
-
-immutable IntervalBox{N,T} <: StaticVector{N}
-    data::NTuple{N,T}
+immutable IntervalBox{N,T} <: StaticVector{Interval{T}}
+    data::NTuple{N,Interval{T}}
 end
 
+IntervalBox{N,T}(x::NTuple{N,Interval{T}}) = IntervalBox{N,T}(x)
 
-(::Type{IntervalBox}){N,T}(x::NTuple{N, Interval{T}}) = SVector{N,Interval{T}}(x)
+StaticArrays.Size{N,T}(::Type{IntervalBox{N,T}}) = Size(N) # @pure not needed, I think...
+Base.getindex(a::IntervalBox, i::Int) = a.data[i]
+
 
 IntervalBox(x::Interval) = IntervalBox( (x,) )  # single interval treated as tuple with one element
 
