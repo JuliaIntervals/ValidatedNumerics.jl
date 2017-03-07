@@ -1,16 +1,16 @@
 #
 # Copyright 2013 - 2015 Marco Nehmeier (nehmeier@informatik.uni-wuerzburg.de)
 # Copyright 2015 Oliver Heimlich (oheim@posteo.de)
-# 
+#
 # Original author: Marco Nehmeier (unit tests in libieeep1788)
 # Converted into portable ITL format by Oliver Heimlich with minor corrections.
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -304,7 +304,7 @@ facts("minimal_mul_dec_test") do
     @fact decoration(DecoratedInterval(Interval(1.0, 2.0), trv) * DecoratedInterval(∅, trv)) --> decoration(DecoratedInterval(∅, trv))
 end
 
-facts("minimal_div_test") do
+facts("minimal_div_test_1") do
     @fact ∅ / ∅ --> ∅
     @fact Interval(-1.0, 1.0) / ∅ --> ∅
     @fact ∅ / Interval(-1.0, 1.0) --> ∅
@@ -322,6 +322,9 @@ facts("minimal_div_test") do
     @fact entireinterval(Float64) / Interval(3.0, Inf) --> entireinterval(Float64)
     @fact entireinterval(Float64) / Interval(0.0, 0.0) --> ∅
     @fact entireinterval(Float64) / Interval(-0.0, -0.0) --> ∅
+  end
+
+  facts("minimal_div_test_2") do
     @fact entireinterval(Float64) / Interval(-3.0, 0.0) --> entireinterval(Float64)
     @fact entireinterval(Float64) / Interval(-3.0, -0.0) --> entireinterval(Float64)
     @fact entireinterval(Float64) / Interval(-3.0, 3.0) --> entireinterval(Float64)
@@ -341,6 +344,9 @@ facts("minimal_div_test") do
     @fact Interval(-30.0, -15.0) / Interval(0.0, 0.0) --> ∅
     @fact Interval(-30.0, -15.0) / Interval(-3.0, 0.0) --> Interval(5.0, Inf)
     @fact Interval(-30.0, -15.0) / Interval(-0.0, -0.0) --> ∅
+  end
+
+  facts("minimal_div_test_3") do
     @fact Interval(-30.0, -15.0) / Interval(-3.0, -0.0) --> Interval(5.0, Inf)
     @fact Interval(-30.0, -15.0) / Interval(-3.0, 3.0) --> entireinterval(Float64)
     @fact Interval(-30.0, -15.0) / Interval(0.0, 3.0) --> Interval(-Inf, -5.0)
@@ -358,6 +364,9 @@ facts("minimal_div_test") do
     @fact Interval(-30.0, 15.0) / Interval(3.0, Inf) --> Interval(-10.0, 5.0)
     @fact Interval(-30.0, 15.0) / Interval(0.0, 0.0) --> ∅
     @fact Interval(-30.0, 15.0) / Interval(-0.0, -0.0) --> ∅
+  end
+
+  facts("minimal_div_test_4") do
     @fact Interval(-30.0, 15.0) / Interval(-3.0, 0.0) --> entireinterval(Float64)
     @fact Interval(-30.0, 15.0) / Interval(-3.0, -0.0) --> entireinterval(Float64)
     @fact Interval(-30.0, 15.0) / Interval(-3.0, 3.0) --> entireinterval(Float64)
@@ -375,6 +384,9 @@ facts("minimal_div_test") do
     @fact Interval(15.0, 30.0) / Interval(-Inf, -3.0) --> Interval(-10.0, 0.0)
     @fact Interval(15.0, 30.0) / Interval(3.0, Inf) --> Interval(0.0, 10.0)
     @fact Interval(15.0, 30.0) / Interval(0.0, 0.0) --> ∅
+  end
+
+  facts("minimal_div_test_5") do
     @fact Interval(15.0, 30.0) / Interval(-3.0, 0.0) --> Interval(-Inf, -5.0)
     @fact Interval(15.0, 30.0) / Interval(-0.0, -0.0) --> ∅
     @fact Interval(15.0, 30.0) / Interval(-3.0, -0.0) --> Interval(-Inf, -5.0)
@@ -392,6 +404,9 @@ facts("minimal_div_test") do
     @fact Interval(0.0, 0.0) / Interval(3.0, 5.0) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) / Interval(-Inf, -3.0) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) / Interval(3.0, Inf) --> Interval(0.0, 0.0)
+end
+
+facts("minimal_div_test_6") do
     @fact Interval(0.0, 0.0) / Interval(0.0, 0.0) --> ∅
     @fact Interval(0.0, 0.0) / Interval(-3.0, 0.0) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) / Interval(-0.0, -0.0) --> ∅
@@ -409,6 +424,9 @@ facts("minimal_div_test") do
     @fact Interval(-0.0, -0.0) / Interval(-5.0, -3.0) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) / Interval(3.0, 5.0) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) / Interval(-Inf, -3.0) --> Interval(0.0, 0.0)
+  end
+
+  facts("minimal_div_test_7") do
     @fact Interval(-0.0, -0.0) / Interval(3.0, Inf) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) / Interval(0.0, 0.0) --> ∅
     @fact Interval(-0.0, -0.0) / Interval(-3.0, 0.0) --> Interval(0.0, 0.0)
@@ -426,6 +444,9 @@ facts("minimal_div_test") do
     @fact Interval(-0.0, -0.0) / entireinterval(Float64) --> Interval(0.0, 0.0)
     @fact Interval(-Inf, -15.0) / Interval(-5.0, -3.0) --> Interval(3.0, Inf)
     @fact Interval(-Inf, -15.0) / Interval(3.0, 5.0) --> Interval(-Inf, -3.0)
+  end
+
+  facts("minimal_div_test_8") do
     @fact Interval(-Inf, -15.0) / Interval(-Inf, -3.0) --> Interval(0.0, Inf)
     @fact Interval(-Inf, -15.0) / Interval(3.0, Inf) --> Interval(-Inf, 0.0)
     @fact Interval(-Inf, -15.0) / Interval(0.0, 0.0) --> ∅
@@ -443,6 +464,9 @@ facts("minimal_div_test") do
     @fact Interval(-Inf, -15.0) / Interval(-0.0, Inf) --> Interval(-Inf, 0.0)
     @fact Interval(-Inf, -15.0) / entireinterval(Float64) --> entireinterval(Float64)
     @fact Interval(-Inf, 15.0) / Interval(-5.0, -3.0) --> Interval(-5.0, Inf)
+  end
+
+  facts("minimal_div_test_9") do
     @fact Interval(-Inf, 15.0) / Interval(3.0, 5.0) --> Interval(-Inf, 5.0)
     @fact Interval(-Inf, 15.0) / Interval(-Inf, -3.0) --> Interval(-5.0, Inf)
     @fact Interval(-Inf, 15.0) / Interval(3.0, Inf) --> Interval(-Inf, 5.0)
@@ -460,6 +484,9 @@ facts("minimal_div_test") do
     @fact Interval(-Inf, 15.0) / Interval(0.0, Inf) --> entireinterval(Float64)
     @fact Interval(-Inf, 15.0) / Interval(-0.0, Inf) --> entireinterval(Float64)
     @fact Interval(-Inf, 15.0) / entireinterval(Float64) --> entireinterval(Float64)
+  end
+
+  facts("minimal_div_test_10") do
     @fact Interval(-15.0, Inf) / Interval(-5.0, -3.0) --> Interval(-Inf, 5.0)
     @fact Interval(-15.0, Inf) / Interval(3.0, 5.0) --> Interval(-5.0, Inf)
     @fact Interval(-15.0, Inf) / Interval(-Inf, -3.0) --> Interval(-Inf, 5.0)
@@ -477,6 +504,9 @@ facts("minimal_div_test") do
     @fact Interval(-15.0, Inf) / Interval(-3.0, Inf) --> entireinterval(Float64)
     @fact Interval(-15.0, Inf) / Interval(0.0, Inf) --> entireinterval(Float64)
     @fact Interval(-15.0, Inf) / Interval(-0.0, Inf) --> entireinterval(Float64)
+  end
+
+  facts("minimal_div_test_11") do
     @fact Interval(-15.0, Inf) / entireinterval(Float64) --> entireinterval(Float64)
     @fact Interval(15.0, Inf) / Interval(-5.0, -3.0) --> Interval(-Inf, -3.0)
     @fact Interval(15.0, Inf) / Interval(3.0, 5.0) --> Interval(3.0, Inf)
@@ -494,6 +524,9 @@ facts("minimal_div_test") do
     @fact Interval(15.0, Inf) / Interval(-Inf, 3.0) --> entireinterval(Float64)
     @fact Interval(15.0, Inf) / Interval(-3.0, Inf) --> entireinterval(Float64)
     @fact Interval(15.0, Inf) / Interval(0.0, Inf) --> Interval(0.0, Inf)
+  end
+
+  facts("minimal_div_test_12") do
     @fact Interval(15.0, Inf) / Interval(-0.0, Inf) --> Interval(0.0, Inf)
     @fact Interval(15.0, Inf) / entireinterval(Float64) --> entireinterval(Float64)
     @fact Interval(-30.0, 0.0) / Interval(-5.0, -3.0) --> Interval(0.0, 10.0)
@@ -511,6 +544,9 @@ facts("minimal_div_test") do
     @fact Interval(-30.0, 0.0) / Interval(-Inf, -0.0) --> Interval(0.0, Inf)
     @fact Interval(-30.0, 0.0) / Interval(-Inf, 3.0) --> entireinterval(Float64)
     @fact Interval(-30.0, 0.0) / Interval(-3.0, Inf) --> entireinterval(Float64)
+  end
+
+  facts("minimal_div_test_13") do
     @fact Interval(-30.0, 0.0) / Interval(0.0, Inf) --> Interval(-Inf, 0.0)
     @fact Interval(-30.0, 0.0) / Interval(-0.0, Inf) --> Interval(-Inf, 0.0)
     @fact Interval(-30.0, 0.0) / entireinterval(Float64) --> entireinterval(Float64)
@@ -528,6 +564,9 @@ facts("minimal_div_test") do
     @fact Interval(-30.0, -0.0) / Interval(-0.0, 3.0) --> Interval(-Inf, 0.0)
     @fact Interval(-30.0, -0.0) / Interval(-Inf, -0.0) --> Interval(0.0, Inf)
     @fact Interval(-30.0, -0.0) / Interval(-Inf, 3.0) --> entireinterval(Float64)
+  end
+
+  facts("minimal_div_test_14") do
     @fact Interval(-30.0, -0.0) / Interval(-3.0, Inf) --> entireinterval(Float64)
     @fact Interval(-30.0, -0.0) / Interval(0.0, Inf) --> Interval(-Inf, 0.0)
     @fact Interval(-30.0, -0.0) / Interval(-0.0, Inf) --> Interval(-Inf, 0.0)
@@ -545,6 +584,9 @@ facts("minimal_div_test") do
     @fact Interval(0.0, 30.0) / Interval(-Inf, 0.0) --> Interval(-Inf, 0.0)
     @fact Interval(0.0, 30.0) / Interval(-0.0, 3.0) --> Interval(0.0, Inf)
     @fact Interval(0.0, 30.0) / Interval(-Inf, -0.0) --> Interval(-Inf, 0.0)
+end
+
+facts("minimal_div_test_15") do
     @fact Interval(0.0, 30.0) / Interval(-Inf, 3.0) --> entireinterval(Float64)
     @fact Interval(0.0, 30.0) / Interval(-3.0, Inf) --> entireinterval(Float64)
     @fact Interval(0.0, 30.0) / Interval(0.0, Inf) --> Interval(0.0, Inf)
@@ -562,6 +604,9 @@ facts("minimal_div_test") do
     @fact Interval(-0.0, 30.0) / Interval(0.0, 3.0) --> Interval(0.0, Inf)
     @fact Interval(-0.0, 30.0) / Interval(-Inf, 0.0) --> Interval(-Inf, 0.0)
     @fact Interval(-0.0, 30.0) / Interval(-0.0, 3.0) --> Interval(0.0, Inf)
+  end
+
+  facts("minimal_div_test_16") do
     @fact Interval(-0.0, 30.0) / Interval(-Inf, -0.0) --> Interval(-Inf, 0.0)
     @fact Interval(-0.0, 30.0) / Interval(-Inf, 3.0) --> entireinterval(Float64)
     @fact Interval(-0.0, 30.0) / Interval(-3.0, Inf) --> entireinterval(Float64)
@@ -579,6 +624,9 @@ facts("minimal_div_test") do
     @fact Interval(-Inf, 0.0) / Interval(-3.0, 3.0) --> entireinterval(Float64)
     @fact Interval(-Inf, 0.0) / Interval(0.0, 3.0) --> Interval(-Inf, 0.0)
     @fact Interval(-Inf, 0.0) / Interval(-Inf, 0.0) --> Interval(0.0, Inf)
+  end
+
+  facts("minimal_div_test_17") do
     @fact Interval(-Inf, 0.0) / Interval(-0.0, 3.0) --> Interval(-Inf, 0.0)
     @fact Interval(-Inf, 0.0) / Interval(-Inf, -0.0) --> Interval(0.0, Inf)
     @fact Interval(-Inf, 0.0) / Interval(-Inf, 3.0) --> entireinterval(Float64)
@@ -596,6 +644,9 @@ facts("minimal_div_test") do
     @fact Interval(-Inf, -0.0) / Interval(-3.0, -0.0) --> Interval(0.0, Inf)
     @fact Interval(-Inf, -0.0) / Interval(-3.0, 3.0) --> entireinterval(Float64)
     @fact Interval(-Inf, -0.0) / Interval(0.0, 3.0) --> Interval(-Inf, 0.0)
+  end
+
+  facts("minimal_div_test_18") do
     @fact Interval(-Inf, -0.0) / Interval(-Inf, 0.0) --> Interval(0.0, Inf)
     @fact Interval(-Inf, -0.0) / Interval(-0.0, 3.0) --> Interval(-Inf, 0.0)
     @fact Interval(-Inf, -0.0) / Interval(-Inf, -0.0) --> Interval(0.0, Inf)
@@ -613,6 +664,9 @@ facts("minimal_div_test") do
     @fact Interval(0.0, Inf) / Interval(-0.0, -0.0) --> ∅
     @fact Interval(0.0, Inf) / Interval(-3.0, -0.0) --> Interval(-Inf, 0.0)
     @fact Interval(0.0, Inf) / Interval(-3.0, 3.0) --> entireinterval(Float64)
+  end
+
+  facts("minimal_div_test_19") do
     @fact Interval(0.0, Inf) / Interval(0.0, 3.0) --> Interval(0.0, Inf)
     @fact Interval(0.0, Inf) / Interval(-Inf, 0.0) --> Interval(-Inf, 0.0)
     @fact Interval(0.0, Inf) / Interval(-0.0, 3.0) --> Interval(0.0, Inf)
@@ -630,6 +684,9 @@ facts("minimal_div_test") do
     @fact Interval(-0.0, Inf) / Interval(-3.0, 0.0) --> Interval(-Inf, 0.0)
     @fact Interval(-0.0, Inf) / Interval(-0.0, -0.0) --> ∅
     @fact Interval(-0.0, Inf) / Interval(-3.0, -0.0) --> Interval(-Inf, 0.0)
+end
+
+facts("minimal_div_test_20") do
     @fact Interval(-0.0, Inf) / Interval(-3.0, 3.0) --> entireinterval(Float64)
     @fact Interval(-0.0, Inf) / Interval(0.0, 3.0) --> Interval(0.0, Inf)
     @fact Interval(-0.0, Inf) / Interval(-Inf, 0.0) --> Interval(-Inf, 0.0)
@@ -661,7 +718,7 @@ facts("minimal_div_dec_test") do
     @fact decoration(DecoratedInterval(Interval(1.0, 2.0), trv) / DecoratedInterval(∅, trv)) --> decoration(DecoratedInterval(∅, trv))
 end
 
-facts("minimal_recip_test") do
+facts("minimal_recip_test_1") do
     @fact inv(Interval(-50.0, -10.0)) --> Interval(-0x1.999999999999ap-4, -0x1.47ae147ae147ap-6)
     @fact (Interval(-50.0, -10.0))^(-1) --> Interval(-0x1.999999999999ap-4, -0x1.47ae147ae147ap-6)
     @fact (Interval(-50.0, -10.0))^(-1//1) --> Interval(-0x1.999999999999ap-4, -0x1.47ae147ae147ap-6)
@@ -683,6 +740,9 @@ facts("minimal_recip_test") do
     @fact (Interval(10.0, Inf))^(-1.0) --> Interval(0.0, 0x1.999999999999ap-4)
     @fact 1 /(Interval(10.0, Inf)) --> Interval(0.0, 0x1.999999999999ap-4)
     @fact inv(Interval(0.0, 0.0)) --> ∅
+  end
+
+  facts("minimal_recip_test_2") do
     @fact (Interval(0.0, 0.0))^(-1) --> ∅
     @fact (Interval(0.0, 0.0))^(-1//1) --> ∅
     @fact (Interval(0.0, 0.0))^(-1.0) --> ∅
@@ -704,6 +764,9 @@ facts("minimal_recip_test") do
     @fact 1 /(Interval(-10.0, -0.0)) --> Interval(-Inf, -0x1.9999999999999p-4)
     @fact inv(Interval(-10.0, 10.0)) --> entireinterval(Float64)
     @fact (Interval(-10.0, 10.0))^(-1) --> entireinterval(Float64)
+  end
+
+  facts("minimal_recip_test_3") do
     @fact (Interval(-10.0, 10.0))^(-1//1) --> entireinterval(Float64)
     @fact (Interval(-10.0, 10.0))^(-1.0) --> entireinterval(Float64)
     @fact 1 /(Interval(-10.0, 10.0)) --> entireinterval(Float64)
@@ -725,6 +788,9 @@ facts("minimal_recip_test") do
     @fact inv(Interval(-Inf, -0.0)) --> Interval(-Inf, 0.0)
     @fact (Interval(-Inf, -0.0))^(-1) --> Interval(-Inf, 0.0)
     @fact (Interval(-Inf, -0.0))^(-1//1) --> Interval(-Inf, 0.0)
+  end
+
+  facts("minimal_recip_test_4") do
     @fact (Interval(-Inf, -0.0))^(-1.0) --> Interval(-Inf, 0.0)
     @fact 1 /(Interval(-Inf, -0.0)) --> Interval(-Inf, 0.0)
     @fact inv(Interval(-Inf, 10.0)) --> entireinterval(Float64)
@@ -993,7 +1059,7 @@ facts("minimal_sqrt_dec_test") do
     @fact decoration((DecoratedInterval(Interval(-5.0, Inf), dac))^(1//2)) --> decoration(DecoratedInterval(Interval(0.0, Inf), trv))
 end
 
-facts("minimal_fma_test") do
+facts("minimal_fma_test_1") do
     @fact fma(∅, ∅, ∅) --> ∅
     @fact fma(Interval(-1.0, 1.0), ∅, ∅) --> ∅
     @fact fma(∅, Interval(-1.0, 1.0), ∅) --> ∅
@@ -1015,6 +1081,9 @@ facts("minimal_fma_test") do
     @fact fma(entireinterval(Float64), entireinterval(Float64), ∅) --> ∅
     @fact fma(Interval(1.0, Inf), Interval(0.0, 0.0), ∅) --> ∅
     @fact fma(Interval(1.0, Inf), Interval(-0.0, -0.0), ∅) --> ∅
+end
+
+facts("minimal_fma_test_2") do
     @fact fma(Interval(1.0, Inf), Interval(-5.0, -1.0), ∅) --> ∅
     @fact fma(Interval(1.0, Inf), Interval(-5.0, 3.0), ∅) --> ∅
     @fact fma(Interval(1.0, Inf), Interval(1.0, 3.0), ∅) --> ∅
@@ -1036,6 +1105,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-Inf, 3.0), Interval(0.0, 0.0), ∅) --> ∅
     @fact fma(Interval(-Inf, 3.0), Interval(-0.0, -0.0), ∅) --> ∅
     @fact fma(Interval(-Inf, 3.0), Interval(-5.0, -1.0), ∅) --> ∅
+end
+
+facts("minimal_fma_test_3") do
     @fact fma(Interval(-Inf, 3.0), Interval(-5.0, 3.0), ∅) --> ∅
     @fact fma(Interval(-Inf, 3.0), Interval(1.0, 3.0), ∅) --> ∅
     @fact fma(Interval(-Inf, 3.0), Interval(-Inf, -1.0), ∅) --> ∅
@@ -1057,6 +1129,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(0.0, 0.0), Interval(-0.0, -0.0), ∅) --> ∅
     @fact fma(Interval(0.0, 0.0), Interval(-5.0, -1.0), ∅) --> ∅
     @fact fma(Interval(0.0, 0.0), Interval(-5.0, 3.0), ∅) --> ∅
+end
+
+facts("minimal_fma_test_4") do
     @fact fma(Interval(0.0, 0.0), Interval(1.0, 3.0), ∅) --> ∅
     @fact fma(Interval(0.0, 0.0), Interval(-Inf, -1.0), ∅) --> ∅
     @fact fma(Interval(0.0, 0.0), Interval(-Inf, 3.0), ∅) --> ∅
@@ -1078,6 +1153,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(1.0, 5.0), Interval(-5.0, -1.0), ∅) --> ∅
     @fact fma(Interval(1.0, 5.0), Interval(-5.0, 3.0), ∅) --> ∅
     @fact fma(Interval(1.0, 5.0), Interval(1.0, 3.0), ∅) --> ∅
+end
+
+facts("minimal_fma_test_5") do
     @fact fma(Interval(1.0, 5.0), Interval(-Inf, -1.0), ∅) --> ∅
     @fact fma(Interval(1.0, 5.0), Interval(-Inf, 3.0), ∅) --> ∅
     @fact fma(Interval(1.0, 5.0), Interval(-5.0, Inf), ∅) --> ∅
@@ -1099,6 +1177,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-1.0, 5.0), Interval(1.0, Inf), ∅) --> ∅
     @fact fma(Interval(-1.0, 5.0), entireinterval(Float64), ∅) --> ∅
     @fact fma(Interval(-10.0, -5.0), Interval(0.0, 0.0), ∅) --> ∅
+end
+
+facts("minimal_fma_test_6") do
     @fact fma(Interval(-10.0, -5.0), Interval(-0.0, -0.0), ∅) --> ∅
     @fact fma(Interval(-10.0, -5.0), Interval(-5.0, -1.0), ∅) --> ∅
     @fact fma(Interval(-10.0, -5.0), Interval(-5.0, 3.0), ∅) --> ∅
@@ -1120,6 +1201,9 @@ facts("minimal_fma_test") do
     @fact fma(entireinterval(Float64), Interval(0.0, 0.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(entireinterval(Float64), Interval(-0.0, -0.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(entireinterval(Float64), Interval(-5.0, -1.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_7") do
     @fact fma(entireinterval(Float64), Interval(-5.0, 3.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
     @fact fma(entireinterval(Float64), Interval(1.0, 3.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
     @fact fma(entireinterval(Float64), Interval(-Inf, -1.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
@@ -1151,6 +1235,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-Inf, 3.0), Interval(-0.0, -0.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(Interval(-Inf, 3.0), Interval(-5.0, -1.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
     @fact fma(Interval(-Inf, 3.0), Interval(-5.0, 3.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_8") do
     @fact fma(Interval(-Inf, 3.0), Interval(1.0, 3.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 11.0)
     @fact fma(Interval(-Inf, 3.0), Interval(-Inf, -1.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
     @fact fma(Interval(-Inf, 3.0), Interval(-Inf, 3.0), Interval(-Inf, 2.0)) --> entireinterval(Float64)
@@ -1182,6 +1269,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-0.0, -0.0), Interval(-5.0, -1.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(Interval(-0.0, -0.0), Interval(-5.0, 3.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(Interval(-0.0, -0.0), Interval(1.0, 3.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
+end
+
+facts("minimal_fma_test_9") do
     @fact fma(Interval(-0.0, -0.0), Interval(-Inf, -1.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(Interval(-0.0, -0.0), Interval(-Inf, 3.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(Interval(-0.0, -0.0), Interval(-5.0, Inf), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
@@ -1213,6 +1303,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-1.0, 5.0), Interval(1.0, Inf), Interval(-Inf, 2.0)) --> entireinterval(Float64)
     @fact fma(Interval(-1.0, 5.0), entireinterval(Float64), Interval(-Inf, 2.0)) --> entireinterval(Float64)
     @fact fma(Interval(-10.0, -5.0), Interval(0.0, 0.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
+end
+
+facts("minimal_fma_test_10") do
     @fact fma(Interval(-10.0, -5.0), Interval(-0.0, -0.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 2.0)
     @fact fma(Interval(-10.0, -5.0), Interval(-5.0, -1.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 52.0)
     @fact fma(Interval(-10.0, -5.0), Interval(-5.0, 3.0), Interval(-Inf, 2.0)) --> Interval(-Inf, 52.0)
@@ -1244,6 +1337,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(1.0, Inf), Interval(0.0, 0.0), Interval(-2.0, 2.0)) --> Interval(-2.0, 2.0)
     @fact fma(Interval(1.0, Inf), Interval(-0.0, -0.0), Interval(-2.0, 2.0)) --> Interval(-2.0, 2.0)
     @fact fma(Interval(1.0, Inf), Interval(-5.0, -1.0), Interval(-2.0, 2.0)) --> Interval(-Inf, 1.0)
+end
+
+facts("minimal_fma_test_11") do
     @fact fma(Interval(1.0, Inf), Interval(-5.0, 3.0), Interval(-2.0, 2.0)) --> entireinterval(Float64)
     @fact fma(Interval(1.0, Inf), Interval(1.0, 3.0), Interval(-2.0, 2.0)) --> Interval(-1.0, Inf)
     @fact fma(Interval(1.0, Inf), Interval(-Inf, -1.0), Interval(-2.0, 2.0)) --> Interval(-Inf, 1.0)
@@ -1275,6 +1371,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-Inf, -3.0), Interval(-0.0, -0.0), Interval(-2.0, 2.0)) --> Interval(-2.0, 2.0)
     @fact fma(Interval(-Inf, -3.0), Interval(-5.0, -1.0), Interval(-2.0, 2.0)) --> Interval(1.0, Inf)
     @fact fma(Interval(-Inf, -3.0), Interval(-5.0, 3.0), Interval(-2.0, 2.0)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_12") do
     @fact fma(Interval(-Inf, -3.0), Interval(1.0, 3.0), Interval(-2.0, 2.0)) --> Interval(-Inf, -1.0)
     @fact fma(Interval(-Inf, -3.0), Interval(-Inf, -1.0), Interval(-2.0, 2.0)) --> Interval(1.0, Inf)
     @fact fma(Interval(-Inf, -3.0), Interval(-Inf, 3.0), Interval(-2.0, 2.0)) --> entireinterval(Float64)
@@ -1306,6 +1405,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(1.0, 5.0), Interval(-5.0, -1.0), Interval(-2.0, 2.0)) --> Interval(-27.0, 1.0)
     @fact fma(Interval(1.0, 5.0), Interval(-5.0, 3.0), Interval(-2.0, 2.0)) --> Interval(-27.0, 17.0)
     @fact fma(Interval(1.0, 5.0), Interval(1.0, 3.0), Interval(-2.0, 2.0)) --> Interval(-1.0, 17.0)
+end
+
+facts("minimal_fma_test_13") do
     @fact fma(Interval(1.0, 5.0), Interval(-Inf, -1.0), Interval(-2.0, 2.0)) --> Interval(-Inf, 1.0)
     @fact fma(Interval(1.0, 5.0), Interval(-Inf, 3.0), Interval(-2.0, 2.0)) --> Interval(-Inf, 17.0)
     @fact fma(Interval(1.0, 5.0), Interval(-5.0, Inf), Interval(-2.0, 2.0)) --> Interval(-27.0, Inf)
@@ -1337,6 +1439,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-10.0, -5.0), Interval(1.0, Inf), Interval(-2.0, 2.0)) --> Interval(-Inf, -3.0)
     @fact fma(Interval(-10.0, -5.0), entireinterval(Float64), Interval(-2.0, 2.0)) --> entireinterval(Float64)
     @fact fma(∅, ∅, Interval(-2.0, Inf)) --> ∅
+end
+
+facts("minimal_fma_test_14") do
     @fact fma(Interval(-1.0, 1.0), ∅, Interval(-2.0, Inf)) --> ∅
     @fact fma(∅, Interval(-1.0, 1.0), Interval(-2.0, Inf)) --> ∅
     @fact fma(∅, entireinterval(Float64), Interval(-2.0, Inf)) --> ∅
@@ -1368,6 +1473,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-1.0, Inf), Interval(0.0, 0.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(-1.0, Inf), Interval(-0.0, -0.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(-1.0, Inf), Interval(-5.0, -1.0), Interval(-2.0, Inf)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_15") do
     @fact fma(Interval(-1.0, Inf), Interval(-5.0, 3.0), Interval(-2.0, Inf)) --> entireinterval(Float64)
     @fact fma(Interval(-1.0, Inf), Interval(1.0, 3.0), Interval(-2.0, Inf)) --> Interval(-5.0, Inf)
     @fact fma(Interval(-1.0, Inf), Interval(-Inf, -1.0), Interval(-2.0, Inf)) --> entireinterval(Float64)
@@ -1398,6 +1506,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(0.0, 0.0), Interval(0.0, 0.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(0.0, 0.0), Interval(-0.0, -0.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(0.0, 0.0), Interval(-5.0, -1.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
+end
+
+facts("minimal_fma_test_16") do
     @fact fma(Interval(0.0, 0.0), Interval(-5.0, 3.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(0.0, 0.0), Interval(1.0, 3.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(0.0, 0.0), Interval(-Inf, -1.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
@@ -1428,6 +1539,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-1.0, 5.0), Interval(-0.0, -0.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(-1.0, 5.0), Interval(0.0, 0.0), Interval(-2.0, Inf)) --> Interval(-2.0, Inf)
     @fact fma(Interval(-1.0, 5.0), Interval(-5.0, -1.0), Interval(-2.0, Inf)) --> Interval(-27.0, Inf)
+end
+
+facts("minimal_fma_test_17") do
     #min max
     @fact fma(Interval(-1.0, 5.0), Interval(-5.0, 3.0), Interval(-2.0, Inf)) --> Interval(-27.0, Inf)
     @fact fma(Interval(-10.0, 2.0), Interval(-5.0, 3.0), Interval(-2.0, Inf)) --> Interval(-32.0, Inf)
@@ -1459,6 +1573,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-0.0, -0.0), ∅, entireinterval(Float64)) --> ∅
     @fact fma(∅, Interval(0.0, 0.0), entireinterval(Float64)) --> ∅
     @fact fma(∅, Interval(-0.0, -0.0), entireinterval(Float64)) --> ∅
+end
+
+facts("minimal_fma_test_18") do
     @fact fma(entireinterval(Float64), Interval(0.0, 0.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(entireinterval(Float64), Interval(-0.0, -0.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(entireinterval(Float64), Interval(-5.0, -1.0), entireinterval(Float64)) --> entireinterval(Float64)
@@ -1490,6 +1607,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(-1.0, Inf), Interval(1.0, Inf), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-1.0, Inf), entireinterval(Float64), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-Inf, 3.0), Interval(0.0, 0.0), entireinterval(Float64)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_19") do
     @fact fma(Interval(-Inf, 3.0), Interval(-0.0, -0.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-Inf, 3.0), Interval(-5.0, -1.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-Inf, 3.0), Interval(-5.0, 3.0), entireinterval(Float64)) --> entireinterval(Float64)
@@ -1521,6 +1641,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(0.0, 0.0), entireinterval(Float64), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-0.0, -0.0), Interval(0.0, 0.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-0.0, -0.0), Interval(-0.0, -0.0), entireinterval(Float64)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_20") do
     @fact fma(Interval(-0.0, -0.0), Interval(-5.0, -1.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-0.0, -0.0), Interval(-5.0, 3.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-0.0, -0.0), Interval(1.0, 3.0), entireinterval(Float64)) --> entireinterval(Float64)
@@ -1541,6 +1664,9 @@ facts("minimal_fma_test") do
     @fact fma(Interval(1.0, 5.0), entireinterval(Float64), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-1.0, 5.0), Interval(0.0, 0.0), entireinterval(Float64)) --> entireinterval(Float64)
     @fact fma(Interval(-1.0, 5.0), Interval(-0.0, -0.0), entireinterval(Float64)) --> entireinterval(Float64)
+end
+
+facts("minimal_fma_test_21") do
     @fact fma(Interval(-1.0, 5.0), Interval(-5.0, -1.0), entireinterval(Float64)) --> entireinterval(Float64)
     #min max
     @fact fma(Interval(-1.0, 5.0), Interval(-5.0, 3.0), entireinterval(Float64)) --> entireinterval(Float64)
@@ -1579,7 +1705,7 @@ facts("minimal_fma_dec_test") do
     @fact decoration(fma(DecoratedInterval(Interval(1.0, 2.0), com), DecoratedInterval(Interval(1.0, 2.0), com), DecoratedInterval(Interval(2.0, 5.0), com))) --> decoration(DecoratedInterval(Interval(3.0, 9.0), com))
 end
 
-facts("minimal_pown_test") do
+facts("minimal_pown_test_1") do
     @fact ∅ ^ 0 --> ∅
     @fact entireinterval(Float64) ^ 0 --> Interval(1.0, 1.0)
     @fact Interval(0.0, 0.0) ^ 0 --> Interval(1.0, 1.0)
@@ -1611,6 +1737,9 @@ facts("minimal_pown_test") do
     @fact ∅ ^ 8 --> ∅
     @fact entireinterval(Float64) ^ 8 --> Interval(0.0, Inf)
     @fact Interval(0.0, 0.0) ^ 8 --> Interval(0.0, 0.0)
+end
+
+facts("minimal_pown_test_2") do
     @fact Interval(-0.0, -0.0) ^ 8 --> Interval(0.0, 0.0)
     @fact Interval(13.1, 13.1) ^ 8 --> Interval(0x1.9d8fd495853f5p+29, 0x1.9d8fd495853f6p+29)
     @fact Interval(-7451.145, -7451.145) ^ 8 --> Interval(0x1.dfb1bb622e70dp+102, 0x1.dfb1bb622e70ep+102)
@@ -1642,6 +1771,9 @@ facts("minimal_pown_test") do
     @fact entireinterval(Float64) ^ 3 --> entireinterval(Float64)
     @fact Interval(0.0, 0.0) ^ 3 --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) ^ 3 --> Interval(0.0, 0.0)
+end
+
+facts("minimal_pown_test_3") do
     @fact Interval(13.1, 13.1) ^ 3 --> Interval(0x1.1902e978d4fdep+11, 0x1.1902e978d4fdfp+11)
     @fact Interval(-7451.145, -7451.145) ^ 3 --> Interval(-0x1.81460637b9a3dp+38, -0x1.81460637b9a3cp+38)
     @fact Interval(0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023) ^ 3 --> Interval(0x1.fffffffffffffp1023, Inf)
@@ -1673,6 +1805,9 @@ facts("minimal_pown_test") do
     @fact Interval(0.0, 0.0) ^ -2 --> ∅
     @fact Interval(-0.0, -0.0) ^ -2 --> ∅
     @fact Interval(13.1, 13.1) ^ -2 --> Interval(0x1.7de3a077d1568p-8, 0x1.7de3a077d1569p-8)
+end
+
+facts("minimal_pown_test_4") do
     @fact Interval(-7451.145, -7451.145) ^ -2 --> Interval(0x1.3570290cd6e14p-26, 0x1.3570290cd6e15p-26)
     @fact Interval(0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023) ^ -2 --> Interval(0x0p+0, 0x0.0000000000001p-1022)
     @fact Interval(-0x1.fffffffffffffp1023, -0x1.fffffffffffffp1023) ^ -2 --> Interval(0x0p+0, 0x0.0000000000001p-1022)
@@ -1704,6 +1839,9 @@ facts("minimal_pown_test") do
     @fact Interval(-0.0, -0.0) ^ -1 --> ∅
     @fact Interval(13.1, 13.1) ^ -1 --> Interval(0x1.38abf82ee6986p-4, 0x1.38abf82ee6987p-4)
     @fact Interval(-7451.145, -7451.145) ^ -1 --> Interval(-0x1.197422c9048bfp-13, -0x1.197422c9048bep-13)
+end
+
+facts("minimal_pown_test_5") do
     @fact Interval(0x1.fffffffffffffp1023, 0x1.fffffffffffffp1023) ^ -1 --> Interval(0x0.4p-1022, 0x0.4000000000001p-1022)
     @fact Interval(-0x1.fffffffffffffp1023, -0x1.fffffffffffffp1023) ^ -1 --> Interval(-0x0.4000000000001p-1022, -0x0.4p-1022)
     @fact Interval(0.0, Inf) ^ -1 --> Interval(0.0, Inf)
@@ -1723,6 +1861,9 @@ facts("minimal_pown_test") do
     @fact Interval(-0x1.fffffffffffffp1023, -0x1.fffffffffffffp1023) ^ -3 --> Interval(-0x0.0000000000001p-1022, -0x0p+0)
     @fact Interval(0.0, Inf) ^ -3 --> Interval(0.0, Inf)
     @fact Interval(-0.0, Inf) ^ -3 --> Interval(0.0, Inf)
+end
+
+facts("minimal_pown_test_6") do
     @fact Interval(-Inf, 0.0) ^ -3 --> Interval(-Inf, 0.0)
     @fact Interval(-Inf, -0.0) ^ -3 --> Interval(-Inf, 0.0)
     @fact Interval(-324.3, 2.5) ^ -3 --> entireinterval(Float64)
@@ -1770,7 +1911,7 @@ facts("minimal_pown_dec_test") do
     @fact decoration(DecoratedInterval(Interval(-3.0, 5.0), com) ^ -3) --> decoration(DecoratedInterval(entireinterval(Float64), trv))
 end
 
-facts("minimal_pow_test") do
+facts("minimal_pow_test_1") do
     @fact ∅ ^ ∅ --> ∅
     @fact ∅ ^ entireinterval(Float64) --> ∅
     @fact ∅ ^ Interval(-Inf, -1.0) --> ∅
@@ -1812,6 +1953,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.1, 0.5) ^ Interval(-1.0, Inf) --> Interval(0.0, 0x1.4p+3)
     @fact Interval(0.1, 0.5) ^ Interval(-2.5, 0.1) --> Interval(0x1.96b230bcdc434p-1, 0x1.3c3a4edfa9758p+8)
     @fact Interval(0.1, 0.5) ^ Interval(-2.5, 1.0) --> Interval(0x1.999999999999ap-4, 0x1.3c3a4edfa9758p+8)
+end
+
+facts("minimal_pow_test_2") do
     @fact Interval(0.1, 0.5) ^ Interval(-2.5, 2.5) --> Interval(0x1.9e7c6e43390b7p-9, 0x1.3c3a4edfa9758p+8)
     @fact Interval(0.1, 0.5) ^ Interval(-2.5, Inf) --> Interval(0.0, 0x1.3c3a4edfa9758p+8)
     @fact Interval(0.1, 0.5) ^ Interval(-Inf, 0.1) --> Interval(0x1.96b230bcdc434p-1, Inf)
@@ -1853,6 +1997,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.1, 1.0) ^ Interval(2.5, Inf) --> Interval(0.0, 1.0)
     @fact Interval(0.1, 1.0) ^ Interval(-0.1, 0.1) --> Interval(0x1.96b230bcdc434p-1, 0x1.4248ef8fc2604p+0)
     @fact Interval(0.1, 1.0) ^ Interval(-0.1, 1.0) --> Interval(0x1.999999999999ap-4, 0x1.4248ef8fc2604p+0)
+end
+
+facts("minimal_pow_test_3") do
     @fact Interval(0.1, 1.0) ^ Interval(-0.1, 2.5) --> Interval(0x1.9e7c6e43390b7p-9, 0x1.4248ef8fc2604p+0)
     @fact Interval(0.1, 1.0) ^ Interval(-0.1, Inf) --> Interval(0.0, 0x1.4248ef8fc2604p+0)
     @fact Interval(0.1, 1.0) ^ Interval(-1.0, 0.1) --> Interval(0x1.96b230bcdc434p-1, 0x1.4p+3)
@@ -1894,6 +2041,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.5, 1.5) ^ Interval(0.0, Inf) --> Interval(0.0, Inf)
     @fact Interval(0.5, 1.5) ^ Interval(-0.0, Inf) --> Interval(0.0, Inf)
     @fact Interval(0.5, 1.5) ^ Interval(0.1, 0.1) --> Interval(0x1.ddb680117ab12p-1, 0x1.0a97dce72a0cbp+0)
+end
+
+facts("minimal_pow_test_4") do
     @fact Interval(0.5, 1.5) ^ Interval(0.1, 1.0) --> Interval(0.5, 1.5)
     @fact Interval(0.5, 1.5) ^ Interval(0.1, 2.5) --> Interval(0x1.6a09e667f3bccp-3, 0x1.60b9fd68a4555p+1)
     @fact Interval(0.5, 1.5) ^ Interval(0.1, Inf) --> Interval(0.0, Inf)
@@ -1925,6 +2075,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.5, 1.5) ^ Interval(-Inf, 0.0) --> Interval(0x0p+0, Inf)
     @fact Interval(0.5, 1.5) ^ Interval(-Inf, -0.0) --> Interval(0x0p+0, Inf)
     @fact Interval(0.5, 1.5) ^ Interval(-0.1, -0.1) --> Interval(0x1.eba7c9e4d31e9p-1, 0x1.125fbee250665p+0)
+end
+
+facts("minimal_pow_test_5") do
     @fact Interval(0.5, 1.5) ^ Interval(-1.0, -0.1) --> Interval(0x1.5555555555555p-1, 0x1p+1)
     @fact Interval(0.5, 1.5) ^ Interval(-2.5, -0.1) --> Interval(0x1.7398bf1d1ee6fp-2, 0x1.6a09e667f3bcdp+2)
     @fact Interval(0.5, 1.5) ^ Interval(-Inf, -0.1) --> Interval(0x0p+0, Inf)
@@ -1966,6 +2119,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.5, Inf) ^ Interval(-Inf, 0.1) --> Interval(0.0, Inf)
     @fact Interval(0.5, Inf) ^ Interval(-Inf, 1.0) --> Interval(0.0, Inf)
     @fact Interval(0.5, Inf) ^ Interval(-Inf, 2.5) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_6") do
     @fact Interval(0.5, Inf) ^ entireinterval(Float64) --> Interval(0.0, Inf)
     @fact Interval(0.5, Inf) ^ Interval(-1.0, 0.0) --> Interval(0.0, 0x1p+1)
     @fact Interval(0.5, Inf) ^ Interval(-1.0, -0.0) --> Interval(0.0, 0x1p+1)
@@ -2007,6 +2163,9 @@ facts("minimal_pow_test") do
     @fact Interval(1.0, 1.5) ^ Interval(-1.0, 0.1) --> Interval(0x1.5555555555555p-1, 0x1.0a97dce72a0cbp+0)
     @fact Interval(1.0, 1.5) ^ Interval(-1.0, 1.0) --> Interval(0x1.5555555555555p-1, 0x1.8p+0)
     @fact Interval(1.0, 1.5) ^ Interval(-1.0, 2.5) --> Interval(0x1.5555555555555p-1, 0x1.60b9fd68a4555p+1)
+end
+
+facts("minimal_pow_test_7") do
     @fact Interval(1.0, 1.5) ^ Interval(-1.0, Inf) --> Interval(0x1.5555555555555p-1, Inf)
     @fact Interval(1.0, 1.5) ^ Interval(-2.5, 0.1) --> Interval(0x1.7398bf1d1ee6fp-2, 0x1.0a97dce72a0cbp+0)
     @fact Interval(1.0, 1.5) ^ Interval(-2.5, 1.0) --> Interval(0x1.7398bf1d1ee6fp-2, 0x1.8p+0)
@@ -2048,6 +2207,9 @@ facts("minimal_pow_test") do
     @fact Interval(1.0, Inf) ^ Interval(1.0, 2.5) --> Interval(1.0, Inf)
     @fact Interval(1.0, Inf) ^ Interval(1.0, Inf) --> Interval(1.0, Inf)
     @fact Interval(1.0, Inf) ^ Interval(2.5, 2.5) --> Interval(1.0, Inf)
+end
+
+facts("minimal_pow_test_8") do
     @fact Interval(1.0, Inf) ^ Interval(2.5, Inf) --> Interval(1.0, Inf)
     @fact Interval(1.0, Inf) ^ Interval(-0.1, 0.1) --> Interval(0x0p+0, Inf)
     @fact Interval(1.0, Inf) ^ Interval(-0.1, 1.0) --> Interval(0x0p+0, Inf)
@@ -2089,6 +2251,9 @@ facts("minimal_pow_test") do
     @fact Interval(1.1, 1.5) ^ Interval(-0.0, 2.5) --> Interval(1.0, 0x1.60b9fd68a4555p+1)
     @fact Interval(1.1, 1.5) ^ Interval(0.0, Inf) --> Interval(1.0, Inf)
     @fact Interval(1.1, 1.5) ^ Interval(-0.0, Inf) --> Interval(1.0, Inf)
+end
+
+facts("minimal_pow_test_9") do
     @fact Interval(1.1, 1.5) ^ Interval(0.1, 0.1) --> Interval(0x1.02739c65d58bfp+0, 0x1.0a97dce72a0cbp+0)
     @fact Interval(1.1, 1.5) ^ Interval(0.1, 1.0) --> Interval(0x1.02739c65d58bfp+0, 0x1.8p+0)
     @fact Interval(1.1, 1.5) ^ Interval(0.1, 2.5) --> Interval(0x1.02739c65d58bfp+0, 0x1.60b9fd68a4555p+1)
@@ -2130,6 +2295,9 @@ facts("minimal_pow_test") do
     @fact Interval(1.1, 1.5) ^ Interval(-2.5, -2.5) --> Interval(0x1.7398bf1d1ee6fp-2, 0x1.9372d999784c8p-1)
     @fact Interval(1.1, 1.5) ^ Interval(-Inf, -2.5) --> Interval(0x0p+0, 0x1.9372d999784c8p-1)
     @fact Interval(1.1, Inf) ^ ∅ --> ∅
+end
+
+facts("minimal_pow_test_10") do
     @fact Interval(1.1, Inf) ^ Interval(0.0, 0.0) --> Interval(1.0, 1.0)
     @fact Interval(1.1, Inf) ^ Interval(-0.0, -0.0) --> Interval(1.0, 1.0)
     @fact Interval(1.1, Inf) ^ Interval(0.0, 1.0) --> Interval(1.0, Inf)
@@ -2171,6 +2339,9 @@ facts("minimal_pow_test") do
     @fact Interval(1.1, Inf) ^ Interval(-Inf, -0.0) --> Interval(0x0p+0, 1.0)
     @fact Interval(1.1, Inf) ^ Interval(-0.1, -0.1) --> Interval(0x0p+0, 0x1.fb24af5281928p-1)
     @fact Interval(1.1, Inf) ^ Interval(-1.0, -0.1) --> Interval(0x0p+0, 0x1.fb24af5281928p-1)
+end
+
+facts("minimal_pow_test_11") do
     @fact Interval(1.1, Inf) ^ Interval(-2.5, -0.1) --> Interval(0x0p+0, 0x1.fb24af5281928p-1)
     @fact Interval(1.1, Inf) ^ Interval(-Inf, -0.1) --> Interval(0x0p+0, 0x1.fb24af5281928p-1)
     @fact Interval(1.1, Inf) ^ Interval(-1.0, -1.0) --> Interval(0x0p+0, 0x1.d1745d1745d17p-1)
@@ -2222,6 +2393,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.0, 0.5) ^ Interval(-1.0, -0.1) --> Interval(0x1.125fbee250664p+0, Inf)
     @fact Interval(0.0, 0.5) ^ Interval(-2.5, -0.1) --> Interval(0x1.125fbee250664p+0, Inf)
     @fact Interval(0.0, 0.5) ^ Interval(-Inf, -0.1) --> Interval(0x1.125fbee250664p+0, Inf)
+end
+
+facts("minimal_pow_test_12") do
     @fact Interval(0.0, 0.5) ^ Interval(-1.0, -1.0) --> Interval(0x1p+1, Inf)
     @fact Interval(0.0, 0.5) ^ Interval(-2.5, -1.0) --> Interval(0x1p+1, Inf)
     @fact Interval(0.0, 0.5) ^ Interval(-Inf, -1.0) --> Interval(0x1p+1, Inf)
@@ -2263,6 +2437,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.0, 1.0) ^ entireinterval(Float64) --> Interval(0.0, Inf)
     @fact Interval(0.0, 1.0) ^ Interval(-0.1, 0.0) --> Interval(1.0, Inf)
     @fact Interval(0.0, 1.0) ^ Interval(-0.1, -0.0) --> Interval(1.0, Inf)
+end
+
+facts("minimal_pow_test_13") do
     @fact Interval(0.0, 1.0) ^ Interval(-1.0, 0.0) --> Interval(1.0, Inf)
     @fact Interval(0.0, 1.0) ^ Interval(-1.0, -0.0) --> Interval(1.0, Inf)
     @fact Interval(0.0, 1.0) ^ Interval(-2.5, 0.0) --> Interval(1.0, Inf)
@@ -2304,6 +2481,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.0, 1.5) ^ Interval(-1.0, 1.0) --> Interval(0.0, Inf)
     @fact Interval(0.0, 1.5) ^ Interval(-1.0, 2.5) --> Interval(0.0, Inf)
     @fact Interval(0.0, 1.5) ^ Interval(-1.0, Inf) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_14") do
     @fact Interval(0.0, 1.5) ^ Interval(-2.5, 0.1) --> Interval(0.0, Inf)
     @fact Interval(0.0, 1.5) ^ Interval(-2.5, 1.0) --> Interval(0.0, Inf)
     @fact Interval(0.0, 1.5) ^ Interval(-2.5, 2.5) --> Interval(0.0, Inf)
@@ -2345,6 +2525,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.0, Inf) ^ Interval(1.0, Inf) --> Interval(0.0, Inf)
     @fact Interval(0.0, Inf) ^ Interval(2.5, 2.5) --> Interval(0.0, Inf)
     @fact Interval(0.0, Inf) ^ Interval(2.5, Inf) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_15") do
     @fact Interval(0.0, Inf) ^ Interval(-0.1, 0.1) --> Interval(0.0, Inf)
     @fact Interval(0.0, Inf) ^ Interval(-0.1, 1.0) --> Interval(0.0, Inf)
     @fact Interval(0.0, Inf) ^ Interval(-0.1, 2.5) --> Interval(0.0, Inf)
@@ -2386,6 +2569,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, 0.5) ^ Interval(0.0, Inf) --> Interval(0.0, 1.0)
     @fact Interval(-0.0, 0.5) ^ Interval(-0.0, Inf) --> Interval(0.0, 1.0)
     @fact Interval(-0.0, 0.5) ^ Interval(0.1, 0.1) --> Interval(0.0, 0x1.ddb680117ab13p-1)
+end
+
+facts("minimal_pow_test_16") do
     @fact Interval(-0.0, 0.5) ^ Interval(0.1, 1.0) --> Interval(0.0, 0x1.ddb680117ab13p-1)
     @fact Interval(-0.0, 0.5) ^ Interval(0.1, 2.5) --> Interval(0.0, 0x1.ddb680117ab13p-1)
     @fact Interval(-0.0, 0.5) ^ Interval(0.1, Inf) --> Interval(0.0, 0x1.ddb680117ab13p-1)
@@ -2427,6 +2613,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, 0.5) ^ Interval(-Inf, -2.5) --> Interval(0x1.6a09e667f3bccp+2, Inf)
     @fact Interval(-0.0, 1.0) ^ ∅ --> ∅
     @fact Interval(-0.0, 1.0) ^ Interval(0.0, 0.0) --> Interval(1.0, 1.0)
+end
+
+facts("minimal_pow_test_17") do
     @fact Interval(-0.0, 1.0) ^ Interval(-0.0, -0.0) --> Interval(1.0, 1.0)
     @fact Interval(-0.0, 1.0) ^ Interval(0.0, 1.0) --> Interval(0.0, 1.0)
     @fact Interval(-0.0, 1.0) ^ Interval(-0.0, 1.0) --> Interval(0.0, 1.0)
@@ -2468,6 +2657,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, 1.0) ^ Interval(-Inf, 0.0) --> Interval(1.0, Inf)
     @fact Interval(-0.0, 1.0) ^ Interval(-Inf, -0.0) --> Interval(1.0, Inf)
     @fact Interval(-0.0, 1.0) ^ Interval(-0.1, -0.1) --> Interval(1.0, Inf)
+end
+
+facts("minimal_pow_test_18") do
     @fact Interval(-0.0, 1.0) ^ Interval(-1.0, -0.1) --> Interval(1.0, Inf)
     @fact Interval(-0.0, 1.0) ^ Interval(-2.5, -0.1) --> Interval(1.0, Inf)
     @fact Interval(-0.0, 1.0) ^ Interval(-Inf, -0.1) --> Interval(1.0, Inf)
@@ -2509,6 +2701,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, 1.5) ^ Interval(-Inf, 0.1) --> Interval(0.0, Inf)
     @fact Interval(-0.0, 1.5) ^ Interval(-Inf, 1.0) --> Interval(0.0, Inf)
     @fact Interval(-0.0, 1.5) ^ Interval(-Inf, 2.5) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_19") do
     @fact Interval(-0.0, 1.5) ^ entireinterval(Float64) --> Interval(0.0, Inf)
     @fact Interval(-0.0, 1.5) ^ Interval(-1.0, 0.0) --> Interval(0x1.5555555555555p-1, Inf)
     @fact Interval(-0.0, 1.5) ^ Interval(-1.0, -0.0) --> Interval(0x1.5555555555555p-1, Inf)
@@ -2550,6 +2745,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, Inf) ^ Interval(-1.0, 0.1) --> Interval(0.0, Inf)
     @fact Interval(-0.0, Inf) ^ Interval(-1.0, 1.0) --> Interval(0.0, Inf)
     @fact Interval(-0.0, Inf) ^ Interval(-1.0, 2.5) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_20") do
     @fact Interval(-0.0, Inf) ^ Interval(-1.0, Inf) --> Interval(0.0, Inf)
     @fact Interval(-0.0, Inf) ^ Interval(-2.5, 0.1) --> Interval(0.0, Inf)
     @fact Interval(-0.0, Inf) ^ Interval(-2.5, 1.0) --> Interval(0.0, Inf)
@@ -2591,6 +2789,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.1, 0.5) ^ Interval(1.0, 2.5) --> Interval(0.0, 0.5)
     @fact Interval(-0.1, 0.5) ^ Interval(1.0, Inf) --> Interval(0.0, 0.5)
     @fact Interval(-0.1, 0.5) ^ Interval(2.5, 2.5) --> Interval(0.0, 0x1.6a09e667f3bcdp-3)
+end
+
+facts("minimal_pow_test_21") do
     @fact Interval(-0.1, 0.5) ^ Interval(2.5, Inf) --> Interval(0.0, 0x1.6a09e667f3bcdp-3)
     @fact Interval(-0.1, 0.5) ^ Interval(-0.1, 0.1) --> Interval(0.0, Inf)
     @fact Interval(-0.1, 0.5) ^ Interval(-0.1, 1.0) --> Interval(0.0, Inf)
@@ -2632,6 +2833,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.1, 1.0) ^ Interval(-0.0, 2.5) --> Interval(0.0, 1.0)
     @fact Interval(-0.1, 1.0) ^ Interval(0.0, Inf) --> Interval(0.0, 1.0)
     @fact Interval(-0.1, 1.0) ^ Interval(-0.0, Inf) --> Interval(0.0, 1.0)
+end
+
+facts("minimal_pow_test_22") do
     @fact Interval(-0.1, 1.0) ^ Interval(0.1, 0.1) --> Interval(0.0, 1.0)
     @fact Interval(-0.1, 1.0) ^ Interval(0.1, 1.0) --> Interval(0.0, 1.0)
     @fact Interval(-0.1, 1.0) ^ Interval(0.1, 2.5) --> Interval(0.0, 1.0)
@@ -2673,6 +2877,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.1, 1.0) ^ Interval(-2.5, -1.0) --> Interval(1.0, Inf)
     @fact Interval(-0.1, 1.0) ^ Interval(-Inf, -1.0) --> Interval(1.0, Inf)
     @fact Interval(-0.1, 1.0) ^ Interval(-2.5, -2.5) --> Interval(1.0, Inf)
+end
+
+facts("minimal_pow_test_24") do
     @fact Interval(-0.1, 1.0) ^ Interval(-Inf, -2.5) --> Interval(1.0, Inf)
     @fact Interval(-0.1, 1.5) ^ ∅ --> ∅
     @fact Interval(-0.1, 1.5) ^ Interval(0.0, 0.0) --> Interval(1.0, 1.0)
@@ -2714,6 +2921,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.1, 1.5) ^ Interval(-2.5, -0.0) --> Interval(0x1.7398bf1d1ee6fp-2, Inf)
     @fact Interval(-0.1, 1.5) ^ Interval(-Inf, 0.0) --> Interval(0.0, Inf)
     @fact Interval(-0.1, 1.5) ^ Interval(-Inf, -0.0) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_25") do
     @fact Interval(-0.1, 1.5) ^ Interval(-0.1, -0.1) --> Interval(0x1.eba7c9e4d31e9p-1, Inf)
     @fact Interval(-0.1, 1.5) ^ Interval(-1.0, -0.1) --> Interval(0x1.5555555555555p-1, Inf)
     @fact Interval(-0.1, 1.5) ^ Interval(-2.5, -0.1) --> Interval(0x1.7398bf1d1ee6fp-2, Inf)
@@ -2755,6 +2965,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.1, Inf) ^ Interval(-2.5, Inf) --> Interval(0.0, Inf)
     @fact Interval(-0.1, Inf) ^ Interval(-Inf, 0.1) --> Interval(0.0, Inf)
     @fact Interval(-0.1, Inf) ^ Interval(-Inf, 1.0) --> Interval(0.0, Inf)
+end
+
+facts("minimal_pow_test_26") do
     @fact Interval(-0.1, Inf) ^ Interval(-Inf, 2.5) --> Interval(0.0, Inf)
     @fact Interval(-0.1, Inf) ^ entireinterval(Float64) --> Interval(0.0, Inf)
     @fact Interval(-0.1, Inf) ^ Interval(-1.0, 0.0) --> Interval(0.0, Inf)
@@ -2796,6 +3009,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.0, 0.0) ^ Interval(-0.1, Inf) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) ^ Interval(-1.0, 0.1) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) ^ Interval(-1.0, 1.0) --> Interval(0.0, 0.0)
+end
+
+facts("minimal_pow_test_27") do
     @fact Interval(0.0, 0.0) ^ Interval(-1.0, 2.5) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) ^ Interval(-1.0, Inf) --> Interval(0.0, 0.0)
     @fact Interval(0.0, 0.0) ^ Interval(-2.5, 0.1) --> Interval(0.0, 0.0)
@@ -2837,6 +3053,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, -0.0) ^ Interval(1.0, 1.0) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) ^ Interval(1.0, 2.5) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) ^ Interval(1.0, Inf) --> Interval(0.0, 0.0)
+end
+
+facts("minimal_pow_test_28") do
     @fact Interval(-0.0, -0.0) ^ Interval(2.5, 2.5) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) ^ Interval(2.5, Inf) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, -0.0) ^ Interval(-0.1, 0.1) --> Interval(0.0, 0.0)
@@ -2878,6 +3097,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, 0.0) ^ Interval(0.0, 2.5) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, 0.0) ^ Interval(-0.0, 2.5) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, 0.0) ^ Interval(0.0, Inf) --> Interval(0.0, 0.0)
+end
+
+facts("minimal_pow_test_29") do
     @fact Interval(-0.0, 0.0) ^ Interval(-0.0, Inf) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, 0.0) ^ Interval(0.1, 0.1) --> Interval(0.0, 0.0)
     @fact Interval(-0.0, 0.0) ^ Interval(0.1, 1.0) --> Interval(0.0, 0.0)
@@ -2919,6 +3141,9 @@ facts("minimal_pow_test") do
     @fact Interval(-0.0, 0.0) ^ Interval(-Inf, -1.0) --> ∅
     @fact Interval(-0.0, 0.0) ^ Interval(-Inf, -2.5) --> ∅
     @fact Interval(-0.0, 0.0) ^ Interval(-2.5, -2.5) --> ∅
+end
+
+facts("minimal_pow_test_30") do
     @fact Interval(0.0, -0.0) ^ ∅ --> ∅
     @fact Interval(0.0, -0.0) ^ Interval(0.0, 0.0) --> ∅
     @fact Interval(0.0, -0.0) ^ Interval(-0.0, -0.0) --> ∅
@@ -2970,6 +3195,9 @@ facts("minimal_pow_test") do
     @fact Interval(0.0, -0.0) ^ Interval(-2.5, -2.5) --> ∅
     @fact Interval(-1.0, 0.0) ^ ∅ --> ∅
     @fact Interval(-1.0, 0.0) ^ Interval(0.0, 0.0) --> ∅
+end
+
+facts("minimal_pow_test_31") do
     @fact Interval(-1.0, 0.0) ^ Interval(-0.0, -0.0) --> ∅
     @fact Interval(-1.0, 0.0) ^ Interval(0.0, 1.0) --> Interval(0.0, 0.0)
     @fact Interval(-1.0, 0.0) ^ Interval(-0.0, 1.0) --> Interval(0.0, 0.0)
@@ -3011,6 +3239,9 @@ facts("minimal_pow_test") do
     @fact Interval(-1.0, 0.0) ^ Interval(-0.1, -0.1) --> ∅
     @fact Interval(-1.0, 0.0) ^ Interval(-1.0, -0.1) --> ∅
     @fact Interval(-1.0, 0.0) ^ Interval(-2.5, -0.1) --> ∅
+end
+
+facts("minimal_pow_test_32") do
     @fact Interval(-1.0, 0.0) ^ Interval(-Inf, -0.1) --> ∅
     @fact Interval(-1.0, 0.0) ^ Interval(-1.0, -1.0) --> ∅
     @fact Interval(-1.0, 0.0) ^ Interval(-2.5, -1.0) --> ∅
@@ -3052,6 +3283,9 @@ facts("minimal_pow_test") do
     @fact Interval(-1.0, -0.0) ^ Interval(-Inf, 2.5) --> Interval(0.0, 0.0)
     @fact Interval(-1.0, -0.0) ^ entireinterval(Float64) --> Interval(0.0, 0.0)
     @fact Interval(-1.0, -0.0) ^ Interval(-1.0, 0.0) --> ∅
+end
+
+facts("minimal_pow_test_33") do
     @fact Interval(-1.0, -0.0) ^ Interval(-1.0, -0.0) --> ∅
     @fact Interval(-1.0, -0.0) ^ Interval(-2.5, 0.0) --> ∅
     @fact Interval(-1.0, -0.0) ^ Interval(-2.5, -0.0) --> ∅
@@ -3093,6 +3327,9 @@ facts("minimal_pow_test") do
     @fact Interval(-1.0, -0.1) ^ Interval(-1.0, 2.5) --> ∅
     @fact Interval(-1.0, -0.1) ^ Interval(-1.0, Inf) --> ∅
     @fact Interval(-1.0, -0.1) ^ Interval(-2.5, 0.1) --> ∅
+end
+
+facts("minimal_pow_test_34") do
     @fact Interval(-1.0, -0.1) ^ Interval(-2.5, 1.0) --> ∅
     @fact Interval(-1.0, -0.1) ^ Interval(-2.5, 2.5) --> ∅
     @fact Interval(-1.0, -0.1) ^ Interval(-2.5, Inf) --> ∅
