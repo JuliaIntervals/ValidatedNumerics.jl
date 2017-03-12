@@ -165,8 +165,8 @@ c = @interval(0.25, 4.0)
         @test mid(1..2) == 1.5
         @test mid(0.1..0.3) == 0.2
         @test mid(-10..5) == -2.5
-        @test mid(-∞, 1) == -1.7976931348623157e308
-        @test mid(1, ∞) == 1.7976931348623157e308
+        @test mid(-∞..1) == -1.7976931348623157e308
+        @test mid(1..∞) == 1.7976931348623157e308
         @test isnan(mid(emptyinterval()))
     end
 
