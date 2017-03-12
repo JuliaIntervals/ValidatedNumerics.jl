@@ -181,3 +181,16 @@ end
     @test string(x) == "[0, 1]₁₂₈_def"
 
 end
+
+
+@test "@format tests" begin
+    x = 0.1..0.3
+    @format full
+    @test string(x) == "Interval(0.09999999999999999, 0.30000000000000004)"
+
+    @format standard 3
+    @test string(x) == "[0.0999, 0.301]"
+
+    @format 10
+    @test string(x) == "[0.09999999999, 0.3000000001]"
+end

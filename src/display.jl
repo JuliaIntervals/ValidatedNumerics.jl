@@ -49,6 +49,22 @@ function setdisplay(format = display_params.format;
     display_params.sigfigs = sigfigs
 end
 
+macro format(expr...)
+    for ex in expr
+        if isa(ex, Symbol)
+            setdisplay(ex)
+
+        elseif isa(ex, Integer)
+            setdisplay(sigfigs=ex)
+
+        elseif isa(ex, Bool)
+            setdisplay(decorations=ex)
+        end
+    end
+
+    return nothing
+end
+
 
 ## Output
 
