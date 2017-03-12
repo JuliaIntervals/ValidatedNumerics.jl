@@ -78,19 +78,27 @@ julia> x
 ```
 """
 macro format(expr...)
+
+    format = Meta.quot(display_params.format)
+    decorations = display_params.decorations
+    sigfigs = display_params.sigfigs
+
     for ex in expr
+
         if isa(ex, Symbol)
-            setdisplay(ex)
+            format = Meta.quot(ex)
 
         elseif isa(ex, Integer)
-            setdisplay(sigfigs=ex)
+            sigfigs = ex
 
         elseif isa(ex, Bool)
-            setdisplay(decorations=ex)
+            decorations = ex
         end
     end
 
-    return nothing
+    format_code = :(setdisplay($format, decorations=$decorations, sigfigs=$sigfigs))
+
+    return format_code
 end
 
 

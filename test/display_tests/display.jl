@@ -184,6 +184,7 @@ end
 
 @testset "@format tests" begin
     x = 0.1..0.3
+    
     @format full
     @test string(x) == "Interval(0.09999999999999999, 0.30000000000000004)"
 
