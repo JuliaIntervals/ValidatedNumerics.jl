@@ -157,10 +157,10 @@ end
         g = x -> iterate(f, n)(x) - x  # look for fixed points of f^n
 
         roots = newton(g, 0..1)
-        @test length(roots) = 2^n
+        @test length(roots) == 2^n
 
         roots = krawczyk(g, 0..1)
-        @test length(roots) = 2^n
+        @test length(roots) == 2^n
 
     end
 end
