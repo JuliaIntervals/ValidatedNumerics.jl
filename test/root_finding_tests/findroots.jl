@@ -147,7 +147,7 @@ end
     end
 end
 
-@testset "Logistic function with Newton" begin
+@testset "Iterated logistic function fixed points" begin
     ∘(f, g) = x -> f(g(x))
     iterate(f, n) = n == 1 ? f : f ∘ iterate(f, n-1)
 
@@ -155,8 +155,13 @@ end
 
     for n in 1:10
         g = x -> iterate(f, n)(x) - x  # look for fixed points of f^n
+
         roots = newton(g, 0..1)
         @test length(roots) = 2^n
+
+        roots = krawczyk(g, 0..1)
+        @test length(roots) = 2^n
+
     end
 end
 
