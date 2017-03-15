@@ -1,3 +1,4 @@
+using ValidatedNumerics.RootFinding
 
 include("bisect.jl")
 include("findroots.jl")
