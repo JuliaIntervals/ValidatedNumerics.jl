@@ -8,9 +8,9 @@ const display_params = DisplayParameters(:standard, false, 6)
 
 
 doc"""
-    setdisplay(;kw)
+    setformat(;kw)
 
-`setdisplay` changes how intervals are displayed using keyword arguments.
+`setformat` changes how intervals are displayed using keyword arguments.
 The following options are available:
 
 - `format`: interval output format
@@ -25,10 +25,10 @@ The following options are available:
 
 Example:
 ```
-julia> setdisplay(:full, decorations=true)
+julia> setformat(:full, decorations=true)
 ```
 """
-function setdisplay(format = display_params.format;
+function setformat(format = display_params.format;
                     decorations = display_params.decorations, sigfigs::Integer = display_params.sigfigs)
 
     if format ∉ (:standard, :full, :midpoint)
@@ -53,7 +53,7 @@ doc"""
     @format [style::Symbol] [decorations::Bool] [sigfigs::Integer]
 
 The `@format` macro provides a simple interface to control the output format
-for intervals. These options are passed to the `setdisplay` function.
+for intervals. These options are passed to the `setformat` function.
 
 The arguments may be in any order and of type:
 
@@ -96,7 +96,7 @@ macro format(expr...)
         end
     end
 
-    format_code = :(setdisplay($format, decorations=$decorations, sigfigs=$sigfigs))
+    format_code = :(setformat($format, decorations=$decorations, sigfigs=$sigfigs))
 
     return format_code
 end
