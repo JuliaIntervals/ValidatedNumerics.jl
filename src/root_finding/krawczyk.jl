@@ -17,7 +17,7 @@ function guarded_derivative_midpoint{T}(f::Function, f_prime::Function, x::Inter
 
     # Check that 0 is not in C; if so, consider another point rather than m
     i = 0
-    while zero(T) ∈ C
+    while zero(T) ∈ C || isempty(C)
         m = Interval( α*x.lo + (one(T)-α)*x.hi )
         C = inv(f_prime(m))
 
