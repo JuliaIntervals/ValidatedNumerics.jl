@@ -1,8 +1,10 @@
 f = open("libieeep1788_tests_elem.jl")
 code_lines = readlines(f)
-
+code_lines_new = String[]
 A = []
 
+aux_index = 1
+block_title{:String}
 chunk_begin = 0
 chunk_end = 0
 
@@ -20,6 +22,8 @@ for i in 1:length(code_lines)
 
   if chunk_end - chunk_begin > 100
 
+    #append!(code_lines_new, code_lines[aux_index:chunk_begin - 1])
+
     push!(A, [chunk_begin, chunk_end])
     chunk_end = 0
 
@@ -27,18 +31,4 @@ for i in 1:length(code_lines)
 
 end
 
-#for i in length(A)
-
-  insert!(code_lines, A[1][1], "BEGIN")
-  #insert!(code_lines, A[i][1] + 50, "")
-  #insert!(code_lines, A[i][1] + 50, "end")
-
-#end
-
-for j in A[1][1]-1:A[1][1]+1
-
-  println(code_lines[j])
-
-end
-
-println(A)
+println(typeof(code_lines[33]))
