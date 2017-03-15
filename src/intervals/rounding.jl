@@ -13,12 +13,12 @@ The current allowed rounding types are
 - :fast     # fast rounding by prevfloat and nextfloat  (slightly wider than needed)
 - :none     # no rounding at all (for speed, but forgoes any pretense at being rigorous)
 
-The function `setrounding(Interval, rounding_type)` then defines rounded functions
-*without* an explicit rounding type, e.g.
+The function `setrounding(Interval, rounding_type)` then defines rounded
+ functions *without* an explicit rounding type, e.g.
 
 sin(x, r::RoundingMode) = sin(IntervalRounding{:correct}, x, r)
 
-These are overwritten when  `setrounding(Interval, rounding_type)` is called again.
+These are overwritten when `setrounding(Interval, rounding_type)` is called again.
 
 In Julia v0.6, but *not* in Julia v0.5, this will automatically redefine all relevant functions, in particular those used in +(a::Interval, b::Interval) etc., so that all interval functions will automatically work with the correct interval rounding type.
 =#
