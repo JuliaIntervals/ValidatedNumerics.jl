@@ -13,16 +13,24 @@ setdisplay(:full)
 
 setrounding(Interval, :correct)
 x = Interval(0.5)
-@test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+@testset "Correct rounding" begin
+    @test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+end
 
 setrounding(Interval, :fast)
-@test sin(x) == Interval(0.47942553860420295, 0.47942553860420306)
+@testset "Fast rounding" begin
+    @test sin(x) == Interval(0.47942553860420295, 0.47942553860420306)
+end
 
 setrounding(Interval, :none)
-@test sin(x) == Interval(0.479425538604203, 0.479425538604203)
+@testset "No rounding" begin
+    @test sin(x) == Interval(0.479425538604203, 0.479425538604203)
+end
 
 setrounding(Interval, :correct)
-@test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+@testset "Back to correct rounding" begin
+    @test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+end
 
 setdisplay(:standard)
 
