@@ -1,6 +1,11 @@
 using ValidatedNumerics
 using Base.Test
 
+using Suppressor
+
+setdisplay(:full)
+
+@suppress begin
 
 @testset "Interval rounding" begin
 
@@ -16,4 +21,5 @@ using Base.Test
     setrounding(Interval, :correct)
     @test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
 
+end
 end
