@@ -1,25 +1,30 @@
 using ValidatedNumerics
 using Base.Test
 
-using Suppressor
+# using Suppressor
 
 setdisplay(:full)
 
-#@suppress begin
+# @suppress begin
 
-@testset "Interval rounding" begin
+# @testset "Interval rounding" begin
 
-    x = Interval(0.5)
-    @test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+# NB: Due to "world age" problems, the following is not a @testset
 
-    setrounding(Interval, :fast)
-    @test sin(x) == Interval(0.47942553860420295, 0.47942553860420306)
+setrounding(Interval, :correct)
+x = Interval(0.5)
+@test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
 
-    setrounding(Interval, :none)
-    @test sin(x) == Interval(0.479425538604203, 0.479425538604203)
+setrounding(Interval, :fast)
+@test sin(x) == Interval(0.47942553860420295, 0.47942553860420306)
 
-    setrounding(Interval, :correct)
-    @test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+setrounding(Interval, :none)
+@test sin(x) == Interval(0.479425538604203, 0.479425538604203)
 
-end
-#end
+setrounding(Interval, :correct)
+@test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
+
+setdisplay(:standard)
+
+# end
+# end
