@@ -154,7 +154,10 @@ for mode in (:Down, :Up)
 end
 
 doc"""
+    setrounding(Interval, rounding_type::Symbol)
+
 Set the rounding type used for all interval calculations on Julia v0.6 and above.
+Valid `rounding_type`s are `:correct`, `:fast` and `:none`.
 """
 function setrounding(::Type{Interval}, rounding_type::Symbol)
 
