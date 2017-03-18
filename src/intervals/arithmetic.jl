@@ -325,6 +325,9 @@ function mid{T}(a::Interval{T}, α=0.5)
     return (1-α) * a.lo + α * a.hi  # rounds to nearest
 end
 
+mid{T}(a::Interval{Rational{T}}) = (1//2) * (a.lo + a.hi)
+
+
 doc"""
     diam(a::Interval)
 
