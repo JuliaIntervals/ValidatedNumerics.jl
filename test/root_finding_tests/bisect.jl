@@ -12,7 +12,7 @@ using Base.Test
     @test bisect(X, 0.75) == (-∞..0, 0..∞)
 
     X = 1..∞
-    @test bisect(X) == (Interval(1..prevfloat(∞)), Interval(prevfloat(∞), ∞))
+    @test bisect(X) == (Interval(1, prevfloat(∞)), Interval(prevfloat(∞), ∞))
 
     X = (0..1) × (0..2)
     @test bisect(X) == ( (0..1) × (0..1), (0..1) × (1..2) )
