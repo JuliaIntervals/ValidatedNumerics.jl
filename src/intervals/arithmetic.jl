@@ -310,7 +310,7 @@ end
 doc"""
     mid(a::Interval, α=0.5)
 
-Find the "midpoint" at distance α along the interval `a`.
+Find the midpoint (or, in general, an intermediate point) at a distance α along the interval `a`. The default is the true midpoint at α=0.5.
 """
 function mid{T}(a::Interval{T}, α=0.5)
 
