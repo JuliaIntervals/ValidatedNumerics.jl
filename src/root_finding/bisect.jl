@@ -8,7 +8,7 @@ Returns a tuple of the new intervals.
 function bisect(X::Interval, α=0.5)
     @assert 0 ≤ α ≤ 1
 
-    m = (1-α) * X.lo + α * X.hi
+    m = mid(X, α)
 
     return (Interval(X.lo, m), Interval(m, X.hi))
 end

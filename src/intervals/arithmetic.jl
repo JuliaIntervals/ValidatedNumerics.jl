@@ -346,7 +346,12 @@ Return the radius of the `Interval` `a`, such that
 function radius(a::Interval)
     isempty(a) && return convert(eltype(a), NaN)
     m = mid(a)
-    max(m - a.lo, a.hi - m)
+    return max(m - a.lo, a.hi - m)
+end
+
+function radius{T}(a::Interval{Rational{T}})
+    m = (a.lo + a.hi) / 2
+    return max(m - a.lo, a.hi - m)
 end
 
 # cancelplus and cancelminus
