@@ -172,7 +172,7 @@ end
         atan2(@interval(-0.1, 0.1), @interval(0.0, 0.1))
 end
 
-@test "Trig" begin
+@testset "Trig" begin
     for a in ( @interval(17, 19), @interval(0.5, 1.2) )
         @test tan(a) ⊆ sin(a)/cos(a)
     end
@@ -181,7 +181,7 @@ end
     @test cos(Interval(-pi/2, 3pi/2)) == Interval(-1, 1)
 end
 
-@test "Trig with large arguments"
+@testset "Trig with large arguments"
     x = Interval(2.)^1000   # this is a thin interval
     @test diam(x) == 0.0
 
