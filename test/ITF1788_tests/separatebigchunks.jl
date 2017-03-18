@@ -72,7 +72,7 @@ for i in 1:length(code_lines)
 
 end
 
-new_file = join(code_lines_new, "\t")
+new_file = join(code_lines_new)
 f_new = open("test_file.jl", "w")
 print(f_new, new_file)
 close(f_new)
