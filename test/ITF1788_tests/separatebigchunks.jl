@@ -5,6 +5,8 @@ code_lines = readlines(f)[1:158] #Shorter array for tests
 code_lines_new = []
 #A = []
 
+n_bs = 10 #new blocks size
+
 aux_index = 1 #this number helps appending the 'good' blocks
 chunk_begin = 0
 chunk_end = 0
@@ -36,15 +38,30 @@ for i in 1:length(code_lines)
 
     # Divide big chunks in blocks of 50 lines
 
-      for j in 0:floor(Int, chunk_length/10) - 1
+    residue = chunk_length%n_bs
 
-        push!(code_lines_new, "facts(\"$title" * "_" * "$number\") do")
+      for j in 0:floor(Int, chunk_length / n_bs) - 1
 
-        append!(code_lines_new, code_lines[chunk_begin + 1 + j*10  : chunk_begin + 1 + (j + 1)*10])
+        push!(code_lines_new, "facts(\"$title" * "_" * "$number\") do", "\n")
 
-        push!(code_lines_new, "", "end")
+        append!(code_lines_new, code_lines[chunk_begin + 1 + j*n_bs  : chunk_begin + (j + 1)*n_bs])
+
+        push!(code_lines_new, "end", "\n", "\n")
+
         number += 1
+
       end
+
+      if residue > 0
+
+        push!(code_lines_new, "facts(\"$title" * "_" * "$number\") do", "\n")
+
+        append!(code_lines_new, code_lines[chunk_end - residue + 1 : chunk_end - 1])
+
+        push!(code_lines_new, "end", "\n")
+
+      end
+
 
     #
 
@@ -55,7 +72,9 @@ for i in 1:length(code_lines)
 
 end
 
-new_file = join(code_lines_new, "\n")
+new_file = join(code_lines_new, "\t")
 f_new = open("test_file.jl", "w")
 print(f_new, new_file)
 close(f_new)
+
+println(code_lines[79:90])
