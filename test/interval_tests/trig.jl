@@ -181,7 +181,7 @@ end
     @test cos(Interval(-pi/2, 3pi/2)) == Interval(-1, 1)
 end
 
-@testset "Trig with large arguments"
+@testset "Trig with large arguments" begin 
     x = Interval(2.)^1000   # this is a thin interval
     @test diam(x) == 0.0
 
