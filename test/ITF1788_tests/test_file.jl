@@ -703,7 +703,7 @@ facts("minimal_div_dec_test") do
     @fact decoration(DecoratedInterval(Interval(1.0, 2.0), trv) / DecoratedInterval(∅, trv)) --> decoration(DecoratedInterval(∅, trv))
 end
 
-facts("minimal_recip_test") do
+facts("minimal_recip_test_1") do
     @fact inv(Interval(-50.0, -10.0)) --> Interval(-0x1.999999999999ap-4, -0x1.47ae147ae147ap-6)
     @fact (Interval(-50.0, -10.0))^(-1) --> Interval(-0x1.999999999999ap-4, -0x1.47ae147ae147ap-6)
     @fact (Interval(-50.0, -10.0))^(-1//1) --> Interval(-0x1.999999999999ap-4, -0x1.47ae147ae147ap-6)
@@ -734,6 +734,9 @@ facts("minimal_recip_test") do
     @fact (Interval(-0.0, -0.0))^(-1//1) --> ∅
     @fact (Interval(-0.0, -0.0))^(-1.0) --> ∅
     @fact 1 /(Interval(-0.0, -0.0)) --> ∅
+end
+
+facts("minimal_recip_test_2") do
     @fact inv(Interval(-10.0, 0.0)) --> Interval(-Inf, -0x1.9999999999999p-4)
     @fact (Interval(-10.0, 0.0))^(-1) --> Interval(-Inf, -0x1.9999999999999p-4)
     @fact (Interval(-10.0, 0.0))^(-1//1) --> Interval(-Inf, -0x1.9999999999999p-4)
@@ -764,6 +767,9 @@ facts("minimal_recip_test") do
     @fact (Interval(-Inf, 0.0))^(-1//1) --> Interval(-Inf, 0.0)
     @fact (Interval(-Inf, 0.0))^(-1.0) --> Interval(-Inf, 0.0)
     @fact 1 /(Interval(-Inf, 0.0)) --> Interval(-Inf, 0.0)
+end
+
+facts("minimal_recip_test_3") do
     @fact inv(Interval(-Inf, -0.0)) --> Interval(-Inf, 0.0)
     @fact (Interval(-Inf, -0.0))^(-1) --> Interval(-Inf, 0.0)
     @fact (Interval(-Inf, -0.0))^(-1//1) --> Interval(-Inf, 0.0)
@@ -796,7 +802,10 @@ facts("minimal_recip_test") do
     @fact 1 /(entireinterval(Float64)) --> entireinterval(Float64)
 end
 
-facts("minimal_recip_dec_test") do
+facts("minimal_recip_test_4") do
+end
+
+facts("minimal_recip_dec_test_1") do
     @fact inv(DecoratedInterval(Interval(10.0, 50.0), com)) --> DecoratedInterval(Interval(0x1.47ae147ae147ap-6, 0x1.999999999999ap-4), com)
     @fact decoration(inv(DecoratedInterval(Interval(10.0, 50.0), com))) --> decoration(DecoratedInterval(Interval(0x1.47ae147ae147ap-6, 0x1.999999999999ap-4), com))
     @fact (DecoratedInterval(Interval(10.0, 50.0), com))^(-1) --> DecoratedInterval(Interval(0x1.47ae147ae147ap-6, 0x1.999999999999ap-4), com)
@@ -827,6 +836,9 @@ facts("minimal_recip_dec_test") do
     @fact decoration((DecoratedInterval(Interval(-0x1.fffffffffffffp1023, -0x0.0000000000001p-1022), def))^(-1.0)) --> decoration(DecoratedInterval(Interval(-Inf, -0x0.4p-1022), def))
     @fact 1 /(DecoratedInterval(Interval(-0x1.fffffffffffffp1023, -0x0.0000000000001p-1022), def)) --> DecoratedInterval(Interval(-Inf, -0x0.4p-1022), def)
     @fact decoration(1 /(DecoratedInterval(Interval(-0x1.fffffffffffffp1023, -0x0.0000000000001p-1022), def))) --> decoration(DecoratedInterval(Interval(-Inf, -0x0.4p-1022), def))
+end
+
+facts("minimal_recip_dec_test_2") do
     @fact inv(DecoratedInterval(Interval(0.0, 0.0), com)) --> DecoratedInterval(∅, trv)
     @fact decoration(inv(DecoratedInterval(Interval(0.0, 0.0), com))) --> decoration(DecoratedInterval(∅, trv))
     @fact (DecoratedInterval(Interval(0.0, 0.0), com))^(-1) --> DecoratedInterval(∅, trv)
@@ -857,6 +869,9 @@ facts("minimal_recip_dec_test") do
     @fact decoration((DecoratedInterval(Interval(-10.0, Inf), dac))^(-1.0)) --> decoration(DecoratedInterval(entireinterval(Float64), trv))
     @fact 1 /(DecoratedInterval(Interval(-10.0, Inf), dac)) --> DecoratedInterval(entireinterval(Float64), trv)
     @fact decoration(1 /(DecoratedInterval(Interval(-10.0, Inf), dac))) --> decoration(DecoratedInterval(entireinterval(Float64), trv))
+end
+
+facts("minimal_recip_dec_test_3") do
     @fact inv(DecoratedInterval(Interval(-0.0, Inf), dac)) --> DecoratedInterval(Interval(0.0, Inf), trv)
     @fact decoration(inv(DecoratedInterval(Interval(-0.0, Inf), dac))) --> decoration(DecoratedInterval(Interval(0.0, Inf), trv))
     @fact (DecoratedInterval(Interval(-0.0, Inf), dac))^(-1) --> DecoratedInterval(Interval(0.0, Inf), trv)
@@ -3895,7 +3910,7 @@ facts("minimal_tan_test") do
     @fact tan(Interval(0x1.fae147ae147aep-1, 0x1.028f5c28f5c29p+0)) --> Interval(0x1.860fadcc59064p+0, 0x1.979ad0628469dp+0)
 end
 
-facts("minimal_tan_dec_test") do
+facts("minimal_tan_dec_test_1") do
     @fact tan(DecoratedInterval(∅, trv)) --> DecoratedInterval(∅, trv)
     @fact decoration(tan(DecoratedInterval(∅, trv))) --> decoration(DecoratedInterval(∅, trv))
     @fact tan(DecoratedInterval(Interval(0.0, Inf), dac)) --> DecoratedInterval(entireinterval(Float64), trv)
@@ -3926,6 +3941,9 @@ facts("minimal_tan_dec_test") do
     @fact decoration(tan(DecoratedInterval(Interval(0.0, 0x1.921fb54442d18p+0), dac))) --> decoration(DecoratedInterval(Interval(0.0, 0x1.d02967c31cdb5p+53), dac))
     @fact tan(DecoratedInterval(Interval(-0.0, 0x1.921fb54442d18p+0), com)) --> DecoratedInterval(Interval(0.0, 0x1.d02967c31cdb5p+53), com)
     @fact decoration(tan(DecoratedInterval(Interval(-0.0, 0x1.921fb54442d18p+0), com))) --> decoration(DecoratedInterval(Interval(0.0, 0x1.d02967c31cdb5p+53), com))
+end
+
+facts("minimal_tan_dec_test_2") do
     @fact tan(DecoratedInterval(Interval(0.0, 0x1.921fb54442d19p+0), trv)) --> DecoratedInterval(entireinterval(Float64), trv)
     @fact decoration(tan(DecoratedInterval(Interval(0.0, 0x1.921fb54442d19p+0), trv))) --> decoration(DecoratedInterval(entireinterval(Float64), trv))
     @fact tan(DecoratedInterval(Interval(-0.0, 0x1.921fb54442d19p+0), def)) --> DecoratedInterval(entireinterval(Float64), trv)
@@ -3956,6 +3974,9 @@ facts("minimal_tan_dec_test") do
     @fact decoration(tan(DecoratedInterval(Interval(-0x1.921fb54442d19p+0, 0x1.921fb54442d19p+0), dac))) --> decoration(DecoratedInterval(entireinterval(Float64), trv))
     @fact tan(DecoratedInterval(Interval(-0x1.555475a31a4bep-2, 0x1.999999999999ap-4), com)) --> DecoratedInterval(Interval(-0x1.628f4fd931fefp-2, 0x1.9af8877430b81p-4), com)
     @fact decoration(tan(DecoratedInterval(Interval(-0x1.555475a31a4bep-2, 0x1.999999999999ap-4), com))) --> decoration(DecoratedInterval(Interval(-0x1.628f4fd931fefp-2, 0x1.9af8877430b81p-4), com))
+end
+
+facts("minimal_tan_dec_test_3") do
     @fact tan(DecoratedInterval(Interval(0x1.4e18e147ae148p+12, 0x1.4e2028f5c28f6p+12), dac)) --> DecoratedInterval(Interval(-0x1.d6d67b035b6b4p+2, -0x1.7e42b0760e3f3p+0), dac)
     @fact decoration(tan(DecoratedInterval(Interval(0x1.4e18e147ae148p+12, 0x1.4e2028f5c28f6p+12), dac))) --> decoration(DecoratedInterval(Interval(-0x1.d6d67b035b6b4p+2, -0x1.7e42b0760e3f3p+0), dac))
     @fact tan(DecoratedInterval(Interval(0x1.4e18e147ae148p+12, 0x1.546028f5c28f6p+12), def)) --> DecoratedInterval(entireinterval(Float64), trv)

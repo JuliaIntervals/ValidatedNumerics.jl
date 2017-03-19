@@ -1,12 +1,8 @@
-```
-  separatechunks(file_name ::String, size_criterium::Int, new_size::Int)
 
 
-```
+function separate_chunks(file_name ::String, new_file_name ::String, size_criterium::Int, new_size::Int)
 
-function separatechunks(file_name ::String, size_criterium::Int, new_size::Int)
-  
-  f = open("libieeep1788_tests_elem.jl")
+  f = open(file_name)
   code_lines = readlines(f) #Creates array with all the code lines
   code_lines_new = [] #The new array
 
@@ -79,7 +75,12 @@ function separatechunks(file_name ::String, size_criterium::Int, new_size::Int)
   #writing the new file
 
   new_file = join(code_lines_new)
-  f_new = open("test_file.jl", "w")
+  f_new = open(new_file_name, "w")
   print(f_new, new_file)
   close(f_new)
+
 end
+
+#Testing function
+
+separate_chunks("libieeep1788_tests_elem.jl", "test_file.jl", 60, 30)
