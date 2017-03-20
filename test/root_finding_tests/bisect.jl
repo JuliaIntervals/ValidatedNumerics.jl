@@ -2,7 +2,7 @@ using ValidatedNumerics, ValidatedNumerics.RootFinding
 using Base.Test
 
 
-@testset "Bisection tests" begin
+@testset "`bisect` function" begin
     X = 0..1
     @test bisect(X) == (0..0.5, 0.5..1)
     @test bisect(X, 0.25) == (0..0.25, 0.25..1)
