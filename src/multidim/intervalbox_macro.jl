@@ -34,7 +34,7 @@ macro intervalbox(ex)
     new_ex = Expr(:block)
 
     push!(new_ex.args, ex)  # the function call
-
+    push!(new_ex.args,  :( ($f)(X::Vector) = [$f(X...)...] ) )
     push!(new_ex.args,  :( ($f)(X::IntervalBox) = IntervalBox( $f(X...)...) ) )
 
     #@show new_ex
