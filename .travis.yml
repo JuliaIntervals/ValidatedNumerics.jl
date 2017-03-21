@@ -14,6 +14,10 @@ julia:
   - 0.6
   - nightly
 
+script:
+  - travis_wait 30 julia -e 'Pkg.clone(pwd()); Pkg.build(\"ValidatedNumerics\"); Pkg.test(\"ValidatedNumerics\", coverage=true)'
+
+
 matrix:
   allow_failures:
     - julia: 0.6
