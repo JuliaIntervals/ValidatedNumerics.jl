@@ -18,12 +18,33 @@ function guarded_mid{T}(f, x::Interval{T})
     m
 end
 
-
+doc"""
+Single-variable Newton operator
+"""
 function N{T}(f::Function, x::Interval{T}, deriv::Interval{T})
-    m = guarded_mid(f, x)
-    m = Interval(m)
+    m = Interval( guarded_mid(f, x) )
 
     m - (f(m) / deriv)
+end
+
+function N{T}(f::Function, x::Interval{T})
+    m = Interval( guarded_mid(f, x) )
+
+    m - (f(m) / ForwardDiff.derivative(f, x))
+end
+
+doc"""
+Multi-variable Newton operator.
+Requires the function to be defined using the `@intervalbox` macro.
+"""
+function N(f::Function, X::IntervalBox)  # multidimensional Newton operator
+    m = IntervalBox(Interval.(mid.(X)))
+    J = ForwardDiff.jacobian(f, [X...])
+
+    # @show m
+    # @show J
+
+    return IntervalBox( (m - (J \ f(m))... ) )
 end
 
 
@@ -64,7 +85,7 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
 
     debug && (print("Entering newton:"); @show(level); @show(x))
 
-    isempty(x) && return Root{T}[]  #[(x, :none)]
+    isempty(x) && return Root{typeof(x)}[]  #[(x, :none)]
 
     z = zero(x.lo)
     tolerance = abs(tolerance)
@@ -79,7 +100,7 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
         Nx = N(f, x, deriv)
         debug && @show(Nx, Nx ⊆ x, Nx ∩ x)
 
-        isempty(Nx ∩ x) && return Root{T}[]
+        isempty(Nx ∩ x) && return Root{typeof(x)}[]
 
         if Nx ⊆ x
             debug && (print("Refining "); @show(x))
