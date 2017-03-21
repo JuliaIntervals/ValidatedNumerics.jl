@@ -1,6 +1,6 @@
 
 
-function separate_chunks(file_name ::String, new_file_name ::String, size_criterium::Int, new_size::Int)
+function split_testsets(file_name ::String, new_file_name ::String, size_criterium::Int, new_size::Int)
 
   f = open(file_name)
   code_lines = readlines(f) #Creates array with all the code lines
@@ -34,9 +34,11 @@ function separate_chunks(file_name ::String, new_file_name ::String, size_criter
 
       ## Extract block name: facts("block_name") do
 
-      b = search(code_lines[chunk_begin], "\") do")[1] - 1
-      a = search(code_lines[chunk_begin], "facts(\"")[end] +1
-      title = code_lines[chunk_begin][a:b]
+      # = search(code_lines[chunk_begin], "\") do")[1] - 1
+      #a = search(code_lines[chunk_begin], "facts(\"")[end] +1
+      #title = code_lines[chunk_begin][a:b]
+      #title = parse(match(r"\".*\"", code_lines[chunk_begin]).match)
+      title = split(match(r"\".*\"", code_lines[chunk_begin]).match, "\"")[2]
       number = 1
 
       # Divide big chunks in smaller blocks
@@ -83,4 +85,4 @@ end
 
 #Testing function
 
-separate_chunks("libieeep1788_tests_elem.jl", "test_file.jl", 60, 30)
+split_testsets("libieeep1788_tests_elem.jl", "test_file.jl", 60, 30)
