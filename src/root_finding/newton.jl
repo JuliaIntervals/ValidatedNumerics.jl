@@ -32,7 +32,7 @@ doc"""If a root is known to be inside an interval,
 function newton_refine{T}(f::Function, f_prime::Function, x::Interval{T};
                           tolerance=eps(T), debug=false)
 
-    debug && (print("Entering newton_refine:"); @show x)
+    debug && (print("\nEntering newton_refine:"); @show x)
 
     while diam(x) > tolerance  # avoid problem with tiny floating-point numbers if 0 is a root
         deriv = f_prime(x)
@@ -62,7 +62,7 @@ subdividing, and a `debug` boolean argument that prints out diagnostic informati
 function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
                    tolerance=eps(T), debug=false, maxlevel=30)
 
-    debug && (print("Entering newton:"); @show(level); @show(x))
+    debug && (print("\nEntering newton: "); @show(level); print(" "); @show(x))
 
     isempty(x) && return Root{T}[]  #[(x, :none)]
 
@@ -81,7 +81,7 @@ function newton{T}(f::Function, f_prime::Function, x::Interval{T}, level::Int=0;
 
         isempty(Nx ∩ x) && return Root{T}[]
 
-        if Nx ⊆ x
+        if Nx ⊆ x && Nx != x
             debug && (print("Refining "); @show(x))
             return newton_refine(f, f_prime, Nx, tolerance=tolerance, debug=debug)
         end
