@@ -7,19 +7,11 @@ using Base.Test
 setformat(:full)
 
 include("interval_tests/intervals.jl")
+include("error_free_arithmetic_tests/error_free_arithmetic_tests.jl")
 include("decoration_tests/decoration_tests.jl")
-
-# Display tests:
 include("display_tests/display.jl")
-
-# Root-finding tests:
+include("multidim_tests/multidim.jl")
 
 using ValidatedNumerics.RootFinding
 include("root_finding_tests/root_finding.jl")
-
-
-# ITF1788 tests
-
 include("ITF1788_tests/ITF1788_tests.jl")
-
-include("multidim_tests/multidim.jl")
