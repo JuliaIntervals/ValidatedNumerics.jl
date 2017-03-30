@@ -84,41 +84,25 @@ function /(::Type{IntervalRounding{:errorfree}}, a, b, ::RoundingMode{:Up})
     c = a / b
     d, e = fast2mult(c, b)   # d should be (close to) a
 
-    # todo: separate according to sign of b
-
-    if sign(b) > 0
-        if d > a || (d==a && e >= 0)  # the division is too big
-            return c
-        else
-            return nextfloat(c)
-        end
-
+    s = sign(b)
+    if s*d > s*a || (d==a && s*e >= 0)  # the division is too big
+        return c
     else
-        if d < a || (d==a && e <= 0)  # the division is too big
-            return c
-        else
-            return nextfloat(c)
-        end
+        return nextfloat(c)
     end
+
 end
 
 function /(::Type{IntervalRounding{:errorfree}}, a, b, ::RoundingMode{:Down})
     c = a / b
     d, e = fast2mult(c, b)
 
-    if sign(b) > 0
-        if d < a || (abs(d) == abs(a) && e <= 0)  # the division is too big
-            return c
-        else
-            return prevfloat(c)
-        end
+    s = sign(b)
 
+    if s*d < s*a || (d == a && s*e <= 0)  # the division is too big
+        return c
     else
-        if d > a || (abs(d) == abs(a) && e >= 0)  # the division is too big
-            return c
-        else
-            return prevfloat(c)
-        end
+        return prevfloat(c)
     end
 end
 
