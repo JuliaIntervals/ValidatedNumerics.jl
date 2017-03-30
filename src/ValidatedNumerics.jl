@@ -81,6 +81,8 @@ end
 ## Includes
 
 include("intervals/intervals.jl")
+include("error_free_arithmetic/error_free_arithmetic.jl")
+
 include("multidim/multidim.jl")
 include("decorations/decorations.jl")
 
