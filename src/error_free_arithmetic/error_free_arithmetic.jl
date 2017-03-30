@@ -110,7 +110,7 @@ function sqrt(::Type{IntervalRounding{:errorfree}}, x, ::RoundingMode{:Up})
     y = sqrt(x)
     d, e = fast2mult(y, y)
 
-    if abs(d) > abs(y) || (abs(d) == abs(y) && e > 0)  # the sqrt is too big
+    if d > x || (d == x && e >= 0)
         return y
     else
         return nextfloat(y)
@@ -121,7 +121,7 @@ function sqrt(::Type{IntervalRounding{:errorfree}}, x, ::RoundingMode{:Down})
     y = sqrt(x)
     d, e = fast2mult(y, y)
 
-    if d < y || (d == y && e < 0)  # the sqrt is too big
+    if d < x || (d == x && e <= 0)
         return y
     else
         return prevfloat(y)
