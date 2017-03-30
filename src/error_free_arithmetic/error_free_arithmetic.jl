@@ -68,7 +68,6 @@ end
 function +(::Type{IntervalRounding{:errorfree}}, a, b, r::RoundingMode)
     (s, t) = two_sum(a, b) # two_sum(a, b)
     do_rounding(s, t, r)
-
 end
 
 function -(::Type{IntervalRounding{:errorfree}}, a, b, r::RoundingMode)
@@ -83,13 +82,23 @@ end
 
 function /(::Type{IntervalRounding{:errorfree}}, a, b, ::RoundingMode{:Up})
     c = a / b
-    d, e = fast2mult(c, b)
+    d, e = fast2mult(c, b)   # d should be (close to) a
 
-    # todo: separate according to sign of c
-    if abs(d) > abs(a) || (d==a && e >= 0)  # the division is too big
-        return c
+    # todo: separate according to sign of b
+
+    if sign(b) > 0
+        if d > a || (d==a && e >= 0)  # the division is too big
+            return c
+        else
+            return nextfloat(c)
+        end
+
     else
-        return nextfloat(c)
+        if d < a || (d==a && e <= 0)  # the division is too big
+            return c
+        else
+            return nextfloat(c)
+        end
     end
 end
 
@@ -97,10 +106,19 @@ function /(::Type{IntervalRounding{:errorfree}}, a, b, ::RoundingMode{:Down})
     c = a / b
     d, e = fast2mult(c, b)
 
-    if abs(d) < abs(a) || (abs(d) == abs(a) && e <= 0)  # the division is too big
-        return c
+    if sign(b) > 0
+        if d < a || (abs(d) == abs(a) && e <= 0)  # the division is too big
+            return c
+        else
+            return prevfloat(c)
+        end
+
     else
-        return prevfloat(c)
+        if d > a || (abs(d) == abs(a) && e >= 0)  # the division is too big
+            return c
+        else
+            return prevfloat(c)
+        end
     end
 end
 
