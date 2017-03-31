@@ -32,6 +32,18 @@ setrounding(Interval, :correct)
     @test sin(x) == Interval(0.47942553860420295, 0.479425538604203)
 end
 
+setrounding(Interval, :correct)
+@testset "Arithmetic" begin
+    @test +(0.1, 0.5, RoundUp) == 0.6000000000000001
+    @test +(0.1, 0.5, RoundDown) == 0.6
+end
+
+setrounding(Interval, :errorfree)
+@testset "Arithmetic" begin
+    @test +(0.1, 0.5, RoundUp) == 0.6000000000000001
+    @test +(0.1, 0.5, RoundDown) == 0.6
+end
+
 setformat(:standard)
 
 # end

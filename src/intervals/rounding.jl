@@ -153,6 +153,9 @@ for mode in (:Down, :Up)
     end
 end
 
+
+const rounding_types = (:errorfree, :correct, :fast, :none)
+
 doc"""
     setrounding(Interval, rounding_type::Symbol)
 
@@ -165,18 +168,32 @@ function setrounding(::Type{Interval}, rounding_type::Symbol)
         return  # no need to redefine anything
     end
 
-    if rounding_type ∉ (:correct, :fast, :none)
-        throw(ArgumentError("Rounding type must be one of `:correct`, `:fast`, `:none`"))
+    if rounding_type ∉ rounding_types
+        throw(ArgumentError("Rounding type must be one of $rounding_types"))
     end
 
     roundtype = IntervalRounding{rounding_type}
 
-
-    # binary functions:
-    for f in (:+, :-, :*, :/, :^, :atan2)
+    # arithmetic functions and sqrt are special for errorfree:
+    for f in (:+, :-, :*, :/)
 
         @eval $f{T<:AbstractFloat}(a::T, b::T, r::RoundingMode) = $f($roundtype, a, b, r)
     end
+
+    # sqrt:
+
+    @eval sqrt{T<:AbstractFloat}(a::T, b::T, r::RoundingMode) = sqrt($roundtype, a, b, r)
+
+
+    if rounding_type == :errorfree
+        # all remaining functions same as correct:
+        roundtype = IntervalRounding{:correct}
+    end
+
+
+    for f in (:^, :atan2)
+        @eval $f{T<:AbstractFloat}(a::T, b::T, r::RoundingMode) = $f($roundtype, a, b, r)
+    end 
 
     @eval ^{T<:AbstractFloat, S<:Real}(a::T, b::S, r::RoundingMode) = ^($roundtype, promote(a, b)..., r)
 
