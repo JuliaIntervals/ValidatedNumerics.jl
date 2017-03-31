@@ -5,7 +5,6 @@
 module ErrorFreeArithmetic
 
 using ValidatedNumerics
-using BenchmarkTools
 
 import ValidatedNumerics.IntervalRounding
 
