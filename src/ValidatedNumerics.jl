@@ -8,6 +8,6 @@ using Reexport
 
 @reexport using IntervalArithmetic
 @reexport using IntervalRootFinding
-
+@reexport using IntervalConstraintProgramming
 
 end # module ValidatedNumerics
