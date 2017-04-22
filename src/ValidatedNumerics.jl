@@ -10,8 +10,8 @@ using StaticArrays
 using ForwardDiff
 
 import Base:
-    +, -, *, /, //, fma,
-    <, >, ==, !=, ⊆, ^, <=,
+    +, -, *, /, //, ^, fma,
+    <, >, ==, !=, <=,
     in, zero, one, abs, real, min, max,
     sqrt, exp, log, sin, cos, tan, inv,
     exp2, exp10, log2, log10,
@@ -26,8 +26,10 @@ import Base:
     precision,
     isfinite, isnan,
     show, showall,
-    isinteger, setdiff,
+    isinteger, iseven, isodd,
+    setdiff,
     parse
+
 
 export
     Interval, AbstractInterval,
@@ -65,8 +67,6 @@ export
     @decorated,
     interval_part, decoration, DecoratedInterval,
     com, dac, def, trv, ill
-
-
 
 
 function __init__()
