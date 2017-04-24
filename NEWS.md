@@ -1,5 +1,14 @@
 # What's new in `ValidatedNumerics.jl`
 
+## v0.9
+
+### Major change: `ValidatedNumerics.jl` as a meta-package
+The functionality that was in `ValidatedNumerics.jl` has been split out into `IntervalArithmetic.jl` and `IntervalRootFinding.jl`, which now live in the `JuliaIntervals` organization.
+
+`ValidatedNumerics.jl` itself is now a "meta-package", which just loads and reexports the separate packages in the ecosystem, including `IntervalConstraintProgramming.jl` and any future interval packages that are considered useful.
+
+This actually makes usage more convenient: `using ValidatedNumerics` will now bring all the exported functions from each package into scope.
+
 ## v0.8
 
 ### Supported versions of Julia
