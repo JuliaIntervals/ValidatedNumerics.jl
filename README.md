@@ -7,7 +7,7 @@ https://codecov.io/gh/dpsanders/ValidatedNumerics.jl/branch/master/graph/badge.s
 (https://codecov.io/gh/dpsanders/ValidatedNumerics.jl)
 [![Join the chat at https://gitter.im/dpsanders/ValidatedNumerics.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dpsanders/ValidatedNumerics.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-`ValidatedNumerics.jl` is a Julia package for performing *Validated Numerics* in Julia, i.e. *rigorous* computations with finite-precision floating-point arithmetic.
+`ValidatedNumerics.jl` is a Julia meta-package for performing *Validated Numerics* in Julia, i.e. *rigorous* computations with finite-precision floating-point arithmetic.
 
 
 
@@ -17,10 +17,21 @@ To install the package, from within Julia do
     julia> Pkg.add("ValidatedNumerics")
 
 
+## Meta-package
+
+Since version 0.9, `ValidatedNumerics.jl` is a meta-package that reexports the following packages from the [`JuliaIntervals` organization](https://github.com/JuliaIntervals) on GitHub:
+- [`IntervalArithmetic.jl`](https://github.com/JuliaIntervals/IntervalArithmetic.jl) -- fundamental arithmetic and elementary operations on intervals
+
+- [`IntervalRootFinding.jl`](https://github.com/JuliaIntervals/IntervalRootFinding.jl) -- find roots of functions in a guaranteed way
+
+- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl) -- characterization of feasible sets of inequalities
+
 ## Interval arithmetic
 All calculations are carried out using **interval arithmetic**: all quantities are treated as intervals, which are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
 
-The aim of the package is correctness over speed, although performance considerations are also taken into account
+The aim of the package is correctness, together with performance.
+
+
 
 ## Documentation
 Documentation is available [**here**](http://dpsanders.github.io/ValidatedNumerics.jl/).
