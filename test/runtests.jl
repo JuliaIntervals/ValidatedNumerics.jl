@@ -1,25 +1,25 @@
+using IntervalArithmetic
+using IntervalRootFinding
+using IntervalConstraintProgramming
 
-using ValidatedNumerics
 using Base.Test
 
-# Interval tests:
+@testset "Load and briefly test packages" begin
+    @testset "IntervalArithmetic" begin
+        @test @interval(1, 2) == Interval(1, 2)
+    end
 
-setformat(:full)
+    @testset "IntervalRootFinding" begin
+        roots = newton(x->x^2 - 2, -10..10)
+        @test length(roots) == 2
+    end
 
-include("interval_tests/intervals.jl")
-include("decoration_tests/decoration_tests.jl")
+    @testset "IntervalConstraintProgramming" begin
+        S = @constraint x^2 + y^2 <= 1
+        X = (-∞..∞) × (-∞..∞)
+        paving = pave(S, X, 1.0)
 
-# Display tests:
-include("display_tests/display.jl")
-
-# Root-finding tests:
-
-using ValidatedNumerics.RootFinding
-include("root_finding_tests/root_finding.jl")
-
-
-# ITF1788 tests
-
-include("ITF1788_tests/ITF1788_tests.jl")
-
-include("multidim_tests/multidim.jl")
+        @test length(paving.inner) == 4
+        @test length(paving.boundary) == 8
+    end
+end
