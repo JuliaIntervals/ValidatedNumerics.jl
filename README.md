@@ -5,21 +5,9 @@
 [![codecov](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl)
 [![Join the chat at https://gitter.im/dpsanders/ValidatedNumerics.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dpsanders/ValidatedNumerics.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-`ValidatedNumerics.jl` is a Julia meta-package for performing *Validated Numerics* in Julia, i.e. *rigorous* computations with finite-precision floating-point arithmetic.
+`ValidatedNumerics.jl` is a suite of Julia packages for performing *Validated Numerics* in Julia, i.e. *rigorous* computations with finite-precision floating-point arithmetic, using **interval arithmetic**: quantities are treated as intervals that are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
 
-All calculations are carried out using **interval arithmetic**: all quantities are treated as intervals, which are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
-
-The aim of the package is correctness over speed, although performance considerations are also taken into account.
-
-### Authors
-- [Luis Benet](http://www.cicc.unam.mx/~benet/), Instituto de Ciencias Físicas, Universidad Nacional Autónoma de México (UNAM)
-- [David P. Sanders](http://sistemas.fciencias.unam.mx/~dsanders), Departamento de Física, Facultad de Ciencias, Universidad Nacional Autónoma de México (UNAM)
-
-### Contributors
-- Oliver Heimlich
-- Nikolay Kryukov
-- John Verzani
-
+The aims of the package are both correctness and good performance.
 
 
 ## Installation
@@ -29,22 +17,15 @@ To install the package, from within Julia do
 julia> Pkg.add("ValidatedNumerics")
 ```
 
-## Meta-package
+Since version 0.9, `ValidatedNumerics.jl` is a meta-package that automatically installs and reexports the following packages from the [`JuliaIntervals` GitHub organization](https://github.com/JuliaIntervals):
 
-Since version 0.9, `ValidatedNumerics.jl` is a meta-package that reexports the following packages from the [`JuliaIntervals` organization](https://github.com/JuliaIntervals) on GitHub:
-- [`IntervalArithmetic.jl`](https://github.com/JuliaIntervals/IntervalArithmetic.jl): fundamental arithmetic and elementary operations on intervals
+- [`IntervalArithmetic.jl`](https://github.com/JuliaIntervals/IntervalArithmetic.jl): arithmetic and elementary functions on intervals
 
 - [`IntervalRootFinding.jl`](https://github.com/JuliaIntervals/IntervalRootFinding.jl): find roots of functions in a guaranteed way
 
-- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl): characterization of feasible sets of inequalities
+- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl): characterization of feasible sets of equations and inequalities
 
 - [`IntervalContractors.jl`](https://github.com/JuliaIntervals/IntervalContractors.jl): contractors and reverse (or inverse) functions
-
-
-## Interval arithmetic
-In calculations carried out using **interval arithmetic**, quantities are treated as intervals that are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
-
-The aim of the package is correctness, together with performance.
 
 
 ## Documentation
@@ -54,6 +35,15 @@ Documentation is available separately for each of the above packages.
 The IEEE Std 1788-2015 - IEEE Standard for Interval Arithmetic was [published](https://standards.ieee.org/findstds/standard/1788-2015.html) in June 2015. We are working towards having `ValidatedNumerics` be conformant with this standard.
 
 To do so, we have incorporated tests from the excellent [ITF1788 test suite](https://github.com/oheim/ITF1788), originally written by Marco Nehmeier and Maximilian Kiesner, and converted to a common format and to output tests for Julia by Oliver Heimlich.
+
+## Authors
+- [Luis Benet](http://www.cicc.unam.mx/~benet/), Instituto de Ciencias Físicas, Universidad Nacional Autónoma de México (UNAM)
+- [David P. Sanders](http://sistemas.fciencias.unam.mx/~dsanders), Departamento de Física, Facultad de Ciencias, Universidad Nacional Autónoma de México (UNAM)
+
+### Contributors
+- Oliver Heimlich
+- Nikolay Kryukov
+- John Verzani
 
 ## Bibliography
 
