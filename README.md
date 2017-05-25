@@ -41,8 +41,16 @@ Since version 0.9, `ValidatedNumerics.jl` is a meta-package that reexports the f
 - [`IntervalContractors.jl`](https://github.com/JuliaIntervals/IntervalContractors.jl): contractors and reverse (or inverse) functions
 
 
-## Standard for Interval Arithmetic:  IEEE 1788-2015
+## Interval arithmetic
+In calculations carried out using **interval arithmetic**, quantities are treated as intervals that are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
 
+The aim of the package is correctness, together with performance.
+
+
+## Documentation
+Documentation is available separately for each of the above packages.
+
+## IEEE Standard 1788-2015 - IEEE Standard for Interval Arithmetic
 The IEEE Std 1788-2015 - IEEE Standard for Interval Arithmetic was [published](https://standards.ieee.org/findstds/standard/1788-2015.html) in June 2015. We are working towards having `ValidatedNumerics` be conformant with this standard.
 
 To do so, we have incorporated tests from the excellent [ITF1788 test suite](https://github.com/oheim/ITF1788), originally written by Marco Nehmeier and Maximilian Kiesner, and converted to a common format and to output tests for Julia by Oliver Heimlich.
