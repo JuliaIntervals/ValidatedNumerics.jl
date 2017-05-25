@@ -32,11 +32,14 @@ julia> Pkg.add("ValidatedNumerics")
 ## Meta-package
 
 Since version 0.9, `ValidatedNumerics.jl` is a meta-package that reexports the following packages from the [`JuliaIntervals` organization](https://github.com/JuliaIntervals) on GitHub:
-- [`IntervalArithmetic.jl`](https://github.com/JuliaIntervals/IntervalArithmetic.jl) -- fundamental arithmetic and elementary operations on intervals
+- [`IntervalArithmetic.jl`](https://github.com/JuliaIntervals/IntervalArithmetic.jl): fundamental arithmetic and elementary operations on intervals
 
-- [`IntervalRootFinding.jl`](https://github.com/JuliaIntervals/IntervalRootFinding.jl) -- find roots of functions in a guaranteed way
+- [`IntervalRootFinding.jl`](https://github.com/JuliaIntervals/IntervalRootFinding.jl): find roots of functions in a guaranteed way
 
-- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl) -- characterization of feasible sets of inequalities
+- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl): characterization of feasible sets of inequalities
+
+- [`IntervalContractors.jl`](https://github.com/JuliaIntervals/IntervalContractors.jl): contractors and reverse (or inverse) functions
+
 
 ## Standard for Interval Arithmetic:  IEEE 1788-2015
 
