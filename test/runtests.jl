@@ -1,6 +1,4 @@
-using IntervalArithmetic
-using IntervalRootFinding
-using IntervalConstraintProgramming
+using ValidatedNumerics
 
 using Base.Test
 
@@ -10,7 +8,7 @@ using Base.Test
     end
 
     @testset "IntervalRootFinding" begin
-        roots = newton(x->x^2 - 2, -10..10)
+        roots = IntervalRootFinding.roots(x->x^2 - 2, -10..10)
         @test length(roots) == 2
     end
 
