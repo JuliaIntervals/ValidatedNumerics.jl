@@ -9,5 +9,6 @@ using Reexport
 @reexport using IntervalArithmetic
 @reexport using IntervalRootFinding
 @reexport using IntervalConstraintProgramming
+@reexport using IntervalOptimisation
 
 end # module ValidatedNumerics
