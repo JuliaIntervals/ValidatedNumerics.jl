@@ -4,7 +4,7 @@
 
 ### Supported versions of Julia
 
-This is the last release compatible with Julia 0.6.
+Support for Julia 0.5 has been dropped. This is the last release compatible with Julia 0.6.
 
 ## v0.9
 
