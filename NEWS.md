@@ -1,11 +1,21 @@
 # What's new in `ValidatedNumerics.jl`
 
+## v0.11
+
+### Supported versions of Julia
+
+- Support for Julia 0.6 has been dropped. This release is fully compatible with Julia 1.0.
+
+### Included packages
+
+- `IntervalContractors.jl` is now re-exported, so that reverse functions from that package are directly accessible.
+
 
 ## v0.10
 
 ### Supported versions of Julia
 
-Support for Julia 0.5 has been dropped. This is the last release compatible with Julia 0.6.
+- Support for Julia 0.5 has been dropped. This is the last release compatible with Julia 0.6.
 
 ## v0.9
 
