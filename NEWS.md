@@ -1,5 +1,11 @@
 # What's new in `ValidatedNumerics.jl`
 
+## v0.10
+
+### Supported versions of Julia
+
+This is the last release compatible with Julia 0.6.
+
 ## v0.9
 
 ### Major change: `ValidatedNumerics.jl` as a meta-package
