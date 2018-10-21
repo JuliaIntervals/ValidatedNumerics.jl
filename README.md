@@ -21,9 +21,11 @@ Since version 0.9, `ValidatedNumerics.jl` is a meta-package that automatically i
 
 - [`IntervalArithmetic.jl`](https://github.com/JuliaIntervals/IntervalArithmetic.jl): arithmetic and elementary functions on intervals
 
-- [`IntervalRootFinding.jl`](https://github.com/JuliaIntervals/IntervalRootFinding.jl): find roots of functions in a guaranteed way
+- [`IntervalRootFinding.jl`](https://github.com/JuliaIntervals/IntervalRootFinding.jl): find roots of multidimensional functions in a guaranteed way
 
-- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl): characterization of feasible sets of equations and inequalities
+- [`IntervalOptimisation.jl`](https://github.com/JuliaIntervals/IntervalOptimisation.jl): guaranteed global optimisation of multidimensional functions
+
+- [`IntervalConstraintProgramming.jl`](https://github.com/JuliaIntervals/IntervalConstraintProgramming.jl): characterization of feasible sets of equations and inequalities via constraint propagation
 
 - [`IntervalContractors.jl`](https://github.com/JuliaIntervals/IntervalContractors.jl): contractors and reverse (or inverse) functions
 
@@ -39,11 +41,6 @@ To do so, we have incorporated tests from the excellent [ITF1788 test suite](htt
 ## Authors
 - [Luis Benet](http://www.cicc.unam.mx/~benet/), Instituto de Ciencias Físicas, Universidad Nacional Autónoma de México (UNAM)
 - [David P. Sanders](http://sistemas.fciencias.unam.mx/~dsanders), Departamento de Física, Facultad de Ciencias, Universidad Nacional Autónoma de México (UNAM)
-
-### Contributors
-- Oliver Heimlich
-- Nikolay Kryukov
-- John Verzani
 
 ## Bibliography
 
@@ -61,5 +58,5 @@ This project was begun during a masters' course in the postgraduate programs in 
 
 ## Acknowledgements ##
 
-Financial support is acknowledged from DGAPA-UNAM PAPIME grants PE-105911 and PE-107114, and DGAPA-UNAM PAPIIT grant IN-117214. LB acknowledges support through a *Cátedra Marcos Moshinsky* (2013).
-DPS acknowledges a sabbatical fellowship from CONACYT and thanks Alan Edelman and the Julia group at MIT for hosting his sabbatical visit.
+Financial support is acknowledged from DGAPA-UNAM PAPIME grants PE-105911 and PE-107114, and DGAPA-UNAM PAPIIT grants IN-117214 and 117117. LB acknowledges support through a *Cátedra Marcos Moshinsky* (2013).
+DPS acknowledges a sabbatical fellowship from CONACYT and thanks Alan Edelman and the Julia group at MIT for hosting his sabbatical visit during 2016.
