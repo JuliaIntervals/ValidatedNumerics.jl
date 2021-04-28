@@ -20,7 +20,7 @@ IntervalConstraintProgramming = "0.12"
 IntervalOptimisation = "0.4"
 TaylorModels = "0.3"
 Reexport = "0.2, 1.0"
-julia = "1.3, 1.4, 1.5"
+julia = "1.3, 1.4, 1.5, 1.6"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
