@@ -1,9 +1,9 @@
 # ValidatedNumerics.jl #
 
-[![Build Status](https://travis-ci.org/JuliaIntervals/ValidatedNumerics.jl.svg?branch=master)](https://travis-ci.org/JuliaIntervals/ValidatedNumerics.jl)
-[![Coverage Status](https://coveralls.io/repos/dpsanders/ValidatedNumerics.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/dpsanders/ValidatedNumerics.jl?branch=master)
-[![codecov](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl)
-[![Join the chat at https://gitter.im/dpsanders/ValidatedNumerics.jl](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dpsanders/ValidatedNumerics.jl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://github.com/JuliaIntervals/ValidatedNumerics.jl/workflows/CI/badge.svg)](https://github.com/JuliaIntervals/ValidatedNumerics.jl/actions/workflows/CI.yml)
+[![coverage](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl)
+[![docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaintervals.github.io/pages/packages/)
+
 
 `ValidatedNumerics.jl` is a suite of Julia packages for performing *Validated Numerics* in Julia, i.e. *rigorous* computations with finite-precision floating-point arithmetic, using **interval arithmetic**: quantities are treated as intervals that are propagated throughout a calculation. The final result is an interval that is *guaranteed* to contain the correct result, starting from the given initial data.
 
@@ -29,9 +29,11 @@ Since version 0.9, `ValidatedNumerics.jl` is a meta-package that automatically i
 
 - [`IntervalContractors.jl`](https://github.com/JuliaIntervals/IntervalContractors.jl): contractors and reverse (or inverse) functions
 
+- [`TaylorModels.jl`](https://github.com/JuliaIntervals/TaylorModels.jl): rigorous function approximation
+
 
 ## Documentation
-Documentation is available separately for each of the above packages.
+The documentation for each of the above packages can be found [here](https://juliaintervals.github.io/pages/packages/) 
 
 ## IEEE Standard 1788-2015 - IEEE Standard for Interval Arithmetic
 The IEEE Std 1788-2015 - IEEE Standard for Interval Arithmetic was [published](https://standards.ieee.org/findstds/standard/1788-2015.html) in June 2015. We are working towards having `ValidatedNumerics` be conformant with this standard.
