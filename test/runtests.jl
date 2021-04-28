@@ -39,9 +39,16 @@ using Test
     @testset "IntervalOptimisation" begin
         f(x) = x^4 - 3x^3 + 2x
 
-        globalmin, minimisers = minimise(f, -1e10..1e10, 1e-7)
+        globalmin, minimisers = minimise(f, -1e10..1e10, tol=1e-5)
 
         @test globalmin ⊆ (-4.15.. -4.14)
     end
 
+    @testset "TaylorModels" begin
+        x0 = Interval(0.0)
+        ii0 = Interval(-0.5, 0.5)
+
+        tpol = exp( Taylor1(2) )
+        @test TaylorModels.bound_taylor1( tpol, ii0) == tpol(ii0.lo) .. tpol(ii0.hi)
+    end
 end

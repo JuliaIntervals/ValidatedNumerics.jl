@@ -9,5 +9,6 @@ using Reexport
 @reexport using IntervalContractors
 @reexport using IntervalConstraintProgramming
 @reexport using IntervalOptimisation
+@reexport using TaylorModels
 
 end # module ValidatedNumerics
