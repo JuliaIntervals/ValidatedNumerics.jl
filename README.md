@@ -1,5 +1,11 @@
 # ValidatedNumerics.jl #
 
+> [!IMPORTANT]
+> ValidatedNumerics.jl is no longer the main entry point to Interval computations in Julia.
+> Please see [IntervalArithmetic.jl](https://github.com/JuliaIntervals/IntervalArithmetic.jl) for the core functionnalities,
+> and have a look at the [JuliaIntervals organisation](https://github.com/JuliaIntervals) for an overview of the ecosystem.
+
+
 [![Build Status](https://github.com/JuliaIntervals/ValidatedNumerics.jl/workflows/CI/badge.svg)](https://github.com/JuliaIntervals/ValidatedNumerics.jl/actions/workflows/CI.yml)
 [![coverage](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/JuliaIntervals/ValidatedNumerics.jl)
 [![docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://juliaintervals.github.io/pages/packages/)
